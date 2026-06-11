@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Why Machines Learn — Caderno Técnico">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#ff5a1f" stop-opacity="0.32"/>
+      <stop offset="60%" stop-color="#101014" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#0a0a0c" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <g fill="none" stroke="#ff5a1f" stroke-opacity="0.28" stroke-width="2" transform="translate(760 300)">
+    <circle r="180"/><circle r="120"/><circle r="60"/>
+    <path d="M -260 0 C -120 -180 120 180 260 0 C 120 -180 -120 180 -260 0Z"/>
+    <path d="M 0 -250 C 190 -80 -190 80 0 250 C 190 80 -190 -80 0 -250Z"/>
+  </g>
+  <text x="80" y="170" fill="#ECE7E1" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="800">Why Machines Learn</text>
+  <text x="84" y="238" fill="#ff8a4c" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Caderno técnico · matemática da IA moderna</text>
+  <text x="84" y="330" fill="#d8d2cb" font-family="Arial, Helvetica, sans-serif" font-size="30">vetores → erro → gradiente → profundidade → generalização</text>
+  <text x="84" y="526" fill="#928b83" font-family="Arial, Helvetica, sans-serif" font-size="22">Drmcoelho/Math · single-file HTML + labs interativos</text>
+</svg>
