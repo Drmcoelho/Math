@@ -75,7 +75,7 @@ def main() -> None:
 
     # Cadernos irmãos (trilha de Matemática da Música): precisam existir e
     # seus links locais (inclusive o cruzamento entre eles) não podem quebrar.
-    extra_pages = ["matematica-fundamental.html", "musica-matematica.html"]
+    extra_pages = ["matematica-introdutoria.html", "matematica-fundamental.html", "musica-matematica.html"]
     for name in extra_pages:
         page_path = ROOT / name
         if not page_path.exists():
