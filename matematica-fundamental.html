@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Matemática por trás da Matemática — fundamentos para o caderno musical</title>
+<style>
+:root{
+  --bg:#0b0b0e;--bg2:#0f0f13;--surface:#15151b;--surface2:#1c1c24;
+  --border:#262631;--border2:#34343f;--text:#cdcdd8;--text-dim:#9494a6;
+  --muted:#5e5e72;--faint:#3a3a48;--amber:#e8a838;--amber-dim:#b8842c;
+  --blue:#5d8fcc;--blue-dim:#4a6fa5;--bluelight:#8fb4e0;--green:#4fb87a;
+  --green-dim:#3a8a5b;--red:#d05a5a;--red-dim:#a04545;--violet:#9b7fd4;
+  --epi-math:#5d8fcc;--epi-phys:#4fb87a;--epi-hist:#e8a838;--epi-peda:#9b7fd4;
+  --geo:#5d8fcc;--kin:#e8a838;  /* analogia geométrica / cinemática */
+  --font-mono:'Courier New',monospace;
+  --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --maxw:820px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:60px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased}
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--green),var(--blue));z-index:200;transition:width .1s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,11,14,.93);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);display:flex;align-items:center;padding:0 1.5rem;height:54px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nav-logo{font-family:var(--font-mono);font-size:.72rem;color:var(--green);padding-right:1.2rem;margin-right:1rem;border-right:1px solid var(--border);letter-spacing:.04em;flex-shrink:0}
+nav a{color:var(--muted);text-decoration:none;font-size:.74rem;padding:.5rem .55rem;letter-spacing:.02em;flex-shrink:0;transition:color .2s;font-family:var(--font-mono)}
+nav a:hover{color:var(--text)}
+nav a.active{color:var(--green)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.5rem}
+section{padding:4.5rem 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+#hero-canvas{position:absolute;inset:0;opacity:.4;pointer-events:none}
+.hero-content{position:relative;z-index:2}
+.hero-kicker{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.28em;color:var(--green);text-transform:uppercase;margin-bottom:1.8rem}
+h1{font-family:var(--font-mono);font-weight:700;font-size:clamp(2rem,6vw,3.9rem);line-height:1.1;color:#fff;margin-bottom:1.8rem;letter-spacing:-.01em}
+h1 em{color:var(--green);font-style:normal}
+.hero-lead{font-size:1.05rem;color:var(--text-dim);max-width:640px;line-height:1.85;margin-bottom:2.5rem}
+.hero-thesis{font-family:var(--font-mono);font-size:.9rem;color:var(--bluelight);border-left:2px solid var(--green);padding-left:1.2rem;max-width:640px;line-height:1.9}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.15em;z-index:2;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+.level-tag{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.8rem;display:inline-block;padding:.25rem .7rem;border:1px solid var(--border2);border-radius:2px;color:var(--green)}
+h2{font-family:var(--font-mono);font-weight:700;font-size:clamp(1.45rem,3.5vw,2rem);line-height:1.18;color:#fff;margin-bottom:1.4rem;letter-spacing:-.005em}
+h3{font-family:var(--font-mono);font-size:1.05rem;color:var(--green);margin:2.5rem 0 1rem;letter-spacing:.01em}
+h4{font-family:var(--font-mono);font-size:.85rem;color:var(--bluelight);margin:1.8rem 0 .8rem;letter-spacing:.05em;text-transform:uppercase}
+p{margin-bottom:1.1rem;color:var(--text)}
+p.lead{font-size:1.08rem;color:var(--text-dim);line-height:1.8}
+strong{color:#fff;font-weight:600}
+em.term{color:var(--green);font-style:italic}
+code{font-family:var(--font-mono);color:var(--bluelight);background:rgba(93,143,204,.1);padding:0 .3em;border-radius:2px;font-size:.92em}
+.aside{font-size:.9rem;color:var(--text-dim);background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--muted);padding:1rem 1.3rem;margin:1.5rem 0;border-radius:0 4px 4px 0}
+.aside .aside-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.4rem}
+
+/* INTUIÇÃO PRIMEIRO — bloco que vem antes de qualquer símbolo */
+.intuition{background:linear-gradient(135deg,rgba(79,184,122,.08),rgba(93,143,204,.04));border:1px solid var(--border2);border-left:3px solid var(--green);padding:1.3rem 1.5rem;margin:1.8rem 0;border-radius:0 4px 4px 0}
+.intuition .int-label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.6rem}
+.intuition p:last-child{margin-bottom:0}
+.key-insight{background:linear-gradient(135deg,rgba(232,168,56,.07),rgba(155,127,212,.04));border:1px solid var(--border2);border-left:3px solid var(--amber);padding:1.3rem 1.5rem;margin:1.8rem 0;border-radius:0 4px 4px 0}
+.key-insight .ki-label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:.6rem}
+.key-insight p:last-child{margin-bottom:0}
+
+/* ANALOGIA DUPLA — geométrica vs cinemática */
+.analogy{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.6rem 0}
+.analogy .acard{border:1px solid var(--border);border-radius:6px;padding:1.1rem 1.2rem;background:var(--bg2)}
+.analogy .acard.geo{border-top:2px solid var(--geo)}
+.analogy .acard.kin{border-top:2px solid var(--kin)}
+.analogy .acard h5{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.analogy .acard.geo h5{color:var(--geo)}
+.analogy .acard.kin h5{color:var(--kin)}
+.analogy .acard p{font-size:.86rem;color:var(--text-dim);margin:0 0 .6rem;line-height:1.6}
+.analogy .acard p:last-child{margin-bottom:0}
+@media(max-width:640px){.analogy{grid-template-columns:1fr}}
+
+/* tags epistêmicas */
+.epi{display:inline-flex;align-items:center;gap:.3em;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.12rem .5rem;border-radius:10px;border:1px solid;vertical-align:middle;white-space:nowrap;font-weight:600}
+.epi::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.epi.math{color:var(--epi-math);border-color:var(--epi-math)}
+.epi.phys{color:var(--epi-phys);border-color:var(--epi-phys)}
+.epi.hist{color:var(--epi-hist);border-color:var(--epi-hist)}
+.epi.peda{color:var(--epi-peda);border-color:var(--epi-peda)}
+.claim{display:flex;gap:.7rem;align-items:flex-start;margin:1.1rem 0;padding:.5rem 0 .5rem .9rem;border-left:2px solid var(--border2)}
+.claim .epi{flex-shrink:0;margin-top:.18rem}
+.claim p{margin:0}
+
+.eq{font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.5rem;margin:1.5rem 0;overflow-x:auto;font-size:1.02rem;line-height:1.9;color:var(--text)}
+.eq .lbl{color:var(--muted);font-size:.8rem}
+.eq.big{font-size:1.2rem;text-align:center}
+.derivation{font-family:var(--font-mono);font-size:.92rem;line-height:2.1;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem;margin:1.5rem 0;overflow-x:auto}
+.derivation .step{display:block}
+.derivation .annot{color:var(--muted);font-size:.78rem}
+.hl-amber{color:var(--amber)}.hl-blue{color:var(--bluelight)}.hl-green{color:var(--green)}.hl-red{color:var(--red)}.hl-violet{color:var(--violet)}
+
+.viz{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.4rem;margin:2rem 0}
+.viz-head{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.viz-head span:last-child{color:var(--bluelight);text-align:right}
+.viz canvas{width:100%;display:block;border-radius:3px}
+.viz-caption{font-size:.82rem;color:var(--muted);margin-top:.9rem;line-height:1.6}
+.viz-caption strong{color:var(--text-dim)}
+.controls{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:1.2rem;align-items:flex-end}
+.ctrl{display:flex;flex-direction:column;gap:.35rem;flex:1;min-width:140px}
+.ctrl label{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.ctrl label .v{color:var(--bluelight)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--border2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--green);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--green);border:none;cursor:pointer}
+input[type=range]:focus-visible{outline:2px solid var(--bluelight);outline-offset:4px}
+button{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;background:transparent;border:1px solid var(--green);color:var(--green);padding:.5rem 1.1rem;cursor:pointer;text-transform:uppercase;transition:all .18s;border-radius:3px;white-space:nowrap;flex-shrink:0}
+button:hover{background:var(--green);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--bluelight);outline-offset:3px}
+button.playing{background:var(--green);color:var(--bg)}
+button.sec{border-color:var(--blue-dim);color:var(--bluelight)}
+button.sec:hover{background:var(--blue-dim);color:#fff}
+button.sm{font-size:.62rem;padding:.3rem .7rem}
+.btn-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.readout{font-family:var(--font-mono);font-size:.85rem;color:var(--bluelight);display:flex;flex-direction:column;gap:.2rem;flex-shrink:0}
+.readout .rl{color:var(--muted);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em}
+
+/* MOTOR DE EXERCÍCIOS */
+.exercises{margin:2.5rem 0}
+.ex-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem}
+.ex-head h3{margin:0;color:var(--amber)}
+.ex-progress{font-family:var(--font-mono);font-size:.7rem;color:var(--muted)}
+.ex-filter{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.ex-filter button{font-size:.6rem;padding:.25rem .6rem;border-color:var(--border2);color:var(--muted)}
+.ex-filter button.on{border-color:var(--green);color:var(--green)}
+.ex{border:1px solid var(--border);border-radius:6px;margin-bottom:.9rem;overflow:hidden;background:var(--bg2)}
+.ex-q{padding:1rem 1.2rem;display:flex;gap:.8rem;align-items:flex-start}
+.ex-num{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);flex-shrink:0;min-width:2.2rem}
+.ex-body{flex:1}
+.ex-level{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.1rem .45rem;border-radius:8px;border:1px solid;margin-left:.5rem;vertical-align:middle}
+.ex-level.facil{color:var(--green);border-color:var(--green-dim)}
+.ex-level.medio{color:var(--amber);border-color:var(--amber-dim)}
+.ex-level.dificil{color:var(--red);border-color:var(--red-dim)}
+.ex-level.desafio{color:var(--violet);border-color:#6b5499}
+.ex-qtext{margin:.2rem 0 .6rem;line-height:1.6}
+.ex-qtext code{font-size:.95em}
+.ex-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.ex-actions button{font-size:.6rem;padding:.3rem .7rem}
+.ex-hint{font-size:.84rem;color:var(--bluelight);background:rgba(93,143,204,.07);border-left:2px solid var(--blue-dim);padding:.6rem .9rem;margin:.7rem 0 0;border-radius:0 3px 3px 0;display:none}
+.ex-hint.show{display:block}
+.ex-sol{border-top:1px solid var(--border);padding:1.1rem 1.2rem;background:var(--surface);display:none;font-size:.9rem;line-height:1.75}
+.ex-sol.show{display:block}
+.ex-sol .sol-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.7rem}
+.ex-sol .sstep{font-family:var(--font-mono);font-size:.86rem;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.5rem .8rem;margin:.5rem 0;line-height:1.7;overflow-x:auto}
+.ex-sol .sstep .an{color:var(--muted);font-size:.78rem}
+.ex-sol p{margin:.6rem 0}
+.ex-sol .ans{color:var(--green);font-weight:600}
+.ex-sol strong{color:#fff}
+
+footer{padding:4rem 1.5rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.74rem;letter-spacing:.06em;line-height:2}
+footer .sig{color:var(--text-dim)}
+footer a{color:var(--green);text-decoration:none;border-bottom:1px solid var(--border2)}
+.crosslink{display:block;margin:2.5rem 0;padding:1.4rem 1.6rem;background:linear-gradient(135deg,rgba(232,168,56,.08),rgba(155,127,212,.05));border:1px solid var(--border2);border-radius:8px;text-decoration:none;transition:border-color .2s}
+.crosslink:hover{border-color:var(--amber)}
+.crosslink .cl-k{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:.4rem}
+.crosslink .cl-t{color:#fff;font-family:var(--font-mono);font-size:1.05rem}
+.crosslink .cl-d{color:var(--text-dim);font-size:.85rem;margin-top:.3rem}
+.skip-link{position:absolute;left:-999px;top:0;background:var(--green);color:#000;padding:.6rem 1rem;z-index:300;font-family:var(--font-mono);font-size:.8rem}
+.skip-link:focus{left:0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+@media(max-width:600px){body{font-size:14.5px}.controls{gap:.9rem}.ctrl{min-width:110px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a href="#f1" class="skip-link">Pular para o conteúdo</a>
+<div id="progress"></div>
+
+<nav id="nav" aria-label="Navega&ccedil;&atilde;o dos fundamentos">
+  <span class="nav-logo">f = 1/T</span>
+  <a href="#f1">1 &middot; Equa&ccedil;&atilde;o</a>
+  <a href="#f2">2 &middot; Raz&atilde;o</a>
+  <a href="#f3">3 &middot; Inverso</a>
+  <a href="#f4">4 &middot; Pot&ecirc;ncias</a>
+  <a href="#f5">5 &middot; Fun&ccedil;&atilde;o</a>
+  <a href="#f6">6 &middot; Logaritmo</a>
+  <a href="#f7">7 &middot; Seno</a>
+  <a href="#f8">8 &middot; Somat&oacute;rio</a>
+  <a href="#f9">9 &middot; Derivada</a>
+  <a href="#f10">10 &middot; Integral</a>
+  <a href="#f11">11 &middot; A equa&ccedil;&atilde;o</a>
+</nav>
+
+<header id="hero">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="wrap hero-content">
+    <div class="hero-kicker">Pr&eacute;-caderno &middot; do zero absoluto</div>
+    <h1>A matem&aacute;tica<br>por tr&aacute;s da <em>matem&aacute;tica</em></h1>
+    <p class="hero-lead">
+      O caderno principal fala em derivadas, logaritmos e raz&otilde;es como se todo leitor j&aacute; os
+      tivesse na ponta da l&iacute;ngua. Este aqui n&atilde;o pressup&otilde;e <strong>nada</strong>. Constru&iacute;mos,
+      do ch&atilde;o, cada ferramenta matem&aacute;tica necess&aacute;ria &mdash; com intui&ccedil;&atilde;o antes de s&iacute;mbolo,
+      exemplos f&iacute;sicos reais, e <strong>muitos exerc&iacute;cios com solu&ccedil;&atilde;o passo a passo</strong>.
+    </p>
+    <div class="hero-thesis">
+      Regra da casa: nenhum s&iacute;mbolo aparece antes de uma intui&ccedil;&atilde;o concreta.<br>
+      Toda ferramenta &eacute; mostrada por dentro &mdash; geometria, f&iacute;sica e m&uacute;sica juntas.<br>
+      E todo conceito s&oacute; fica de p&eacute; quando voc&ecirc; o exercita.
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">&darr; come&ccedil;ar do come&ccedil;o</div>
+</header>
+
+<main>
+<div class="wrap" style="padding-top:3rem">
+  <div class="intuition">
+    <span class="int-label">Como usar este caderno</span>
+    <p>
+      Cada fundamento segue a mesma forma: primeiro uma <strong style="color:var(--green)">intui&ccedil;&atilde;o</strong>
+      (uma imagem concreta, sem s&iacute;mbolos), depois o <strong>s&iacute;mbolo</strong> que a captura, depois um
+      <strong>interativo</strong> para voc&ecirc; mexer, e por fim <strong style="color:var(--amber)">exerc&iacute;cios
+      com gabarito detalhado</strong> &mdash; clic&aacute;veis, para voc&ecirc; tentar antes de ver a resposta. Matem&aacute;tica
+      n&atilde;o se aprende lendo; aprende-se fazendo. Fa&ccedil;a os exerc&iacute;cios.
+    </p>
+  </div>
+  <div class="aside">
+    <span class="aside-label">Duas lentes que usaremos o tempo todo</span>
+    Toda ideia de c&aacute;lculo ser&aacute; mostrada por <strong style="color:var(--geo)">geometria</strong>
+    (formas: comprimento, &aacute;rea, volume) <em>e</em> por <strong style="color:var(--kin)">cinem&aacute;tica</strong>
+    (movimento: posi&ccedil;&atilde;o, velocidade, acelera&ccedil;&atilde;o). N&atilde;o por acaso: um instrumento de sopro &eacute;
+    geometria (volume de ar oco, &aacute;rea da abertura); a pele de um tambor &eacute; cinem&aacute;tica (cada ponto
+    da membrana tem posi&ccedil;&atilde;o, velocidade e acelera&ccedil;&atilde;o). A m&uacute;sica usa as duas &mdash; e elas convergem
+    na mesma equa&ccedil;&atilde;o no final.
+  </div>
+</div>
+
+<section id="f1">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 1 &mdash; A base</span>
+    <h2>Vari&aacute;vel e equa&ccedil;&atilde;o:<br>a balan&ccedil;a que nunca pode desequilibrar</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        Uma <strong>vari&aacute;vel</strong> &eacute; s&oacute; uma caixa com um nome, guardando um n&uacute;mero que ainda
+        n&atilde;o sabemos. Chamamos de <code>x</code>, <code>f</code>, <code>T</code>&hellip; Uma
+        <strong>equa&ccedil;&atilde;o</strong> &eacute; uma <strong>balan&ccedil;a de dois pratos</strong>: o que est&aacute; &agrave;
+        esquerda do <code>=</code> pesa exatamente o mesmo que &agrave; direita. A regra de ouro &eacute; uma s&oacute;:
+        <strong>o que voc&ecirc; faz em um prato, faz no outro</strong> &mdash; sen&atilde;o a balan&ccedil;a tomba.
+        Resolver uma equa&ccedil;&atilde;o &eacute; ir tirando peso dos dois lados at&eacute; a caixa <code>x</code> ficar sozinha.
+      </p>
+    </div>
+    <p>
+      Exemplo musical concreto: afinar &eacute; resolver uma equa&ccedil;&atilde;o. "Que frequ&ecirc;ncia <code>f</code> faz
+      esta corda soar uma oitava acima de 220 Hz?" A oitava dobra a frequ&ecirc;ncia, ent&atilde;o:
+    </p>
+    <div class="derivation">
+      <span class="step">f = 2 &times; 220 <span class="annot">// a inc&oacute;gnita j&aacute; est&aacute; sozinha</span></span>
+      <span class="step"><span class="hl-green">f = 440 Hz</span></span>
+    </div>
+    <p>E quando a caixa n&atilde;o est&aacute; sozinha? Mantenha a balan&ccedil;a. "Tr&ecirc;s vezes uma frequ&ecirc;ncia d&aacute; 1320 Hz":</p>
+    <div class="derivation">
+      <span class="step">3 &times; f = 1320</span>
+      <span class="step"><span class="annot">// divido OS DOIS lados por 3 (mant&eacute;m o equil&iacute;brio):</span></span>
+      <span class="step">3f / 3 = 1320 / 3</span>
+      <span class="step"><span class="hl-green">f = 440 Hz</span></span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>Fazer a mesma opera&ccedil;&atilde;o nos dois lados <strong>preserva a igualdade</strong>. N&atilde;o &eacute;
+      conven&ccedil;&atilde;o nem truque &mdash; &eacute; o que significa "ser igual". Toda a &aacute;lgebra &eacute; isso, repetido.</p>
+    </div>
+    <div class="exercises" id="ex-f1"></div>
+  </div>
+</section>
+
+<section id="f2">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 2 &mdash; O cora&ccedil;&atilde;o</span>
+    <h2>Raz&atilde;o e propor&ccedil;&atilde;o:<br>por que a m&uacute;sica compara dividindo, n&atilde;o subtraindo</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        Uma <strong>raz&atilde;o</strong> compara dois n&uacute;meros perguntando "<strong>quantas vezes</strong> um
+        cabe no outro?" &mdash; isto &eacute;, dividindo. A raz&atilde;o de 6 para 3 &eacute; <code>6/3 = 2</code>: seis &eacute;
+        o dobro de tr&ecirc;s. O segredo que muda tudo na m&uacute;sica: <strong>a raz&atilde;o n&atilde;o muda se voc&ecirc;
+        escala os dois n&uacute;meros juntos</strong>. <code>6/3</code>, <code>4/2</code> e <code>2/1</code> s&atilde;o
+        a mesma raz&atilde;o (todas valem 2). Seis ma&ccedil;&atilde;s para tr&ecirc;s pessoas &eacute; a mesma "generosidade" que
+        duas ma&ccedil;&atilde;s para uma pessoa.
+      </p>
+    </div>
+    <p>
+      Por que isso &eacute; o cora&ccedil;&atilde;o da m&uacute;sica? Porque o ouvido mede intervalos por
+      <strong>raz&atilde;o</strong>, n&atilde;o por diferen&ccedil;a. Veja a armadilha da subtra&ccedil;&atilde;o:
+    </p>
+    <div class="analogy">
+      <div class="acard kin">
+        <h5>Se medisse por diferen&ccedil;a (errado)</h5>
+        <p>De 100 para 200 Hz: diferen&ccedil;a de <strong>100</strong>.</p>
+        <p>De 400 para 500 Hz: diferen&ccedil;a de <strong>100</strong> tamb&eacute;m.</p>
+        <p>Pela subtra&ccedil;&atilde;o, "mesmo salto". Mas o ouvido <strong>n&atilde;o</strong> os ouve iguais &mdash; o segundo soa bem menor.</p>
+      </div>
+      <div class="acard geo">
+        <h5>Medindo por raz&atilde;o (certo)</h5>
+        <p>De 100 para 200 Hz: raz&atilde;o <code>200/100 = 2</code>.</p>
+        <p>De 400 para 800 Hz: raz&atilde;o <code>800/400 = 2</code>.</p>
+        <p>Mesma raz&atilde;o = mesmo intervalo percebido (uma oitava). <strong>&Eacute; assim que a m&uacute;sica funciona.</strong></p>
+      </div>
+    </div>
+    <p>
+      Uma <strong>propor&ccedil;&atilde;o</strong> &eacute; simplesmente a afirma&ccedil;&atilde;o de que duas raz&otilde;es s&atilde;o iguais:
+      <code>a/b = c/d</code>. "Subir a mesma melodia, mais aguda" &eacute; manter todas as propor&ccedil;&otilde;es e
+      multiplicar tudo pelo mesmo fator.
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>Raz&atilde;o vs. diferen&ccedil;a &mdash; arraste a frequ&ecirc;ncia base</span><span id="ratio-lbl">base 100 Hz</span></div>
+      <canvas id="ratio-canvas" height="220" role="img" aria-label="Duas barras mostram que somar uma diferen&ccedil;a fixa encolhe perceptualmente no agudo, enquanto multiplicar por uma raz&atilde;o fixa mant&eacute;m o intervalo."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="ratio-base">Frequ&ecirc;ncia base <span class="v" id="ratio-base-v">100</span> Hz</label><input type="range" id="ratio-base" min="50" max="800" step="10" value="100" aria-label="Frequ&ecirc;ncia base de 50 a 800 Hz"></div>
+      </div>
+      <div class="viz-caption">
+        <strong style="color:var(--kin)">&Acirc;mbar:</strong> somar +100 Hz (diferen&ccedil;a fixa) &mdash; o "salto" perceptual
+        encolhe conforme a base sobe. <strong style="color:var(--geo)">Azul:</strong> multiplicar por 2 (raz&atilde;o fixa)
+        &mdash; o intervalo percebido (oitava) &eacute; sempre o mesmo. A m&uacute;sica vive no azul.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f2"></div>
+  </div>
+</section>
+
+<section id="f3">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 3 &mdash; O espelho</span>
+    <h2>Fra&ccedil;&atilde;o, divis&atilde;o e o inverso:<br>por que f = 1/T</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        Uma <strong>fra&ccedil;&atilde;o</strong> <code>a/b</code> &eacute; uma divis&atilde;o esperando acontecer: "parta
+        <code>a</code> em <code>b</code> peda&ccedil;os iguais". O <strong>inverso</strong> (ou rec&iacute;proco) de
+        um n&uacute;mero &eacute; <code>1</code> dividido por ele: o inverso de 4 &eacute; <code>1/4</code>; o inverso
+        de <code>1/4</code> &eacute; 4. Inverter &eacute; trocar a pergunta de cabe&ccedil;a para baixo: de "quanto cabe
+        em cada parte?" para "quantas partes cabem no todo?".
+      </p>
+    </div>
+    <p>
+      A m&uacute;sica precisa disso na rela&ccedil;&atilde;o mais b&aacute;sica de todas, entre <em class="term">per&iacute;odo</em>
+      e <em class="term">frequ&ecirc;ncia</em>. O per&iacute;odo <code>T</code> &eacute; <strong>quanto tempo</strong>
+      leva uma vibra&ccedil;&atilde;o completa (em segundos). A frequ&ecirc;ncia <code>f</code> &eacute; <strong>quantas
+      vibra&ccedil;&otilde;es por segundo</strong>. Uma &eacute; o inverso da outra:
+    </p>
+    <div class="eq big">
+      f = 1 / T &nbsp;&nbsp;&nbsp; e &nbsp;&nbsp;&nbsp; T = 1 / f
+      <br><span class="lbl">// f em hertz (Hz = vibra&ccedil;&otilde;es/segundo); T em segundos</span>
+    </div>
+    <div class="intuition">
+      <span class="int-label">Por que &eacute; inverso, em uma frase</span>
+      <p>
+        Se cada volta leva <strong>meio segundo</strong> (<code>T = 0,5 s</code>), ent&atilde;o em um segundo
+        cabem <strong>duas</strong> voltas (<code>f = 2 Hz</code>). Quanto mais <em>demorada</em> cada
+        vibra&ccedil;&atilde;o, <em>menos</em> vibra&ccedil;&otilde;es por segundo. Dividir 1 pelo tempo de cada uma d&aacute;
+        quantas cabem &mdash; isso &eacute; o inverso.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Per&iacute;odo e frequ&ecirc;ncia s&atilde;o espelhos</span><span id="period-lbl">T = 0.5 s &rarr; f = 2 Hz</span></div>
+      <canvas id="period-canvas" height="180" role="img" aria-label="Onda cujo per&iacute;odo encolhe conforme a frequ&ecirc;ncia aumenta; o produto T vezes f permanece 1."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="period-T">Per&iacute;odo T <span class="v" id="period-T-v">0.5</span> s</label><input type="range" id="period-T" min="0.1" max="2" step="0.05" value="0.5" aria-label="Per&iacute;odo de 0.1 a 2 segundos"></div>
+        <div class="readout"><span class="rl">Frequ&ecirc;ncia f = 1/T</span><span id="period-f">2.00 Hz</span></div>
+      </div>
+      <div class="viz-caption">
+        Diminua <code>T</code> (vibra&ccedil;&atilde;o mais r&aacute;pida) e <code>f</code> sobe na mesma propor&ccedil;&atilde;o inversa.
+        O produto <code>T &times; f</code> &eacute; sempre <strong>1</strong> &mdash; a marca registrada de dois inversos.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f3"></div>
+  </div>
+</section>
+
+<section id="f4">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 4 &mdash; Multiplicar em massa</span>
+    <h2>Pot&ecirc;ncias e ra&iacute;zes:<br>e o n&uacute;mero secreto do piano, <code>2^(1/12)</code></h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        Uma <strong>pot&ecirc;ncia</strong> &eacute; multiplica&ccedil;&atilde;o repetida, como a multiplica&ccedil;&atilde;o &eacute; soma
+        repetida. <code>2&sup3;</code> significa "use o 2 como fator tr&ecirc;s vezes": <code>2&times;2&times;2 = 8</code>.
+        O n&uacute;mero de baixo (2) &eacute; a <strong>base</strong>; o de cima (3) &eacute; o <strong>expoente</strong>,
+        que conta quantas vezes multiplicar. Uma <strong>raiz</strong> &eacute; a pergunta inversa: a raiz
+        c&uacute;bica de 8 pergunta "que n&uacute;mero, multiplicado por si mesmo tr&ecirc;s vezes, d&aacute; 8?" &mdash; resposta, 2.
+      </p>
+    </div>
+    <h3>A lei que explica tudo o que vem depois</h3>
+    <p>
+      Uma s&oacute; regra das pot&ecirc;ncias importa para a m&uacute;sica, e ela &eacute; a semente do logaritmo (Fundamento 6).
+      Quando voc&ecirc; <strong>multiplica</strong> duas pot&ecirc;ncias de mesma base, os expoentes <strong>somam</strong>:
+    </p>
+    <div class="eq big">
+      a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup>
+      <br><span class="lbl">// ex.: 2&sup2; &times; 2&sup3; = (2&middot;2)&middot;(2&middot;2&middot;2) = 2&#8309; &nbsp;&mdash;&nbsp; 2+3 = 5 fatores</span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>Isto &eacute; s&oacute; contar fatores: <code>m</code> c&oacute;pias vezes <code>n</code> c&oacute;pias d&atilde;o
+      <code>m+n</code> c&oacute;pias. Guarde a forma da ideia: <strong>multiplicar virou somar</strong>
+      (nos expoentes). O logaritmo vai explorar isso.</p>
+    </div>
+    <h3>O salto dif&iacute;cil: expoente fracion&aacute;rio</h3>
+    <p>
+      O que significa <code>2^(1/12)</code>? Use a lei de cima ao contr&aacute;rio. Se eu multiplicar
+      <code>2^(1/12)</code> por si mesmo <strong>12 vezes</strong>, os expoentes somam:
+      <code>1/12 + 1/12 + &hellip; = 12/12 = 1</code>. Ou seja, <code>(2^(1/12))^12 = 2&sup1; = 2</code>.
+    </p>
+    <div class="intuition">
+      <span class="int-label">A tradu&ccedil;&atilde;o em uma frase</span>
+      <p>
+        <code>2^(1/12)</code> &eacute; <strong>o n&uacute;mero que, multiplicado por si mesmo 12 vezes, d&aacute; 2</strong>
+        &mdash; a "raiz d&eacute;cima-segunda de 2". Numericamente, &asymp; 1,059463. Este &eacute; <strong>o passo do
+        semitom</strong>: subir um semitom no piano &eacute; multiplicar a frequ&ecirc;ncia por 1,059&hellip;; subir 12
+        semitons (uma oitava) multiplica por ele 12 vezes, voltando a dobrar (&times;2). &Eacute; o n&uacute;mero secreto
+        que faz o teclado fechar a oitava perfeitamente.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Subindo semitons: multiplicar por 2^(1/12), doze vezes</span><span id="semitone-lbl">0 semitons &middot; &times;1.000</span></div>
+      <canvas id="semitone-canvas" height="240" role="img" aria-label="Barras de frequ&ecirc;ncia subindo de semitom em semitom; ao 12&ordm; passo a frequ&ecirc;ncia dobra exatamente."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="semitone-n">Semitons acima de 220 Hz <span class="v" id="semitone-n-v">0</span></label><input type="range" id="semitone-n" min="0" max="12" step="1" value="0" aria-label="Semitons de 0 a 12"></div>
+        <div class="readout"><span class="rl">Frequ&ecirc;ncia</span><span id="semitone-f">220.00 Hz</span></div>
+        <div class="readout"><span class="rl">Fator acumulado</span><span id="semitone-mult">&times;1.0000</span></div>
+      </div>
+      <div class="viz-caption">
+        Cada passo multiplica por <code>2^(1/12) &asymp; 1,0595</code>. No 12&ordm; semitom o fator acumulado &eacute;
+        exatamente <strong>&times;2</strong> &mdash; a oitava. A escala temperada &eacute; literalmente esta pot&ecirc;ncia
+        fracion&aacute;ria, repetida.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f4"></div>
+  </div>
+</section>
+
+<section id="f5">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 5 &mdash; A m&aacute;quina</span>
+    <h2>Fun&ccedil;&atilde;o:<br>uma m&aacute;quina que transforma entrada em sa&iacute;da</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        Uma <strong>fun&ccedil;&atilde;o</strong> &eacute; uma m&aacute;quina: voc&ecirc; p&otilde;e um n&uacute;mero pela entrada, ela aplica
+        uma regra fixa, e devolve um n&uacute;mero pela sa&iacute;da. Escrevemos <code>f(x)</code> &mdash; l&ecirc;-se "f de x"
+        &mdash; que significa "a sa&iacute;da da m&aacute;quina <code>f</code> quando a entrada &eacute; <code>x</code>".
+        O <code>x</code> n&atilde;o &eacute; mist&eacute;rio: &eacute; s&oacute; o lugar onde a entrada entra.
+      </p>
+    </div>
+    <p>
+      Exemplo: a m&aacute;quina "dobrar" &eacute; <code>f(x) = 2x</code>. P&otilde;e 220, sai 440. P&otilde;e 5, sai 10. A
+      regra (multiplicar por 2) &eacute; sempre a mesma; s&oacute; a entrada muda. Quando escrevemos
+      <code>y(x,t)</code> no caderno principal, &eacute; a mesma ideia com <strong>duas entradas</strong>: a
+      posi&ccedil;&atilde;o <code>x</code> e o tempo <code>t</code>; a sa&iacute;da <code>y</code> &eacute; a altura da corda
+      naquele ponto, naquele instante.
+    </p>
+    <div class="intuition">
+      <span class="int-label">Por que o gr&aacute;fico &eacute; o "retrato" da m&aacute;quina</span>
+      <p>
+        Se eu alimentar a m&aacute;quina com <em>todas</em> as entradas poss&iacute;veis e marcar cada par
+        (entrada, sa&iacute;da) como um ponto, surge uma curva &mdash; o <strong>gr&aacute;fico</strong>. Ele &eacute; o
+        retrato completo do comportamento da m&aacute;quina: a forma da curva <em>&eacute;</em> a regra, desenhada.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>A m&aacute;quina-fun&ccedil;&atilde;o: escolha uma regra, alimente uma entrada</span><span id="fn-lbl">f(x) = 2x</span></div>
+      <canvas id="fn-canvas" height="260" role="img" aria-label="Diagrama de uma fun&ccedil;&atilde;o como m&aacute;quina, com entrada x, regra, e sa&iacute;da, junto ao gr&aacute;fico da regra escolhida."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="fn-x">Entrada x <span class="v" id="fn-x-v">3</span></label><input type="range" id="fn-x" min="-5" max="5" step="0.5" value="3" aria-label="Entrada x de menos 5 a 5"></div>
+        <div class="readout"><span class="rl">Sa&iacute;da f(x)</span><span id="fn-out">6</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="sec sm" data-fn="dobro" aria-label="regra dobrar">f(x) = 2x</button>
+        <button class="sec sm" data-fn="quad" aria-label="regra quadrado">f(x) = x&sup2;</button>
+        <button class="sec sm" data-fn="meio" aria-label="regra metade mais um">f(x) = x/2 + 1</button>
+        <button class="sec sm" data-fn="inv" aria-label="regra inverso">f(x) = 1/x</button>
+      </div>
+      <div class="viz-caption">
+        A bolinha mostra a entrada <code>x</code> sendo transformada na sa&iacute;da <code>f(x)</code>. O ponto
+        no gr&aacute;fico &eacute; o par (x, f(x)). Troque a regra e veja a curva &mdash; o retrato &mdash; mudar.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f5"></div>
+  </div>
+</section>
+
+<section id="f6">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 6 &mdash; O conceito estrela</span>
+    <h2>Logaritmo:<br>a pergunta "elevado a quanto?" &mdash; e por que ele vira &times; em +</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        O logaritmo assusta porque o ensinam ao contr&aacute;rio. Ele &eacute; s&oacute; a <strong>pergunta inversa da
+        pot&ecirc;ncia</strong>. A pot&ecirc;ncia pergunta: "2 elevado a 3, quanto d&aacute;?" (resposta: 8). O logaritmo
+        pergunta o contr&aacute;rio: "<strong>2 elevado a QUANTO d&aacute; 8?</strong>" (resposta: 3). S&oacute; isso.
+        <code>log&#8322;(8) = 3</code> l&ecirc;-se "o log na base 2 de 8 &eacute; 3", e significa exatamente
+        "preciso elevar 2 ao expoente 3 para chegar a 8".
+      </p>
+    </div>
+    <p>Em outras palavras, logaritmo &eacute; "<strong>quantas vezes multipliquei?</strong>":</p>
+    <div class="derivation">
+      <span class="step">log&#8322;(2) = 1 <span class="annot">// 2 elevado a 1 d&aacute; 2 (multipliquei uma vez)</span></span>
+      <span class="step">log&#8322;(4) = 2 <span class="annot">// 2&sup2; = 4 (dobrei duas vezes)</span></span>
+      <span class="step">log&#8322;(8) = 3 <span class="annot">// 2&sup3; = 8 (dobrei tr&ecirc;s vezes)</span></span>
+      <span class="step">log&#8322;(1) = 0 <span class="annot">// 2&#8304; = 1 (n&atilde;o multipliquei nenhuma vez)</span></span>
+    </div>
+    <h3>O superpoder: transformar multiplica&ccedil;&atilde;o em soma</h3>
+    <p>
+      Aqui est&aacute; a &uacute;nica raz&atilde;o de o logaritmo existir na m&uacute;sica. Lembra da lei do Fundamento 4,
+      <code>a<sup>m</sup>&times;a<sup>n</sup> = a<sup>m+n</sup></code>? Leia-a pelos olhos do logaritmo. Se
+      multiplicar potências <strong>soma</strong> expoentes, e o log <strong>&eacute;</strong> o expoente, ent&atilde;o:
+    </p>
+    <div class="eq big">
+      log(a &times; b) = log(a) + log(b)
+      <br><span class="lbl">// o log transforma um PRODUTO numa SOMA</span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>Isto n&atilde;o &eacute; coincid&ecirc;ncia nem conven&ccedil;&atilde;o: &eacute; a lei dos expoentes relida. Como o log
+      devolve o expoente, e expoentes somam quando as pot&ecirc;ncias multiplicam, o log
+      <strong>obrigatoriamente</strong> troca &times; por +.</p>
+    </div>
+    <div class="key-insight">
+      <span class="ki-label">Por que a m&uacute;sica precisa exatamente disso</span>
+      <p>
+        Vimos no Fundamento 2 que <strong>empilhar intervalos &eacute; multiplicar raz&otilde;es</strong> (subir duas
+        quintas = <code>3/2 &times; 3/2</code>). Multiplicar &eacute; inc&ocirc;modo; o ouvido, al&eacute;m disso, percebe
+        intervalos como <em>dist&acirc;ncias que somam</em> (uma quinta + uma quarta = uma oitava). O logaritmo &eacute;
+        a ponte exata: ele converte as raz&otilde;es multiplicativas da f&iacute;sica nas dist&acirc;ncias aditivas da
+        percep&ccedil;&atilde;o. &Eacute; por isso que o caderno principal mede intervalos em <em class="term">cents</em> &mdash;
+        uma escala logar&iacute;tmica &mdash; onde <code>cents = 1200 &middot; log&#8322;(raz&atilde;o)</code>.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>O log achata o multiplicativo em aditivo</span><span id="log-lbl">log&#8322;(8) = 3</span></div>
+      <canvas id="log-canvas" height="250" role="img" aria-label="Eixo superior com posi&ccedil;&otilde;es multiplicativas 1,2,4,8,16 desigualmente espa&ccedil;adas; eixo inferior com os logaritmos 0,1,2,3,4 uniformemente espa&ccedil;ados."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="log-x">Valor (base 2) <span class="v" id="log-x-v">8</span></label><input type="range" id="log-x" min="1" max="16" step="1" value="8" aria-label="Valor de 1 a 16"></div>
+        <div class="readout"><span class="rl">log&#8322; do valor</span><span id="log-out">3.00</span></div>
+      </div>
+      <div class="viz-caption">
+        Em cima, os valores <code>1,2,4,8,16</code> &mdash; cada um o <strong>dobro</strong> do anterior, espa&ccedil;ados
+        de forma desigual (multiplicativo). Embaixo, seus logs <code>0,1,2,3,4</code> &mdash; igualmente espa&ccedil;ados
+        (aditivo). O log <strong>endireita</strong> a escala: cada dobra vira um passo do mesmo tamanho.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f6"></div>
+  </div>
+</section>
+
+<section id="f7">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 7 &mdash; A forma da vibra&ccedil;&atilde;o</span>
+    <h2>Seno:<br>movimento circular visto de lado</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        Esque&ccedil;a a tabela de tri&acirc;ngulos do col&eacute;gio. O <strong>seno</strong> tem uma imagem &uacute;nica e
+        f&iacute;sica: imagine um ponto girando num c&iacute;rculo, a velocidade constante. Agora olhe esse c&iacute;rculo
+        <strong>de lado</strong>, de modo que voc&ecirc; s&oacute; veja o ponto subir e descer. Esse sobe-e-desce
+        &mdash; a <strong>altura</strong> do ponto girante ao longo do tempo &mdash; <em>&eacute;</em> a onda do seno.
+        Por isso ela descreve vibra&ccedil;&atilde;o: vibrar &eacute; ir e voltar suavemente, que &eacute; girar visto de lado.
+      </p>
+    </div>
+    <p>
+      O &acirc;ngulo de giro &eacute; medido em radianos; uma volta completa &eacute; <code>2&pi;</code> radianos
+      (&asymp; 6,28). A fun&ccedil;&atilde;o <code>sin(&theta;)</code> devolve a altura do ponto quando ele girou um
+      &acirc;ngulo <code>&theta;</code>. Ela vai de <code>+1</code> (topo) a <code>&minus;1</code> (fundo) e
+      repete a cada volta &mdash; &eacute; <strong>peri&oacute;dica</strong>, como toda vibra&ccedil;&atilde;o.
+    </p>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>Um <strong>tom puro</strong> &mdash; o som mais simples poss&iacute;vel &mdash; &eacute; literalmente uma onda
+      senoidal na press&atilde;o do ar. Quando o caderno principal desenha uma "onda", est&aacute; desenhando
+      <code>sin</code> (ou somas dele). O seno &eacute; o &aacute;tomo do som.</p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>O c&iacute;rculo que vira onda &mdash; gire e veja o seno nascer</span><span id="sine-lbl">&theta; = 0</span></div>
+      <canvas id="sine-canvas" height="260" role="img" aria-label="&Agrave; esquerda, um ponto gira num c&iacute;rculo; &agrave; direita, sua altura tra&ccedil;a a onda senoidal ao longo do tempo."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="sine-freq">Frequ&ecirc;ncia (voltas por segundo) <span class="v" id="sine-freq-v">1</span></label><input type="range" id="sine-freq" min="0.5" max="4" step="0.5" value="1" aria-label="Frequ&ecirc;ncia de 0.5 a 4"></div>
+        <div class="snd"><button id="sine-play" aria-label="Ouvir um tom puro: uma onda senoidal">&#9654; Ouvir tom puro</button></div>
+      </div>
+      <div class="viz-caption">
+        <strong style="color:var(--geo)">Esquerda:</strong> o ponto girando.
+        <strong style="color:var(--green)">Direita:</strong> sua altura desenhando a onda no tempo. Quanto mais
+        r&aacute;pido o giro (maior frequ&ecirc;ncia), mais apertada a onda &mdash; e mais agudo o som.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f7"></div>
+  </div>
+</section>
+
+<section id="f8">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 8 &mdash; Uma nota&ccedil;&atilde;o, n&atilde;o um monstro</span>
+    <h2>O somat&oacute;rio &Sigma;:<br>"some todos estes"</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        O s&iacute;mbolo <code>&Sigma;</code> (sigma grego mai&uacute;sculo) assusta &agrave; toa. Ele &eacute; s&oacute; uma
+        abrevia&ccedil;&atilde;o para "<strong>some uma lista de coisas</strong>". Em vez de escrever
+        <code>a&#8321; + a&#8322; + a&#8323; + a&#8324;</code>, escrevemos <code>&Sigma;</code> com instru&ccedil;&otilde;es de
+        onde come&ccedil;ar e parar. &Eacute; um "for-loop" da matem&aacute;tica: para cada valor do contador, calcule
+        o termo e v&aacute; somando.
+      </p>
+    </div>
+    <div class="eq">
+      &Sigma;<sub>n=1</sub><sup>4</sup> a<sub>n</sub> = a&#8321; + a&#8322; + a&#8323; + a&#8324;
+      <br><span class="lbl">// n come&ccedil;a em 1 (embaixo), vai at&eacute; 4 (em cima); some cada a&#8345;</span>
+    </div>
+    <p>
+      No caderno principal, o timbre &eacute; uma soma de harm&ocirc;nicos:
+      <code>y(t) = &Sigma; a<sub>n</sub> &middot; sin(2&pi; &middot; n&middot;f&#8321; &middot; t)</code>. Traduzido: "some
+      muitas ondas senoidais, cada uma com sua amplitude <code>a<sub>n</sub></code> e frequ&ecirc;ncia
+      <code>n&middot;f&#8321;</code>". O <code>&Sigma;</code> &eacute; s&oacute; o comando "junte todas".
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>&Sigma; em a&ccedil;&atilde;o &mdash; some senoides, uma a uma</span><span id="sum-lbl">1 termo</span></div>
+      <canvas id="sum-canvas" height="220" role="img" aria-label="Ondas senoidais sendo somadas progressivamente; a soma muda de forma a cada termo adicionado."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="sum-n">Quantos termos somar <span class="v" id="sum-n-v">1</span></label><input type="range" id="sum-n" min="1" max="6" step="1" value="1" aria-label="N&uacute;mero de termos de 1 a 6"></div>
+        <div class="snd"><button id="sum-play" aria-label="Ouvir a soma atual de harm&ocirc;nicos">&#9654; Ouvir a soma</button></div>
+      </div>
+      <div class="viz-caption">
+        Comece com 1 termo (uma senoide pura). Aumente: cada novo termo da soma <code>&Sigma;</code> deforma a
+        onda, criando um timbre mais rico. &Eacute; isto que <code>&Sigma; a<sub>n</sub> sin(&hellip;)</code> faz &mdash;
+        nada mais que somar.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f8"></div>
+  </div>
+</section>
+
+<section id="f9">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 9 &mdash; A taxa de varia&ccedil;&atilde;o</span>
+    <h2>Derivada:<br>o qu&atilde;o depressa algo muda, agora</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        A <strong>derivada</strong> responde a uma pergunta &uacute;nica: "<strong>a que velocidade isto est&aacute;
+        mudando, neste instante?</strong>" Se uma grandeza est&aacute; crescendo r&aacute;pido, a derivada &eacute; grande;
+        se est&aacute; parada, a derivada &eacute; zero; se est&aacute; caindo, &eacute; negativa. &Eacute; a inclina&ccedil;&atilde;o da
+        curva &mdash; o quanto ela sobe ou desce a cada passinho. S&oacute; isso. N&atilde;o vamos calcular limites;
+        vamos <em>enxergar</em> a derivada por duas lentes que voc&ecirc; j&aacute; tem: movimento e forma.
+      </p>
+    </div>
+    <div class="analogy">
+      <div class="acard kin">
+        <h5>Lente cinem&aacute;tica &mdash; a derivada no tempo</h5>
+        <p><strong>Posi&ccedil;&atilde;o</strong> &eacute; onde voc&ecirc; est&aacute;. Sua derivada (taxa de mudan&ccedil;a da posi&ccedil;&atilde;o) &eacute; a <strong>velocidade</strong>.</p>
+        <p>A derivada da <em>velocidade</em> &eacute; a <strong>acelera&ccedil;&atilde;o</strong> &mdash; a mudan&ccedil;a da mudan&ccedil;a.</p>
+        <p>Derivar duas vezes a posi&ccedil;&atilde;o d&aacute; a acelera&ccedil;&atilde;o. Guarde isto: ser&aacute; <em>exatamente</em> o lado esquerdo da equa&ccedil;&atilde;o de onda.</p>
+      </div>
+      <div class="acard geo">
+        <h5>Lente geom&eacute;trica &mdash; a derivada na dimens&atilde;o</h5>
+        <p>Infle uma <strong>esfera</strong> um tiquinho. O volume novo &eacute; uma casca fina sobre toda a superf&iacute;cie.</p>
+        <p>Logo a derivada do <strong>volume</strong> &eacute; a <strong>&aacute;rea da superf&iacute;cie</strong>: <code>dV/dr = 4&pi;r&sup2;</code>.</p>
+        <p>A derivada "<strong>descasca</strong>" o s&oacute;lido, descendo uma dimens&atilde;o: volume &rarr; &aacute;rea &rarr; comprimento.</p>
+      </div>
+    </div>
+    <h3>A &uacute;nica regra mec&acirc;nica que voc&ecirc; precisa</h3>
+    <p>
+      Para <em>fazer</em> derivadas (n&atilde;o s&oacute; admir&aacute;-las), uma regra basta para tudo neste caderno: a
+      <strong>regra do expoente</strong>. Derivar <code>x<sup>n</sup></code> traz o expoente para a frente
+      como fator e reduz o expoente em 1:
+    </p>
+    <div class="eq big">
+      d/dx [ x<sup>n</sup> ] = n &middot; x<sup>n&minus;1</sup>
+      <br><span class="lbl">// "desce o n, diminui o expoente"</span>
+    </div>
+    <div class="intuition">
+      <span class="int-label">Veja a regra ter sentido f&iacute;sico</span>
+      <p>
+        A esfera tem <code>V = (4/3)&pi;r&sup3;</code>. Aplique a regra ao <code>r&sup3;</code>: desce o 3,
+        vira <code>3r&sup2;</code>. Ent&atilde;o <code>dV/dr = (4/3)&pi; &middot; 3r&sup2; = 4&pi;r&sup2;</code> &mdash;
+        a &aacute;rea da superf&iacute;cie, exatamente como a intui&ccedil;&atilde;o do "descascar" prometia. O cubo
+        <code>V = L&sup3;</code> d&aacute; <code>dV/dL = 3L&sup2;</code>: as <strong>tr&ecirc;s faces</strong> que
+        crescem quando voc&ecirc; empurra o canto. O "3" que aparece &eacute; o n&uacute;mero de faces &mdash; a regra do
+        expoente tem carne geom&eacute;trica.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Posi&ccedil;&atilde;o &rarr; velocidade &rarr; acelera&ccedil;&atilde;o (derivar &eacute; medir a inclina&ccedil;&atilde;o)</span><span id="deriv-lbl">t = 0</span></div>
+      <canvas id="deriv-canvas" height="300" role="img" aria-label="Tr&ecirc;s curvas empilhadas: posi&ccedil;&atilde;o, sua inclina&ccedil;&atilde;o (velocidade) e a inclina&ccedil;&atilde;o desta (acelera&ccedil;&atilde;o), com uma linha tangente m&oacute;vel mostrando a derivada."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="deriv-t">Instante t <span class="v" id="deriv-t-v">0.0</span></label><input type="range" id="deriv-t" min="0" max="6.2" step="0.1" value="0" aria-label="Instante de 0 a 6.2"></div>
+      </div>
+      <div class="viz-caption">
+        <strong style="color:var(--bluelight)">Topo:</strong> posi&ccedil;&atilde;o de um ponto oscilando (como na membrana
+        de um tambor). <strong style="color:var(--green)">Meio:</strong> sua velocidade &mdash; a inclina&ccedil;&atilde;o da
+        curva de cima. <strong style="color:var(--amber)">Base:</strong> a acelera&ccedil;&atilde;o &mdash; a inclina&ccedil;&atilde;o
+        do meio. A reta tangente m&oacute;vel <em>&eacute;</em> a derivada naquele instante.
+      </div>
+    </div>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>Na corda e na membrana, a acelera&ccedil;&atilde;o de cada ponto &eacute; a derivada segunda da sua posi&ccedil;&atilde;o
+      no tempo &mdash; o s&iacute;mbolo <code>&part;&sup2;y/&part;t&sup2;</code>. N&atilde;o &eacute; monstro nenhum: &eacute; "a
+      acelera&ccedil;&atilde;o daquele pedacinho da pele".</p>
+    </div>
+    <div class="exercises" id="ex-f9"></div>
+  </div>
+</section>
+
+<section id="f10">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 10 &mdash; Acumular</span>
+    <h2>Integral:<br>somar fatias infinitas &mdash; e desfazer a derivada</h2>
+    <div class="intuition">
+      <span class="int-label">Intui&ccedil;&atilde;o primeiro</span>
+      <p>
+        A <strong>integral</strong> &eacute; o oposto exato da derivada. Se a derivada <em>descasca</em> e
+        <em>desce</em> uma dimens&atilde;o, a integral <strong>acumula</strong> e <strong>sobe</strong> uma. Ela
+        responde: "se eu souber a taxa de mudan&ccedil;a, quanto se acumulou no total?" A imagem concreta:
+        a integral &eacute; a <strong>&aacute;rea sob uma curva</strong> &mdash; somar infinitas fatias verticais
+        finíssimas para obter o todo.
+      </p>
+    </div>
+    <div class="analogy">
+      <div class="acard kin">
+        <h5>Lente cinem&aacute;tica &mdash; reconstruir o movimento</h5>
+        <p>Se conhe&ccedil;o a <strong>acelera&ccedil;&atilde;o</strong> e acumulo (integro) no tempo, recupero a <strong>velocidade</strong>.</p>
+        <p>Integrando a velocidade, recupero a <strong>posi&ccedil;&atilde;o</strong>. Integrar sobe a escada de volta: acelera&ccedil;&atilde;o &rarr; velocidade &rarr; posi&ccedil;&atilde;o.</p>
+        <p>&Eacute; o caminho inverso do Fundamento 9 &mdash; derivar desce, integrar sobe.</p>
+      </div>
+      <div class="acard geo">
+        <h5>Lente geom&eacute;trica &mdash; reconstruir o s&oacute;lido</h5>
+        <p>A derivada do volume da esfera era a &aacute;rea (<code>4&pi;r&sup2;</code>). A integral faz o retorno.</p>
+        <p>Empilhe (integre) infinitas cascas esf&eacute;ricas de &aacute;rea <code>4&pi;r&sup2;</code>, de 0 at&eacute; R, e reconstr&oacute;i o <strong>volume</strong> <code>(4/3)&pi;R&sup3;</code>.</p>
+        <p>Integrar &aacute;rea ao longo do raio <strong>sobe</strong> de volta para volume.</p>
+      </div>
+    </div>
+    <p>
+      A regra mec&acirc;nica tamb&eacute;m &eacute; o inverso da derivada: para integrar <code>x<sup>n</sup></code>,
+      <strong>suba o expoente em 1 e divida por ele</strong>:
+    </p>
+    <div class="eq big">
+      &int; x<sup>n</sup> dx = x<sup>n+1</sup> / (n+1)
+      <br><span class="lbl">// "sobe o expoente, divide pelo novo expoente" &mdash; desfaz a regra da derivada</span>
+    </div>
+    <div class="key-insight">
+      <span class="ki-label">O elo: derivar e integrar se desfazem</span>
+      <p>
+        Integre <code>4&pi;r&sup2;</code> (a &aacute;rea): suba o expoente (<code>r&sup2; &rarr; r&sup3;</code>) e divida
+        por 3 &rarr; <code>4&pi;r&sup3;/3 = (4/3)&pi;r&sup3;</code>, o volume. Derive esse volume e volta a
+        <code>4&pi;r&sup2;</code>. Ida e volta perfeitas. Essa rela&ccedil;&atilde;o &mdash; derivada e integral como
+        opera&ccedil;&otilde;es inversas &mdash; &eacute; o teorema fundamental do c&aacute;lculo, e &eacute; o que permite
+        <em>ler</em> a equa&ccedil;&atilde;o de onda nos dois sentidos.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Integral como &aacute;rea sob a curva &mdash; some as fatias</span><span id="integ-lbl">12 fatias</span></div>
+      <canvas id="integ-canvas" height="240" role="img" aria-label="&Aacute;rea sob uma curva aproximada por ret&acirc;ngulos; aumentar o n&uacute;mero de fatias aproxima a &aacute;rea verdadeira."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="integ-n">N&uacute;mero de fatias <span class="v" id="integ-n-v">12</span></label><input type="range" id="integ-n" min="2" max="80" step="1" value="12" aria-label="N&uacute;mero de fatias de 2 a 80"></div>
+        <div class="readout"><span class="rl">&Aacute;rea estimada</span><span id="integ-area">&mdash;</span></div>
+      </div>
+      <div class="viz-caption">
+        Cada ret&acirc;ngulo &eacute; uma fatia <code>altura &times; largura</code>. Somando-as, aproxima-se a &aacute;rea sob
+        a curva. Aumente as fatias: a soma converge para a &aacute;rea verdadeira &mdash; isto &eacute; integrar.
+      </div>
+    </div>
+    <div class="exercises" id="ex-f10"></div>
+  </div>
+</section>
+
+<section id="f11">
+  <div class="wrap">
+    <span class="level-tag">Fundamento 11 &mdash; A s&iacute;ntese</span>
+    <h2>Lendo a equa&ccedil;&atilde;o de onda<br>em portugu&ecirc;s claro</h2>
+    <p class="lead">
+      Tudo convergiu. Aquela primeira linha do caderno principal, que parecia hierogl&iacute;fica, agora pode
+      ser <strong>lida</strong>. Cada s&iacute;mbolo j&aacute; foi constru&iacute;do aqui. Vamos traduzi-la inteira.
+    </p>
+    <div class="eq big">
+      &part;&sup2;y/&part;t&sup2; = c&sup2; &middot; &part;&sup2;y/&part;x&sup2;
+    </div>
+    <h3>Palavra por palavra</h3>
+    <div class="derivation">
+      <span class="step"><span class="hl-blue">y</span> <span class="annot">// a altura da corda/membrana (Fundamento 5: a sa&iacute;da da fun&ccedil;&atilde;o y(x,t))</span></span>
+      <span class="step"><span class="hl-blue">y(x,t)</span> <span class="annot">// depende de DUAS entradas: posi&ccedil;&atilde;o x e tempo t</span></span>
+      <span class="step"></span>
+      <span class="step"><span class="hl-amber">&part;y/&part;t</span> <span class="annot">// derivada de y no tempo = velocidade vertical daquele ponto (Fund. 9)</span></span>
+      <span class="step"><span class="hl-amber">&part;&sup2;y/&part;t&sup2;</span> <span class="annot">// derivada segunda = ACELERA&Ccedil;&Atilde;O vertical daquele ponto</span></span>
+      <span class="step"></span>
+      <span class="step"><span class="hl-green">&part;&sup2;y/&part;x&sup2;</span> <span class="annot">// derivada segunda no espa&ccedil;o = CURVATURA da corda naquele ponto</span></span>
+      <span class="step"><span class="hl-violet">c&sup2;</span> <span class="annot">// c = velocidade da onda no meio; ao quadrado, s&oacute; uma constante (Fund. 4)</span></span>
+    </div>
+    <div class="key-insight">
+      <span class="ki-label">A equa&ccedil;&atilde;o inteira, em uma frase</span>
+      <p>
+        <strong>A acelera&ccedil;&atilde;o de cada ponto da corda &eacute; proporcional &agrave; curvatura da corda naquele
+        ponto.</strong> Em portugu&ecirc;s ainda mais simples: <em>quanto mais dobrada (encurvada) a corda
+        est&aacute; num lugar, mais forte ela &eacute; puxada de volta ali</em> &mdash; e puxar de volta &eacute; acelerar.
+        Um ponto muito entortado sofre acelera&ccedil;&atilde;o grande rumo ao repouso; um trecho reto n&atilde;o sente
+        for&ccedil;a. Essa "lei do retorno proporcional &agrave; curvatura" &eacute; o que faz a corda
+        <strong>vibrar</strong> &mdash; e, no caderno principal, &eacute; de onde sai <code>sin(kL)=0</code> e toda
+        a s&eacute;rie harm&ocirc;nica.
+      </p>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>O <code>&part;</code> (em vez de <code>d</code>) s&oacute; avisa que <code>y</code> tem mais de uma
+      entrada, e que estamos derivando em rela&ccedil;&atilde;o a uma delas de cada vez. A ideia &eacute; id&ecirc;ntica &agrave;
+      derivada que voc&ecirc; j&aacute; entende; a nota&ccedil;&atilde;o s&oacute; especifica "no tempo" ou "no espa&ccedil;o".</p>
+    </div>
+    <div class="intuition">
+      <span class="int-label">As duas lentes se encontram aqui</span>
+      <p>
+        O lado esquerdo &eacute; <strong>cinem&aacute;tica</strong> (acelera&ccedil;&atilde;o no tempo &mdash; a membrana do
+        tambor). O lado direito &eacute; <strong>geom&eacute;trico</strong> (curvatura no espa&ccedil;o &mdash; a forma).
+        A equa&ccedil;&atilde;o diz que os dois s&atilde;o a mesma coisa, ligados pela constante <code>c&sup2;</code>. As
+        duas analogias que usamos o caderno inteiro &mdash; movimento e forma &mdash; eram, o tempo todo, os
+        dois lados desta igualdade.
+      </p>
+    </div>
+    <div class="exercises" id="ex-f11"></div>
+    <a href="musica-matematica.html" class="crosslink">
+      <span class="cl-k">voc&ecirc; est&aacute; pronto &middot; pr&oacute;ximo passo</span>
+      <span class="cl-t">&rarr; A Matem&aacute;tica da M&uacute;sica</span>
+      <span class="cl-d">Agora que cada s&iacute;mbolo faz sentido, volte ao caderno principal e veja a equa&ccedil;&atilde;o de onda gerar a s&eacute;rie harm&ocirc;nica, a conson&acirc;ncia, as escalas e o temperamento &mdash; do zero &agrave; percep&ccedil;&atilde;o.</span>
+    </a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="sig">A Matem&aacute;tica por tr&aacute;s da Matem&aacute;tica &mdash; pr&eacute;-caderno</div>
+  11 fundamentos &middot; da balan&ccedil;a alg&eacute;brica &agrave; leitura da equa&ccedil;&atilde;o de onda<br>
+  intui&ccedil;&atilde;o antes de s&iacute;mbolo &middot; geometria e cinem&aacute;tica como lentes &middot; exerc&iacute;cios com gabarito passo a passo<br>
+  sem depend&ecirc;ncias externas &middot; offline-first &middot; <a href="musica-matematica.html">ir para o caderno principal &rarr;</a>
+</footer>
+<script>
+// ═══════════════════════════════════════════════════════════
+// MOTOR DE EXERCÍCIOS — renderiza de dados, solução colapsável
+// ═══════════════════════════════════════════════════════════
+const EX = {}; // preenchido por cada fundamento: EX.f1 = [...]
+const LEVEL_LABEL = {facil:'fácil', medio:'médio', dificil:'difícil', desafio:'desafio'};
+
+function renderExercises(setId, containerId){
+  const data = EX[setId] || [];
+  const box = document.getElementById(containerId);
+  if(!box) return;
+  let solvedCount = 0;
+  const prog = document.createElement('div'); prog.className='ex-progress';
+  prog.id = containerId+'-prog';
+  function updateProg(){
+    prog.textContent = solvedCount+' / '+data.length+' solu\u00e7\u00f5es abertas';
+  }
+  // filter bar
+  const filter = document.createElement('div'); filter.className='ex-filter';
+  const levels = ['todos','facil','medio','dificil','desafio'];
+  let activeFilter='todos';
+  levels.forEach(lv=>{
+    const b=document.createElement('button');
+    b.textContent = lv==='todos'?'todos':LEVEL_LABEL[lv];
+    if(lv==='todos') b.classList.add('on');
+    b.addEventListener('click',()=>{
+      activeFilter=lv;
+      filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      list.querySelectorAll('.ex').forEach(card=>{
+        card.style.display = (lv==='todos'||card.dataset.level===lv)?'':'none';
+      });
+    });
+    filter.appendChild(b);
+  });
+  const head = document.createElement('div'); head.className='ex-head';
+  const h3 = document.createElement('h3'); h3.textContent='Exerc\u00edcios';
+  head.appendChild(h3); head.appendChild(prog);
+  box.appendChild(head); box.appendChild(filter);
+
+  const list = document.createElement('div');
+  data.forEach((ex,i)=>{
+    const card=document.createElement('div'); card.className='ex'; card.dataset.level=ex.level;
+    const q=document.createElement('div'); q.className='ex-q';
+    const num=document.createElement('div'); num.className='ex-num'; num.textContent=(i+1)+'.';
+    const body=document.createElement('div'); body.className='ex-body';
+    const qt=document.createElement('div'); qt.className='ex-qtext';
+    qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const actions=document.createElement('div'); actions.className='ex-actions';
+    const hintBtn = ex.hint ? document.createElement('button') : null;
+    const solBtn=document.createElement('button'); solBtn.className='sec'; solBtn.textContent='ver solu\u00e7\u00e3o';
+    const hint = ex.hint ? document.createElement('div') : null;
+    if(hint){ hint.className='ex-hint'; hint.innerHTML='<strong>Dica:</strong> '+ex.hint;
+      hintBtn.className='sm'; hintBtn.textContent='dica';
+      hintBtn.addEventListener('click',()=>hint.classList.toggle('show'));
+      actions.appendChild(hintBtn);
+    }
+    actions.appendChild(solBtn);
+    const sol=document.createElement('div'); sol.className='ex-sol';
+    sol.innerHTML='<span class="sol-label">solu\u00e7\u00e3o passo a passo</span>'+ex.sol;
+    solBtn.addEventListener('click',()=>{
+      const wasShown=sol.classList.contains('show');
+      sol.classList.toggle('show');
+      solBtn.textContent = sol.classList.contains('show')?'ocultar solu\u00e7\u00e3o':'ver solu\u00e7\u00e3o';
+      if(!wasShown && !sol.dataset.counted){ sol.dataset.counted='1'; solvedCount++; updateProg(); }
+    });
+    body.appendChild(qt); body.appendChild(actions); if(hint) body.appendChild(hint);
+    q.appendChild(num); q.appendChild(body);
+    card.appendChild(q); card.appendChild(sol);
+    list.appendChild(card);
+  });
+  box.appendChild(list);
+  updateProg();
+}
+// ── EXERCÍCIOS F1: equação como balança ──
+EX.f1 = [
+  {level:'facil', q:'Resolva <code>x + 7 = 12</code>.',
+   hint:'Tire 7 dos dois lados.',
+   sol:'<div class="sstep">x + 7 = 12<br><span class="an">// subtraio 7 dos DOIS lados (mantém a balança):</span><br>x + 7 \u2212 7 = 12 \u2212 7<br>x = 5</div><p class="ans">x = 5</p>'},
+  {level:'facil', q:'Resolva <code>5x = 60</code>.',
+   hint:'Divida os dois lados por 5.',
+   sol:'<div class="sstep">5x = 60<br><span class="an">// divido os dois lados por 5:</span><br>5x / 5 = 60 / 5<br>x = 12</div><p class="ans">x = 12</p>'},
+  {level:'facil', q:'Uma corda soa a 110 Hz. Uma oitava acima dobra a frequência. Que frequência <code>f</code> é essa?',
+   sol:'<div class="sstep">f = 2 \u00d7 110<br>f = 220</div><p class="ans">f = 220 Hz</p>'},
+  {level:'medio', q:'Resolva <code>3x \u2212 4 = 20</code>.',
+   hint:'Primeiro o +4 nos dois lados, depois divida por 3.',
+   sol:'<div class="sstep">3x \u2212 4 = 20<br><span class="an">// +4 nos dois lados:</span><br>3x = 24<br><span class="an">// \u00f7 3 nos dois lados:</span><br>x = 8</div><p class="ans">x = 8</p>'},
+  {level:'medio', q:'A frequência de uma nota é o triplo de outra menos 30 Hz, e vale 1290 Hz. Qual é a frequência menor <code>f</code>? (Equação: <code>3f \u2212 30 = 1290</code>.)',
+   sol:'<div class="sstep">3f \u2212 30 = 1290<br><span class="an">// +30 nos dois lados:</span><br>3f = 1320<br><span class="an">// \u00f7 3:</span><br>f = 440</div><p class="ans">f = 440 Hz (um Lá)</p>'},
+  {level:'medio', q:'Resolva para <code>T</code>: <code>f = 1/T</code> quando <code>f = 250</code>.',
+   hint:'Multiplique os dois lados por T, depois isole.',
+   sol:'<div class="sstep">250 = 1/T<br><span class="an">// \u00d7 T nos dois lados:</span><br>250\u00b7T = 1<br><span class="an">// \u00f7 250:</span><br>T = 1/250 = 0,004 s</div><p class="ans">T = 0,004 s (4 milissegundos)</p>'},
+  {level:'dificil', q:'Resolva <code>(x/2) + 5 = 3x \u2212 10</code>.',
+   hint:'Junte os x de um lado e os números do outro. Cuidado com a fração: multiplique tudo por 2 no início para eliminá-la.',
+   sol:'<div class="sstep">(x/2) + 5 = 3x \u2212 10<br><span class="an">// \u00d7 2 em tudo, para sumir com a fração:</span><br>x + 10 = 6x \u2212 20<br><span class="an">// \u2212x nos dois lados:</span><br>10 = 5x \u2212 20<br><span class="an">// +20:</span><br>30 = 5x<br><span class="an">// \u00f7 5:</span><br>x = 6</div><p class="ans">x = 6</p>'},
+  {level:'dificil', q:'Duas frequências satisfazem <code>f\u2082 = 1,5\u00b7f\u2081</code> (uma quinta) e <code>f\u2081 + f\u2082 = 550</code>. Ache as duas.',
+   hint:'Substitua a primeira equação na segunda: troque f\u2082 por 1,5\u00b7f\u2081.',
+   sol:'<div class="sstep">f\u2081 + f\u2082 = 550, com f\u2082 = 1,5\u00b7f\u2081<br><span class="an">// substituo f\u2082:</span><br>f\u2081 + 1,5\u00b7f\u2081 = 550<br>2,5\u00b7f\u2081 = 550<br><span class="an">// \u00f7 2,5:</span><br>f\u2081 = 220<br><span class="an">// logo f\u2082 = 1,5 \u00d7 220:</span><br>f\u2082 = 330</div><p class="ans">f\u2081 = 220 Hz, f\u2082 = 330 Hz (Lá e Mi — uma quinta)</p>'},
+  {level:'desafio', q:'No temperamento igual, <code>f\u2099 = f\u2080 \u00b7 r\u207f</code> com <code>r</code> o passo do semitom. Se <code>f\u2080 = 440</code> e o 12\u00ba passo dá <code>f\u2081\u2082 = 880</code> (uma oitava), monte a equação que <code>r</code> deve satisfazer. (Você a resolverá no Fundamento 4.)',
+   hint:'Substitua n=12 e iguale a 880. Depois divida por 440.',
+   sol:'<div class="sstep">f\u2081\u2082 = f\u2080 \u00b7 r\u00b9\u00b2<br>880 = 440 \u00b7 r\u00b9\u00b2<br><span class="an">// \u00f7 440 nos dois lados:</span><br>2 = r\u00b9\u00b2</div><p class="ans">A equação é <strong>r\u00b9\u00b2 = 2</strong>. O <code>r</code> que resolve isso é a "raiz décima-segunda de 2", tema do Fundamento 4. É literalmente o número que define toda a afinação do piano.</p>'},
+];
+
+// ── EXERCÍCIOS F2: razão e proporção ──
+EX.f2 = [
+  {level:'facil', q:'Qual é a razão de 12 para 4? E ela é igual à razão de 9 para 3?',
+   sol:'<div class="sstep">12 / 4 = 3<br>9 / 3 = 3<br><span class="an">// iguais</span></div><p class="ans">Ambas valem 3 — são a mesma razão.</p>'},
+  {level:'facil', q:'Simplifique a razão <code>6/4</code> à sua forma mais simples.',
+   hint:'Divida os dois números pelo maior fator comum (2).',
+   sol:'<div class="sstep">6/4<br><span class="an">// \u00f7 2 em cima e embaixo:</span><br>= 3/2</div><p class="ans">3/2 — é a razão da quinta musical.</p>'},
+  {level:'facil', q:'A oitava é a razão 2:1. Se uma nota está em 300 Hz, qual está uma oitava acima?',
+   sol:'<div class="sstep">f = 2 \u00d7 300 = 600</div><p class="ans">600 Hz</p>'},
+  {level:'medio', q:'De 200 para 300 Hz, qual a razão? De 400 para 600 Hz, qual a razão? São o mesmo intervalo?',
+   sol:'<div class="sstep">300/200 = 1,5<br>600/400 = 1,5<br><span class="an">// mesma razão</span></div><p class="ans">Ambas valem 1,5 (= 3/2). São o mesmo intervalo: uma quinta. Note que as <em>diferenças</em> (100 e 200 Hz) são distintas, mas o ouvido segue a razão.</p>'},
+  {level:'medio', q:'Complete a proporção: <code>3/2 = x/8</code>. Ache <code>x</code>.',
+   hint:'Multiplicação cruzada: 3\u00d78 = 2\u00d7x.',
+   sol:'<div class="sstep">3/2 = x/8<br><span class="an">// multiplicação cruzada:</span><br>3 \u00d7 8 = 2 \u00d7 x<br>24 = 2x<br>x = 12</div><p class="ans">x = 12, logo 12/8 = 3/2 ✓</p>'},
+  {level:'medio', q:'Uma quinta é 3:2. Partindo de 264 Hz (um Dó), qual a frequência uma quinta acima?',
+   hint:'Multiplique por 3/2.',
+   sol:'<div class="sstep">f = 264 \u00d7 (3/2)<br>= 264 \u00d7 3 / 2<br>= 792 / 2<br>= 396</div><p class="ans">396 Hz (um Sol)</p>'},
+  {level:'dificil', q:'Subir uma quinta (\u00d73/2) e depois mais uma quinta. Partindo de 200 Hz, onde chego? Que razão total isso representa?',
+   hint:'Multiplique por 3/2 duas vezes. A razão total é (3/2)\u00d7(3/2).',
+   sol:'<div class="sstep">1\u00aa quinta: 200 \u00d7 3/2 = 300<br>2\u00aa quinta: 300 \u00d7 3/2 = 450<br><span class="an">// razão total:</span><br>(3/2) \u00d7 (3/2) = 9/4 = 2,25</div><p class="ans">Chego a 450 Hz; a razão total é 9/4. Note: empilhar intervalos é <strong>multiplicar</strong> razões — guarde isso para o Fundamento 6.</p>'},
+  {level:'dificil', q:'Duas cordas têm comprimentos na razão 4:3 e a mais curta soa a 440 Hz. Pela lei de que frequência é inversamente proporcional ao comprimento, qual a frequência da mais longa?',
+   hint:'Comprimento maior = frequência menor. A razão de frequências é o inverso da de comprimentos: 3/4.',
+   sol:'<div class="sstep"><span class="an">// freq \u221d 1/comprimento, então a razão de freq inverte:</span><br>comprimentos 4:3 \u2192 frequências 3:4<br>f_longa = 440 \u00d7 (3/4)<br>= 1320/4 = 330</div><p class="ans">330 Hz. As duas formam a razão 4:3 — uma quarta. (Era o experimento do monocórdio de Pitágoras.)</p>'},
+  {level:'desafio', q:'Mostre que subir uma quinta justa (\u00d73/2) e descer uma quarta justa (\u00f74/3) resulta em subir um tom inteiro. Que razão é esse tom?',
+   hint:'Descer uma quarta é multiplicar por 3/4. Combine: (3/2)\u00d7(3/4).',
+   sol:'<div class="sstep"><span class="an">// subir quinta \u00d7 descer quarta:</span><br>(3/2) \u00d7 (3/4)<br>= (3\u00d73) / (2\u00d74)<br>= 9/8</div><p class="ans">9/8 — o tom inteiro pitagórico. Subir 3/2 e descer 4/3 dá exatamente 9/8, confirmando que intervalos se combinam por multiplicação de razões.</p>'},
+];
+
+// ── EXERCÍCIOS F3: fração, divisão, inverso ──
+EX.f3 = [
+  {level:'facil', q:'Qual o inverso (recíproco) de 5? E de <code>1/8</code>?',
+   sol:'<div class="sstep">inverso de 5 = 1/5<br>inverso de 1/8 = 8 <span class="an">// vira de cabeça para baixo</span></div><p class="ans">1/5 e 8.</p>'},
+  {level:'facil', q:'Um período é <code>T = 0,01 s</code>. Qual a frequência? (<code>f = 1/T</code>)',
+   sol:'<div class="sstep">f = 1 / 0,01<br>= 100</div><p class="ans">f = 100 Hz</p>'},
+  {level:'facil', q:'Uma nota tem <code>f = 500 Hz</code>. Qual o período <code>T</code>?',
+   hint:'T = 1/f.',
+   sol:'<div class="sstep">T = 1 / 500<br>= 0,002 s</div><p class="ans">T = 0,002 s (2 ms)</p>'},
+  {level:'medio', q:'Verifique que para <code>T = 0,25 s</code> o produto <code>T \u00d7 f</code> vale 1.',
+   sol:'<div class="sstep">f = 1 / 0,25 = 4 Hz<br>T \u00d7 f = 0,25 \u00d7 4 = 1 \u2713</div><p class="ans">O produto é 1 — a marca de dois inversos.</p>'},
+  {level:'medio', q:'O Lá padrão é 440 Hz. Qual seu período em milissegundos? (1 s = 1000 ms)',
+   hint:'T = 1/440 segundos; depois multiplique por 1000.',
+   sol:'<div class="sstep">T = 1/440 = 0,002272... s<br><span class="an">// \u00d7 1000 para ms:</span><br>\u2248 2,27 ms</div><p class="ans">\u2248 2,27 ms por ciclo.</p>'},
+  {level:'medio', q:'Divida <code>(3/2) \u00f7 (4/3)</code>. (Dividir por uma fração = multiplicar pelo inverso dela.)',
+   hint:'Inverta a segunda e multiplique: (3/2)\u00d7(3/4).',
+   sol:'<div class="sstep">(3/2) \u00f7 (4/3)<br><span class="an">// inverto a 2\u00aa e multiplico:</span><br>= (3/2) \u00d7 (3/4)<br>= 9/8</div><p class="ans">9/8 — de novo o tom inteiro. Dividir intervalos é subtrair na razão, via multiplicação pelo inverso.</p>'},
+  {level:'dificil', q:'Se dobro a frequência (subo uma oitava), o que acontece com o período? Mostre com números a partir de <code>f = 220 Hz</code>.',
+   hint:'Calcule T antes e depois de dobrar f.',
+   sol:'<div class="sstep">f = 220 \u2192 T = 1/220 \u2248 0,00455 s<br>f = 440 \u2192 T = 1/440 \u2248 0,00227 s<br><span class="an">// o período caiu pela metade</span></div><p class="ans">Dobrar a frequência <strong>reduz o período à metade</strong>. Como são inversos, multiplicar um por 2 divide o outro por 2.</p>'},
+  {level:'dificil', q:'Uma onda sonora a 343 m/s tem frequência 440 Hz. O comprimento de onda é <code>\u03bb = v/f</code>. Calcule \u03bb. (Note que \u03bb também é "v vezes o inverso de f".)',
+   hint:'\u03bb = v \u00d7 (1/f) = 343/440.',
+   sol:'<div class="sstep">\u03bb = v / f = 343 / 440<br>\u2248 0,78 m</div><p class="ans">\u2248 0,78 m (78 cm). Quanto maior a frequência, menor o comprimento de onda — relação inversa de novo.</p>'},
+  {level:'desafio', q:'Um instrumento toca duas notas: períodos <code>T\u2081 = 1/440 s</code> e <code>T\u2082 = 1/660 s</code>. Qual a razão das frequências <code>f\u2082/f\u2081</code>, e que intervalo é esse?',
+   hint:'f = 1/T, então f\u2082/f\u2081 = (1/T\u2082)/(1/T\u2081) = T\u2081/T\u2082.',
+   sol:'<div class="sstep">f\u2082/f\u2081 = (1/T\u2082) / (1/T\u2081)<br><span class="an">// dividir por fração = multiplicar pelo inverso:</span><br>= (1/T\u2082) \u00d7 (T\u2081/1) = T\u2081/T\u2082<br>= (1/440) / (1/660)<br>= 660/440 = 3/2</div><p class="ans">A razão é 3/2 — uma quinta. Repare que a razão das frequências é o <strong>inverso</strong> da razão dos períodos.</p>'},
+];
+// ── EXERCÍCIOS F4: potências e raízes ──
+EX.f4 = [
+  {level:'facil', q:'Calcule <code>2&#8308;</code> e <code>3&sup3;</code>.',
+   sol:'<div class="sstep">2\u2074 = 2\u00d72\u00d72\u00d72 = 16<br>3\u00b3 = 3\u00d73\u00d73 = 27</div><p class="ans">16 e 27.</p>'},
+  {level:'facil', q:'Qual a raiz quadrada de 49? (Que número \u00d7 ele mesmo dá 49?)',
+   sol:'<div class="sstep">7 \u00d7 7 = 49</div><p class="ans">7.</p>'},
+  {level:'facil', q:'Use a lei <code>a^m \u00d7 a^n = a^(m+n)</code> para calcular <code>2&sup2; \u00d7 2&sup3;</code> sem multiplicar tudo.',
+   hint:'Some os expoentes.',
+   sol:'<div class="sstep">2\u00b2 \u00d7 2\u00b3 = 2^(2+3) = 2\u2075 = 32</div><p class="ans">32.</p>'},
+  {level:'medio', q:'O que significa <code>2^(1/12)</code> em palavras? E quanto dá <code>(2^(1/12))^12</code>?',
+   hint:'Use a lei dos expoentes: multiplicar por si mesmo 12 vezes soma os expoentes 1/12.',
+   sol:'<div class="sstep"><span class="an">// 2^(1/12) = o número que, elevado à 12, dá 2</span><br>(2^(1/12))^12 = 2^(12/12) = 2\u00b9 = 2</div><p class="ans">É a raiz décima-segunda de 2 (\u2248 1,0595). Elevado à 12 dá exatamente 2 — fecha a oitava.</p>'},
+  {level:'medio', q:'Subir 1 semitom multiplica a frequência por <code>2^(1/12) \u2248 1,0595</code>. Partindo de 440 Hz, qual a frequência 1 semitom acima? (use 1,0595)',
+   sol:'<div class="sstep">f = 440 \u00d7 1,0595<br>\u2248 466,2 Hz</div><p class="ans">\u2248 466,2 Hz (um Lá#).</p>'},
+  {level:'medio', q:'Quantos semitons há em 2 oitavas? Por qual fator total a frequência é multiplicada?',
+   hint:'1 oitava = 12 semitons = fator 2. Duas oitavas?',
+   sol:'<div class="sstep">2 oitavas = 24 semitons<br>fator = 2 \u00d7 2 = 4<br><span class="an">// ou (2^(1/12))^24 = 2\u00b2 = 4</span></div><p class="ans">24 semitons; fator \u00d74.</p>'},
+  {level:'dificil', q:'Mostre que 7 semitons (uma quinta temperada) dão um fator <code>2^(7/12)</code>, e calcule seu valor aproximado. (Compare depois com a quinta pura 1,5.)',
+   hint:'Cada semitom é \u00d72^(1/12); sete deles multiplicam os expoentes.',
+   sol:'<div class="sstep"><span class="an">// 7 passos de 2^(1/12):</span><br>(2^(1/12))\u2077 = 2^(7/12)<br>2^(7/12) = 2^0,5833... \u2248 1,4983</div><p class="ans">\u2248 1,4983 — quase igual à quinta pura 1,5 (diferença de \u22480,1%). É por isso que o temperamento funciona.</p>'},
+  {level:'dificil', q:'Simplifique <code>2^(3/12)</code> e diga quantos semitons representa e que intervalo é (aproximadamente).',
+   hint:'3/12 = 1/4. Quanto é 2^(1/4)? São 3 semitons.',
+   sol:'<div class="sstep">2^(3/12) = 2^(1/4) \u2248 1,1892<br><span class="an">// 3 semitons</span></div><p class="ans">\u2248 1,1892; três semitons = uma terça menor temperada.</p>'},
+  {level:'desafio', q:'No Fundamento 1 você chegou em <code>r\u00b9\u00b2 = 2</code>. Resolva para <code>r</code> usando raiz, e explique por que esse número faz a oitava "fechar" perfeitamente onde a pilha de quintas pura (caderno principal) não fechava.',
+   hint:'r é a raiz décima-segunda de 2. Pense no que acontece após 12 passos.',
+   sol:'<div class="sstep">r\u00b9\u00b2 = 2<br><span class="an">// raiz décima-segunda dos dois lados:</span><br>r = 2^(1/12) \u2248 1,059463</div><p class="ans">r = 2^(1/12). Fecha por <strong>construção</strong>: definimos o passo como a raiz exata que, elevada à 12, dá 2. Já a pilha de 12 quintas puras dá (3/2)\u00b9\u00b2 \u2248 129,75 \u2260 128 = 2\u2077 — não fecha porque 3 e 2 são primos distintos. O temperamento <em>força</em> o fechamento abrindo mão da pureza de cada quinta.</p>'},
+];
+
+// ── EXERCÍCIOS F5: funções ──
+EX.f5 = [
+  {level:'facil', q:'Para <code>f(x) = 2x</code>, calcule <code>f(7)</code> e <code>f(0)</code>.',
+   sol:'<div class="sstep">f(7) = 2\u00d77 = 14<br>f(0) = 2\u00d70 = 0</div><p class="ans">14 e 0.</p>'},
+  {level:'facil', q:'Para <code>g(x) = x + 5</code>, calcule <code>g(10)</code>.',
+   sol:'<div class="sstep">g(10) = 10 + 5 = 15</div><p class="ans">15.</p>'},
+  {level:'facil', q:'A máquina <code>h(x) = x&sup2;</code> recebe 4. O que sai?',
+   sol:'<div class="sstep">h(4) = 4\u00b2 = 16</div><p class="ans">16.</p>'},
+  {level:'medio', q:'Para <code>f(x) = 3x \u2212 2</code>, calcule <code>f(4)</code> e ache o <code>x</code> que dá saída 0.',
+   hint:'Para a segunda parte, resolva 3x \u2212 2 = 0.',
+   sol:'<div class="sstep">f(4) = 3\u00d74 \u2212 2 = 10<br><span class="an">// saída 0:</span><br>3x \u2212 2 = 0 \u2192 3x = 2 \u2192 x = 2/3</div><p class="ans">f(4) = 10; saída zero quando x = 2/3.</p>'},
+  {level:'medio', q:'Uma função converte semitons em fator de frequência: <code>F(n) = 2^(n/12)</code>. Calcule <code>F(12)</code> e <code>F(0)</code>.',
+   sol:'<div class="sstep">F(12) = 2^(12/12) = 2\u00b9 = 2<br>F(0) = 2^(0/12) = 2\u2070 = 1</div><p class="ans">F(12) = 2 (oitava); F(0) = 1 (mesma nota).</p>'},
+  {level:'medio', q:'Para <code>f(x) = 1/x</code>, calcule <code>f(4)</code> e <code>f(0,5)</code>. O que a máquina faz?',
+   sol:'<div class="sstep">f(4) = 1/4 = 0,25<br>f(0,5) = 1/0,5 = 2</div><p class="ans">0,25 e 2. É a máquina "inverter" — exatamente a relação f = 1/T do Fundamento 3.</p>'},
+  {level:'dificil', q:'Uma função tem duas entradas: <code>y(x, t) = sin(x) \u00d7 cos(t)</code>. Sem calcular o seno/cosseno, explique o que cada entrada controla, em palavras.',
+   hint:'Pense em x como posição na corda e t como instante de tempo.',
+   sol:'<p><code>x</code> é a <strong>posição</strong> ao longo da corda (onde estou olhando) e <code>t</code> é o <strong>instante</strong> (quando estou olhando). A saída <code>y</code> é a altura da corda naquele ponto, naquele momento. <code>sin(x)</code> dá a forma espacial (o desenho da onda parada); <code>cos(t)</code> faz essa forma toda subir e descer no tempo.</p><p class="ans">x = onde; t = quando; y = altura naquele ponto e instante.</p>'},
+  {level:'dificil', q:'Se <code>f(x) = 2x</code> e <code>g(x) = x + 3</code>, calcule <code>f(g(2))</code> (primeiro g, depois f).',
+   hint:'Calcule g(2) primeiro, depois ponha o resultado em f.',
+   sol:'<div class="sstep">g(2) = 2 + 3 = 5<br><span class="an">// agora f(5):</span><br>f(5) = 2\u00d75 = 10</div><p class="ans">10. Funções podem ser encadeadas — a saída de uma vira a entrada da outra.</p>'},
+  {level:'desafio', q:'A função cents é <code>C(r) = 1200 \u00d7 log\u2082(r)</code>. Sabendo que <code>log\u2082(2) = 1</code>, calcule <code>C(2)</code> (a oitava). Qual o valor em cents?',
+   hint:'Substitua r = 2 e use log\u2082(2) = 1.',
+   sol:'<div class="sstep">C(2) = 1200 \u00d7 log\u2082(2)<br>= 1200 \u00d7 1<br>= 1200</div><p class="ans">1200 cents — por definição, a oitava vale 1200 cents. Você acabou de usar uma função logarítmica, o coração do Fundamento 6.</p>'},
+];
+
+// ── EXERCÍCIOS F6: logaritmo (capricho extra) ──
+EX.f6 = [
+  {level:'facil', q:'Quanto é <code>log\u2082(4)</code>? (2 elevado a quanto dá 4?)',
+   sol:'<div class="sstep"><span class="an">// 2 elevado a QUANTO dá 4?</span><br>2\u00b2 = 4<br>log\u2082(4) = 2</div><p class="ans">2.</p>'},
+  {level:'facil', q:'Quanto é <code>log\u2082(16)</code>?',
+   hint:'2 elevado a quanto dá 16? Conte as dobras: 2,4,8,16.',
+   sol:'<div class="sstep">2\u2074 = 16<br>log\u2082(16) = 4</div><p class="ans">4.</p>'},
+  {level:'facil', q:'Quanto é <code>log\u2082(1)</code>? (2 elevado a quanto dá 1?)',
+   sol:'<div class="sstep">2\u2070 = 1<br>log\u2082(1) = 0</div><p class="ans">0 — não multipliquei nenhuma vez.</p>'},
+  {level:'medio', q:'Quanto é <code>log\u2081\u2080(1000)</code>? (10 elevado a quanto dá 1000?)',
+   sol:'<div class="sstep">10\u00b3 = 1000<br>log\u2081\u2080(1000) = 3</div><p class="ans">3.</p>'},
+  {level:'medio', q:'Use <code>log(a\u00d7b) = log(a) + log(b)</code> para achar <code>log\u2082(4\u00d78)</code> sem multiplicar 4\u00d78.',
+   hint:'log\u2082(4) + log\u2082(8).',
+   sol:'<div class="sstep">log\u2082(4\u00d78) = log\u2082(4) + log\u2082(8)<br>= 2 + 3<br>= 5<br><span class="an">// confere: 4\u00d78 = 32 = 2\u2075 \u2713</span></div><p class="ans">5. A multiplicação virou soma.</p>'},
+  {level:'medio', q:'Empilhar duas oitavas é multiplicar por 2\u00d72 = 4. Em logaritmo base 2, qual a "distância" total? Mostre que somar dá o mesmo.',
+   hint:'log\u2082(2) + log\u2082(2) versus log\u2082(4).',
+   sol:'<div class="sstep">cada oitava: log\u2082(2) = 1<br>duas oitavas somando: 1 + 1 = 2<br>direto: log\u2082(4) = 2 \u2713</div><p class="ans">2. Multiplicar razões (\u00d72 depois \u00d72) virou somar distâncias (1+1) — exatamente o que o ouvido faz.</p>'},
+  {level:'dificil', q:'A quinta pura é razão 3/2. Em cents, <code>C = 1200\u00b7log\u2082(3/2)</code>. Sabendo que <code>log\u2082(3/2) \u2248 0,585</code>, calcule os cents da quinta.',
+   sol:'<div class="sstep">C = 1200 \u00d7 0,585<br>\u2248 702 cents</div><p class="ans">\u2248 702 cents (valor exato 701,96). A quinta temperada vale 700 cents — daí o pequeno erro de \u22122 cents do temperamento.</p>'},
+  {level:'dificil', q:'Mostre, usando a propriedade do logaritmo, por que subir uma quinta (3/2) e depois uma quarta (4/3) dá uma oitava (2), tanto multiplicando razões quanto somando cents.',
+   hint:'3/2 \u00d7 4/3 = 2. E log(3/2) + log(4/3) = log(2).',
+   sol:'<div class="sstep"><span class="an">// multiplicando razões:</span><br>(3/2) \u00d7 (4/3) = 12/6 = 2 \u2713<br><span class="an">// somando em log (cents):</span><br>log\u2082(3/2) + log\u2082(4/3) = log\u2082(2) = 1<br>\u2248 0,585 + 0,415 = 1,000 \u2713</div><p class="ans">Quinta + quarta = oitava. Pelo produto das razões (\u00d7) ou pela soma das distâncias logarítmicas (+) — o log garante que dão a mesma resposta.</p>'},
+  {level:'desafio', q:'Um intervalo tem razão <code>r</code> e vale 400 cents. Recupere a razão. (Inverta <code>400 = 1200\u00b7log\u2082(r)</code>; precisará de <code>r = 2^(400/1200)</code>.)',
+   hint:'Isole log\u2082(r), depois desfaça o log virando potência de 2.',
+   sol:'<div class="sstep">400 = 1200 \u00b7 log\u2082(r)<br><span class="an">// \u00f7 1200:</span><br>log\u2082(r) = 400/1200 = 1/3<br><span class="an">// desfaz o log (2 elevado aos dois lados):</span><br>r = 2^(1/3) \u2248 1,2599</div><p class="ans">r = 2^(1/3) \u2248 1,26 — uma terça maior temperada (4 semitons = 400 cents). Note como log e potência são operações inversas, uma desfazendo a outra.</p>'},
+];
+// ── EXERCÍCIOS F7: seno / círculo ──
+EX.f7 = [
+  {level:'facil', q:'Quanto vale <code>sin(\u03b8)</code> no topo do círculo (ponto mais alto)? E no fundo?',
+   sol:'<div class="sstep"><span class="an">// altura máxima e mínima do ponto girante</span><br>topo: sin = +1<br>fundo: sin = \u22121</div><p class="ans">+1 no topo, \u22121 no fundo.</p>'},
+  {level:'facil', q:'Uma volta completa do círculo são quantos radianos?',
+   sol:'<div class="sstep">1 volta = 2\u03c0 \u2248 6,28 radianos</div><p class="ans">2\u03c0 radianos.</p>'},
+  {level:'facil', q:'O que é um "tom puro", em termos de forma de onda?',
+   sol:'<p class="ans">É uma única onda senoidal — o som mais simples possível, sem harmônicos extras. É o seno tornado som.</p>'},
+  {level:'medio', q:'Se um ponto dá 2 voltas por segundo, a onda senoidal correspondente tem que frequência? E ela soa mais grave ou mais aguda que 1 volta/s?',
+   sol:'<div class="sstep">2 voltas/s = 2 Hz<br><span class="an">// mais voltas = onda mais apertada</span></div><p class="ans">2 Hz; mais aguda (frequência maior = som mais agudo).</p>'},
+  {level:'medio', q:'Por que o seno descreve vibração tão bem? Responda em uma frase usando a imagem do círculo.',
+   sol:'<p class="ans">Porque vibrar é ir-e-voltar suavemente entre dois extremos, e isso é exatamente o que se vê quando se olha um movimento circular uniforme "de lado": a altura sobe e desce de forma suave e periódica.</p>'},
+  {level:'medio', q:'A onda senoidal repete a cada volta. Como chamamos uma função que se repete assim?',
+   sol:'<p class="ans">Periódica. O tempo de uma repetição completa é o período T (Fundamento 3).</p>'},
+  {level:'dificil', q:'Duas senoides têm frequências 1 Hz e 3 Hz. Em um mesmo intervalo de 1 segundo, quantas voltas completas cada uma dá? Qual desenha a onda mais "apertada"?',
+   sol:'<div class="sstep">1 Hz \u2192 1 volta em 1 s<br>3 Hz \u2192 3 voltas em 1 s</div><p class="ans">1 e 3 voltas; a de 3 Hz é mais apertada (e soa mais aguda). Ela é o 3\u00ba harmônico da de 1 Hz.</p>'},
+  {level:'desafio', q:'No caderno principal aparece <code>sin(2\u03c0\u00b7f\u00b7t)</code>. Explique o papel de cada parte: por que <code>2\u03c0</code>, por que <code>f</code>, por que <code>t</code>.',
+   hint:'2\u03c0 é uma volta; f conta voltas por segundo; t é o tempo decorrido.',
+   sol:'<p><code>2\u03c0</code> é o ângulo de uma volta completa. <code>f</code> é quantas voltas por segundo (a frequência). <code>t</code> é o tempo decorrido. Então <code>2\u03c0\u00b7f\u00b7t</code> é o <strong>ângulo total já girado</strong> após t segundos: f voltas por segundo, vezes 2\u03c0 por volta, vezes t segundos.</p><p class="ans">2\u03c0 = uma volta; f = voltas/segundo; t = tempo; o produto é o ângulo acumulado, e sin disso é a altura instantânea.</p>'},
+];
+
+// ── EXERCÍCIOS F8: somatório Σ ──
+EX.f8 = [
+  {level:'facil', q:'Escreva por extenso e calcule <code>&Sigma;<sub>n=1</sub><sup>3</sup> n</code> (some n de 1 a 3).',
+   sol:'<div class="sstep">= 1 + 2 + 3<br>= 6</div><p class="ans">6.</p>'},
+  {level:'facil', q:'Calcule <code>&Sigma;<sub>n=1</sub><sup>4</sup> 2</code> (some o número 2, quatro vezes).',
+   hint:'O termo é sempre 2, somado 4 vezes.',
+   sol:'<div class="sstep">= 2 + 2 + 2 + 2<br>= 8</div><p class="ans">8.</p>'},
+  {level:'medio', q:'Calcule <code>&Sigma;<sub>n=1</sub><sup>4</sup> n&sup2;</code> (some os quadrados de 1 a 4).',
+   sol:'<div class="sstep">= 1\u00b2 + 2\u00b2 + 3\u00b2 + 4\u00b2<br>= 1 + 4 + 9 + 16<br>= 30</div><p class="ans">30.</p>'},
+  {level:'medio', q:'Se <code>a&#8321;=1, a&#8322;=0,5, a&#8323;=0,25</code>, calcule <code>&Sigma;<sub>n=1</sub><sup>3</sup> a<sub>n</sub></code>.',
+   sol:'<div class="sstep">= 1 + 0,5 + 0,25<br>= 1,75</div><p class="ans">1,75. (Estas são amplitudes decrescentes de harmônicos — uma receita de timbre.)</p>'},
+  {level:'dificil', q:'O timbre é <code>y = &Sigma;<sub>n=1</sub><sup>3</sup> (1/n)\u00b7sin(n\u00b7\u03b8)</code>. Liste os três termos por extenso (sem calcular o seno).',
+   hint:'Substitua n = 1, 2, 3 e escreva 1/n e n\u00b7\u03b8 em cada.',
+   sol:'<div class="sstep">n=1: (1/1)\u00b7sin(1\u00b7\u03b8) = sin(\u03b8)<br>n=2: (1/2)\u00b7sin(2\u03b8)<br>n=3: (1/3)\u00b7sin(3\u03b8)<br><span class="an">// soma dos três:</span><br>y = sin(\u03b8) + \u00bd\u00b7sin(2\u03b8) + \u2153\u00b7sin(3\u03b8)</div><p class="ans">É a fundamental mais dois harmônicos com amplitudes 1, \u00bd e \u2153 — uma onda "dente de serra" parcial.</p>'},
+  {level:'desafio', q:'Por que escrever <code>&Sigma; a<sub>n</sub> sin(2\u03c0 n f\u2081 t)</code> é melhor que listar cada harmônico, se há, digamos, 20 deles? Que ideia o &Sigma; captura de uma vez?',
+   sol:'<p>O <code>&Sigma;</code> diz "faça isto para cada n, de 1 a 20, e some". Captura o <strong>padrão</strong> (cada termo é uma senoide de frequência <code>n\u00b7f\u2081</code> com amplitude <code>a<sub>n</sub></code>) sem repetir 20 linhas quase idênticas. É a mesma economia de um loop em programação: descreve a regra uma vez e o número de repetições separadamente.</p><p class="ans">Captura o padrão geral "harmônico n tem frequência n\u00b7f\u2081" e deixa o número de termos como um parâmetro, em vez de listar tudo.</p>'},
+];
+// ── EXERCÍCIOS F9: derivada ──
+EX.f9 = [
+  {level:'facil', q:'Use a regra do expoente <code>d/dx[x^n] = n\u00b7x^(n\u22121)</code> para derivar <code>x&sup3;</code>.',
+   hint:'Desce o 3, diminui o expoente para 2.',
+   sol:'<div class="sstep">d/dx[x\u00b3] = 3\u00b7x\u00b2</div><p class="ans">3x\u00b2.</p>'},
+  {level:'facil', q:'Derive <code>x&sup2;</code>.',
+   sol:'<div class="sstep">d/dx[x\u00b2] = 2\u00b7x\u00b9 = 2x</div><p class="ans">2x.</p>'},
+  {level:'facil', q:'Se a posição é constante (o ponto não se move), qual a velocidade (a derivada da posição)?',
+   sol:'<p class="ans">Zero. Nada muda, logo a taxa de mudança é zero — a derivada de uma constante é 0.</p>'},
+  {level:'medio', q:'Derive <code>V = (4/3)\u03c0r&sup3;</code> em relação a <code>r</code>. Que grandeza geométrica você obtém?',
+   hint:'A constante (4/3)\u03c0 fica; aplique a regra ao r\u00b3.',
+   sol:'<div class="sstep">dV/dr = (4/3)\u03c0 \u00b7 3r\u00b2<br><span class="an">// o 3 desce e cancela com o (4/3):</span><br>= 4\u03c0r\u00b2</div><p class="ans">4\u03c0r\u00b2 — a <strong>área da superfície</strong> da esfera. A derivada do volume é a superfície (o "descascar").</p>'},
+  {level:'medio', q:'Derive <code>V = L&sup3;</code> (volume do cubo) em relação a <code>L</code>. Interprete o resultado geometricamente.',
+   sol:'<div class="sstep">dV/dL = 3L\u00b2</div><p class="ans">3L\u00b2 — as <strong>três faces</strong> que crescem quando você empurra o canto do cubo para fora. O "3" da regra do expoente é o número de faces.</p>'},
+  {level:'medio', q:'A posição de um ponto é <code>p(t) = t&sup2;</code>. Ache a velocidade (derivada 1\u00aa) e a aceleração (derivada 2\u00aa).',
+   hint:'Derive uma vez para velocidade, outra para aceleração.',
+   sol:'<div class="sstep">velocidade: p\u2032 = 2t<br>aceleração: p\u2033 = derivada de 2t = 2</div><p class="ans">Velocidade = 2t; aceleração = 2 (constante). Derivar duas vezes a posição dá a aceleração.</p>'},
+  {level:'dificil', q:'Por que <code>dV/dr</code> da esfera ser a área faz sentido físico? Explique com a imagem da casca.',
+   sol:'<p>Inflar a esfera de <code>r</code> para <code>r+dr</code> adiciona uma casca finíssima de espessura <code>dr</code> espalhada por <strong>toda a superfície</strong>. O volume dessa casca é (área da superfície) \u00d7 (espessura) = <code>4\u03c0r\u00b2 \u00b7 dr</code>. Logo o volume novo por unidade de raio é <code>4\u03c0r\u00b2</code> — que é a área. A derivada mede "quanto volume aparece ao crescer o raio um tiquinho", e isso é literalmente a superfície.</p><p class="ans">Porque o volume acrescentado ao inflar é uma casca = área \u00d7 espessura; por unidade de raio, é a área.</p>'},
+  {level:'dificil', q:'A posição de um ponto da membrana é <code>y(t) = cos(t)</code>. Sabendo que a derivada de <code>cos(t)</code> é <code>\u2212sin(t)</code>, e a de <code>\u2212sin(t)</code> é <code>\u2212cos(t)</code>, mostre que a aceleração é <code>\u2212y</code>.',
+   hint:'Derive duas vezes e compare com a posição original.',
+   sol:'<div class="sstep">y = cos(t)<br>velocidade y\u2032 = \u2212sin(t)<br>aceleração y\u2033 = \u2212cos(t)<br><span class="an">// mas \u2212cos(t) = \u2212y</span><br>y\u2033 = \u2212y</div><p class="ans">A aceleração é \u2212y: o ponto é sempre acelerado de volta na direção oposta ao seu deslocamento. É a assinatura matemática de toda vibração — e o embrião da equação de onda.</p>'},
+  {level:'desafio', q:'O símbolo <code>\u2202&sup2;y/\u2202t&sup2;</code> da equação de onda significa o quê, em palavras simples? Por que o expoente 2 aparece duas vezes?',
+   hint:'É derivada segunda no tempo. Pense em posição \u2192 velocidade \u2192 aceleração.',
+   sol:'<p>Significa a <strong>aceleração vertical</strong> de um ponto da corda: a derivada da posição <code>y</code> no tempo, feita <strong>duas vezes</strong>. O "2" de cima conta quantas derivadas (segunda); o "2" de baixo lembra que é em relação ao tempo <code>t</code>, aplicado duas vezes. Posição \u2192 (deriva) velocidade \u2192 (deriva) aceleração.</p><p class="ans">É a aceleração daquele ponto; o 2 indica "derivada segunda no tempo" (derivar a posição duas vezes).</p>'},
+];
+
+// ── EXERCÍCIOS F10: integral ──
+EX.f10 = [
+  {level:'facil', q:'Use a regra <code>\u222bx^n dx = x^(n+1)/(n+1)</code> para integrar <code>x&sup2;</code>.',
+   hint:'Suba o expoente para 3 e divida por 3.',
+   sol:'<div class="sstep">\u222bx\u00b2 dx = x\u00b3/3</div><p class="ans">x\u00b3/3.</p>'},
+  {level:'facil', q:'Integre <code>x&sup3;</code>.',
+   sol:'<div class="sstep">\u222bx\u00b3 dx = x\u2074/4</div><p class="ans">x\u2074/4.</p>'},
+  {level:'facil', q:'A integral representa qual grandeza, na imagem geométrica?',
+   sol:'<p class="ans">A área sob a curva — a soma de infinitas fatias verticais finíssimas.</p>'},
+  {level:'medio', q:'Integre a área da superfície da esfera <code>4\u03c0r&sup2;</code> em relação a r. Que grandeza você reconstrói?',
+   hint:'Suba o expoente de r\u00b2 para r\u00b3 e divida por 3.',
+   sol:'<div class="sstep">\u222b4\u03c0r\u00b2 dr = 4\u03c0 \u00b7 r\u00b3/3<br>= (4/3)\u03c0r\u00b3</div><p class="ans">(4/3)\u03c0r\u00b3 — o <strong>volume</strong> da esfera. Integrar as cascas reconstrói o sólido (a integral "sobe" de área para volume).</p>'},
+  {level:'medio', q:'Mostre que derivar e integrar se desfazem: integre <code>x&sup2;</code>, depois derive o resultado.',
+   sol:'<div class="sstep">\u222bx\u00b2 dx = x\u00b3/3<br><span class="an">// agora derivo x\u00b3/3:</span><br>d/dx[x\u00b3/3] = 3x\u00b2/3 = x\u00b2</div><p class="ans">Voltei a x\u00b2. Integrar e derivar são operações inversas — uma desfaz a outra.</p>'},
+  {level:'dificil', q:'Na lente cinemática: se a aceleração é constante <code>a = 2</code>, integre para achar a velocidade (partindo do repouso). Depois integre a velocidade para achar a posição.',
+   hint:'\u222b2 dt = 2t. Depois \u222b2t dt.',
+   sol:'<div class="sstep"><span class="an">// integro a aceleração:</span><br>v = \u222b2 dt = 2t<br><span class="an">// integro a velocidade:</span><br>p = \u222b2t dt = 2\u00b7t\u00b2/2 = t\u00b2</div><p class="ans">v = 2t e p = t\u00b2. Integrar sobe a escada: aceleração \u2192 velocidade \u2192 posição — exatamente o inverso de derivar.</p>'},
+  {level:'desafio', q:'Conecte tudo: no Fundamento 9 você derivou <code>p(t)=t&sup2;</code> e obteve aceleração 2. Aqui você integrou aceleração 2 e voltou a <code>t&sup2;</code>. O que essa ida-e-volta demonstra, e por que importa para ler a equação de onda?',
+   sol:'<p>Demonstra o <strong>teorema fundamental do cálculo</strong>: derivar e integrar são inversos exatos. Importa para a equação de onda porque ela é uma afirmação sobre derivadas (aceleração e curvatura); poder ir-e-voltar entre taxa e acúmulo é o que permite, no caderno principal, partir da equação e <em>integrá-la</em> para achar as formas de vibração (os modos com sin(kL)=0), e vice-versa.</p><p class="ans">Que derivada e integral se desfazem; isso permite resolver a equação de onda — passar da lei sobre taxas para as formas concretas de vibração.</p>'},
+];
+
+// ── EXERCÍCIOS F11: lendo a equação de onda ──
+EX.f11 = [
+  {level:'facil', q:'Na equação <code>\u2202&sup2;y/\u2202t&sup2; = c&sup2;\u00b7\u2202&sup2;y/\u2202x&sup2;</code>, o que <code>y</code> representa?',
+   sol:'<p class="ans">A altura (deslocamento) da corda ou membrana num ponto e instante — a saída da função y(x,t).</p>'},
+  {level:'facil', q:'O lado esquerdo <code>\u2202&sup2;y/\u2202t&sup2;</code> é qual grandeza física?',
+   sol:'<p class="ans">A aceleração vertical daquele ponto (derivada segunda da posição no tempo).</p>'},
+  {level:'medio', q:'O lado direito tem <code>\u2202&sup2;y/\u2202x&sup2;</code>. Sendo a derivada segunda no espaço, que propriedade da forma da corda ele mede?',
+   hint:'Derivada segunda no espaço = o quanto a curva se encurva.',
+   sol:'<p class="ans">A curvatura — o quanto a corda está dobrada naquele ponto.</p>'},
+  {level:'medio', q:'Traduza a equação inteira em uma frase de português.',
+   sol:'<p class="ans">"A aceleração de cada ponto é proporcional à curvatura da corda naquele ponto." Quanto mais encurvado o ponto, mais forte ele é puxado de volta ao repouso.</p>'},
+  {level:'dificil', q:'Por que se usa <code>\u2202</code> (derivada parcial) em vez de <code>d</code> nesta equação?',
+   hint:'Quantas entradas tem y?',
+   sol:'<p><code>y</code> depende de <strong>duas</strong> entradas: posição <code>x</code> e tempo <code>t</code>. O <code>\u2202</code> avisa "estou derivando em relação a uma delas de cada vez, segurando a outra fixa". A ideia é a mesma da derivada comum; a notação só diz qual variável está variando.</p><p class="ans">Porque y tem duas entradas (x e t); \u2202 indica derivar em relação a uma, mantendo a outra fixa.</p>'},
+  {level:'desafio', q:'Um trecho da corda está perfeitamente reto (curvatura zero) num instante. Pela equação, qual a aceleração desse ponto ali? E um ponto muito encurvado (formando um pico agudo)?',
+   hint:'Aceleração é proporcional à curvatura. Curvatura zero \u2192 ? Curvatura grande \u2192 ?',
+   sol:'<div class="sstep"><span class="an">// aceleração \u221d curvatura</span><br>trecho reto: curvatura = 0 \u2192 aceleração = 0<br>pico agudo: curvatura grande \u2192 aceleração grande</div><p class="ans">O trecho reto não sofre aceleração (não é puxado de volta); o pico agudo sofre forte aceleração rumo ao repouso. É por isso que picos se achatam e a corda oscila — a equação de onda em ação.</p>'},
+];
+// ═══════════════════════════════════════════════════════════
+// AUDIO (mínimo: só tons puros e somas, com limiter)
+// ═══════════════════════════════════════════════════════════
+let actx=null, lim=null;
+const liveOsc=new Set();
+function AC(){
+  if(!actx){
+    actx=new (window.AudioContext||window.webkitAudioContext)();
+    lim=actx.createDynamicsCompressor();
+    lim.threshold.value=-6; lim.knee.value=6; lim.ratio.value=12;
+    lim.attack.value=0.002; lim.release.value=0.15; lim.connect(actx.destination);
+  }
+  if(actx.state==='suspended') actx.resume();
+  return actx;
+}
+function trackOsc(o){ liveOsc.add(o); o.addEventListener('ended',()=>liveOsc.delete(o)); }
+function stopAll(){ liveOsc.forEach(o=>{try{o.stop();}catch(e){}}); liveOsc.clear(); }
+function playSines(freqs,dur=1.4,vol=0.14){
+  const ac=AC(),t0=ac.currentTime,per=vol/Math.max(1,Math.sqrt(freqs.length));
+  freqs.forEach(f=>{
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(per,t0+0.02);
+    g.gain.setValueAtTime(per,t0+dur-0.08); g.gain.linearRampToValueAtTime(0,t0+dur);
+    o.connect(g); g.connect(lim); o.start(t0); o.stop(t0+dur); trackOsc(o);
+  });
+}
+function playAdditive(f0,amps,dur=1.4,vol=0.16){
+  const ac=AC(),t0=ac.currentTime,m=ac.createGain(); m.connect(lim);
+  m.gain.setValueAtTime(0,t0); m.gain.linearRampToValueAtTime(vol,t0+0.02);
+  m.gain.setValueAtTime(vol,t0+dur-0.08); m.gain.linearRampToValueAtTime(0,t0+dur);
+  const norm=amps.reduce((s,a)=>s+Math.abs(a),0)||1;
+  amps.forEach((a,i)=>{ if(Math.abs(a)<0.001)return;
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='sine'; o.frequency.value=f0*(i+1); g.gain.value=a/norm;
+    o.connect(g); g.connect(m); o.start(t0); o.stop(t0+dur); trackOsc(o);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// CANVAS HELPER (DPR-aware, cached intended height)
+// ═══════════════════════════════════════════════════════════
+function fit(canvas){
+  const dpr=window.devicePixelRatio||1;
+  if(!canvas.dataset.cssH) canvas.dataset.cssH=parseInt(canvas.getAttribute('height'))||200;
+  const cssH=parseInt(canvas.dataset.cssH);
+  const cssW=canvas.clientWidth||canvas.parentElement.clientWidth||600;
+  canvas.style.height=cssH+'px';
+  canvas.width=Math.round(cssW*dpr); canvas.height=Math.round(cssH*dpr);
+  const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {w:cssW,h:cssH,ctx};
+}
+const _hooks=[];
+function onRedraw(fn){ _hooks.push(fn); }
+function redrawAll(){ _hooks.forEach(f=>{try{f();}catch(e){}}); }
+let _rt; window.addEventListener('resize',()=>{clearTimeout(_rt);_rt=setTimeout(redrawAll,120);});
+window.addEventListener('load',()=>requestAnimationFrame(()=>requestAnimationFrame(redrawAll)));
+const C={amber:'#e8a838',blue:'#5d8fcc',bluedim:'#4a6fa5',bluelight:'#8fb4e0',
+  green:'#4fb87a',red:'#d05a5a',violet:'#9b7fd4',muted:'#5e5e72',faint:'#3a3a48',
+  text:'#cdcdd8',border:'#262631',white:'#ffffff',geo:'#5d8fcc',kin:'#e8a838'};
+
+// ═══════════════════════════════════════════════════════════
+// HERO — campo de ondas suaves
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('hero-canvas'); if(!cv)return;
+  let t=0,raf;
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    for(let k=0;k<5;k++){
+      ctx.beginPath();
+      ctx.strokeStyle=[C.green,C.blue,C.violet,C.amber,C.bluelight][k]+'44';
+      ctx.lineWidth=1.2;
+      for(let x=0;x<=W;x+=4){
+        const y=H/2+Math.sin(x*0.008+t*0.5+k*1.3)*(40+k*14)*Math.sin(t*0.2+k);
+        x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke();
+    }
+    t+=0.02; raf=requestAnimationFrame(draw);
+  }
+  draw(); onRedraw(()=>{});
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F2 — razão vs diferença
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('ratio-canvas'); if(!cv)return;
+  const bS=document.getElementById('ratio-base'),bV=document.getElementById('ratio-base-v'),lbl=document.getElementById('ratio-lbl');
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const base=+bS.value;
+    const diff=base+100, ratio=base*2;
+    const maxHz=1700, toX=hz=>40+(hz/maxHz)*(W-60);
+    // baseline
+    [[base,'base',C.white],[diff,'+100 Hz (diferença)',C.kin],[ratio,'×2 (razão)',C.geo]].forEach((d,i)=>{
+      const y=40+i*55, x=toX(d[0]);
+      ctx.strokeStyle=C.border; ctx.beginPath(); ctx.moveTo(40,y); ctx.lineTo(W-20,y); ctx.stroke();
+      ctx.fillStyle=d[2]; ctx.beginPath(); ctx.arc(x,y,7,0,7); ctx.fill();
+      ctx.fillStyle=C.muted; ctx.font='10px "Courier New"'; ctx.textAlign='left';
+      ctx.fillText(d[1]+': '+Math.round(d[0])+' Hz', 40, y-12);
+    });
+    // brackets showing the two intervals from base
+    const yb=40, yd=95, yr=150, xb=toX(base);
+    ctx.strokeStyle=C.kin; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(xb,yb); ctx.lineTo(toX(diff),yd); ctx.stroke();
+    ctx.strokeStyle=C.geo; ctx.beginPath(); ctx.moveTo(xb,yb); ctx.lineTo(toX(ratio),yr); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=C.muted; ctx.font='10px "Courier New"'; ctx.textAlign='left';
+    ctx.fillText('mesma diferença (+100) encolhe perceptualmente ↑', 40, H-26);
+    ctx.fillText('mesma razão (×2) = sempre uma oitava ↓', 40, H-10);
+    bV.textContent=base; lbl.textContent='base '+base+' Hz';
+  }
+  bS.addEventListener('input',draw); draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F3 — período/frequência
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('period-canvas'); if(!cv)return;
+  const TS=document.getElementById('period-T'),TV=document.getElementById('period-T-v'),
+        fOut=document.getElementById('period-f'),lbl=document.getElementById('period-lbl');
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const T=+TS.value, f=1/T, cy=H/2, A=H*0.32;
+    ctx.strokeStyle=C.border; ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
+    // draw f cycles across width (scaled so faster f = more cycles visible)
+    ctx.strokeStyle=C.green; ctx.lineWidth=1.6; ctx.beginPath();
+    const cyclesShown=f*1; // 1 second window
+    for(let x=0;x<=W;x++){ const tt=(x/W); const y=cy-Math.sin(2*Math.PI*f*tt)*A; x?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+    ctx.stroke();
+    // mark one period
+    const pxPerSec=W, Tpx=T*pxPerSec;
+    if(Tpx<=W){ ctx.strokeStyle=C.amber; ctx.setLineDash([4,3]);
+      ctx.beginPath(); ctx.moveTo(0,cy+A+10); ctx.lineTo(Tpx,cy+A+10); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle=C.amber; ctx.font='10px "Courier New"'; ctx.fillText('1 período = '+T.toFixed(2)+'s', 4, cy+A+24);
+    }
+    TV.textContent=T.toFixed(2); fOut.textContent=f.toFixed(2)+' Hz';
+    lbl.textContent='T = '+T.toFixed(2)+' s → f = '+f.toFixed(2)+' Hz';
+  }
+  TS.addEventListener('input',draw); draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F4 — semitons (potência fracionária)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('semitone-canvas'); if(!cv)return;
+  const nS=document.getElementById('semitone-n'),nV=document.getElementById('semitone-n-v'),
+        fOut=document.getElementById('semitone-f'),mOut=document.getElementById('semitone-mult'),lbl=document.getElementById('semitone-lbl');
+  const base=220, step=Math.pow(2,1/12);
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const n=+nS.value, bw=(W-60)/13;
+    for(let i=0;i<=12;i++){
+      const f=base*Math.pow(step,i), hNorm=(f-base)/(base*2-base);
+      const bh=hNorm*(H-50), x=40+i*bw;
+      const on=i<=n;
+      ctx.fillStyle= i===12? C.amber : on?C.green:C.faint;
+      ctx.globalAlpha= on?1:0.35;
+      ctx.fillRect(x,H-30-bh,bw*0.7,bh); ctx.globalAlpha=1;
+      if(i===0||i===12||i===n){ ctx.fillStyle=C.muted; ctx.font='9px "Courier New"'; ctx.textAlign='center';
+        ctx.fillText(i,x+bw*0.35,H-16); }
+    }
+    ctx.textAlign='left';
+    ctx.fillStyle=C.muted; ctx.font='10px "Courier New"';
+    ctx.fillText('220 Hz', 40, 16); ctx.fillText('440 Hz (×2)', W-90, 16);
+    const f=base*Math.pow(step,n), mult=Math.pow(step,n);
+    nV.textContent=n; fOut.textContent=f.toFixed(2)+' Hz'; mOut.textContent='×'+mult.toFixed(4);
+    lbl.textContent=n+' semitons · ×'+mult.toFixed(3);
+  }
+  nS.addEventListener('input',()=>{ draw(); playSines([base*Math.pow(step,+nS.value)],0.6,0.14); });
+  draw(); onRedraw(draw);
+})();
+// ═══════════════════════════════════════════════════════════
+// F5 — função como máquina
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('fn-canvas'); if(!cv)return;
+  const xS=document.getElementById('fn-x'),xV=document.getElementById('fn-x-v'),
+        out=document.getElementById('fn-out'),lbl=document.getElementById('fn-lbl');
+  const fns={ dobro:{f:x=>2*x,s:'f(x) = 2x'}, quad:{f:x=>x*x,s:'f(x) = x²'},
+              meio:{f:x=>x/2+1,s:'f(x) = x/2 + 1'}, inv:{f:x=>x===0?NaN:1/x,s:'f(x) = 1/x'} };
+  let cur='dobro';
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const fn=fns[cur], x=+xS.value, y=fn.f(x);
+    // left: machine diagram
+    const mx=W*0.22;
+    ctx.fillStyle=C.surface2||'#1c1c24'; ctx.strokeStyle=C.green; ctx.lineWidth=1.5;
+    ctx.fillRect(mx-35,H/2-30,70,60); ctx.strokeRect(mx-35,H/2-30,70,60);
+    ctx.fillStyle=C.green; ctx.font='11px "Courier New"'; ctx.textAlign='center';
+    ctx.fillText('REGRA',mx,H/2-8); ctx.fillText(fn.s.split('=')[1].trim(),mx,H/2+10);
+    // input arrow
+    ctx.strokeStyle=C.bluelight; ctx.beginPath(); ctx.moveTo(20,H/2); ctx.lineTo(mx-35,H/2); ctx.stroke();
+    ctx.fillStyle=C.bluelight; ctx.fillText('x='+x,(20+mx-35)/2,H/2-8);
+    // output arrow
+    ctx.strokeStyle=C.amber; ctx.beginPath(); ctx.moveTo(mx+35,H/2); ctx.lineTo(mx+90,H/2); ctx.stroke();
+    ctx.fillStyle=C.amber; ctx.fillText(isNaN(y)?'∞':y.toFixed(1),mx+62,H/2-8);
+    // right: graph
+    const gx0=W*0.5, gw=W*0.46, gy0=20, gh=H-40, cx=gx0+gw/2, cy=gy0+gh/2, sc=gh/12;
+    ctx.strokeStyle=C.border; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(gx0,cy); ctx.lineTo(gx0+gw,cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,gy0); ctx.lineTo(cx,gy0+gh); ctx.stroke();
+    ctx.strokeStyle=C.green; ctx.lineWidth=1.6; ctx.beginPath(); let started=false;
+    for(let px=-6;px<=6;px+=0.1){ const py=fn.f(px); if(isNaN(py)||Math.abs(py)>6.5){started=false;continue;}
+      const sx=cx+px*sc, sy=cy-py*sc; started?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy); started=true; }
+    ctx.stroke();
+    // current point
+    if(!isNaN(y)&&Math.abs(y)<=6.5){ ctx.fillStyle=C.amber; ctx.beginPath(); ctx.arc(cx+x*sc,cy-y*sc,5,0,7); ctx.fill(); }
+    ctx.textAlign='left';
+    xV.textContent=x; out.textContent=isNaN(y)?'indefinido':(+y.toFixed(2)); lbl.textContent=fn.s;
+  }
+  xS.addEventListener('input',draw);
+  cv.parentElement.querySelectorAll('[data-fn]').forEach(b=>b.addEventListener('click',()=>{cur=b.dataset.fn;draw();}));
+  draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F6 — logaritmo achata multiplicativo→aditivo
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('log-canvas'); if(!cv)return;
+  const xS=document.getElementById('log-x'),xV=document.getElementById('log-x-v'),
+        out=document.getElementById('log-out'),lbl=document.getElementById('log-lbl');
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const val=+xS.value, L=Math.log2(val);
+    const x0=40,x1=W-30;
+    // top: multiplicative axis (linear position by value)
+    const yT=60, toXlin=v=>x0+((v-1)/15)*(x1-x0);
+    ctx.strokeStyle=C.border; ctx.beginPath(); ctx.moveTo(x0,yT); ctx.lineTo(x1,yT); ctx.stroke();
+    ctx.fillStyle=C.muted; ctx.font='9px "Courier New"'; ctx.textAlign='center';
+    [1,2,4,8,16].forEach(v=>{ const x=toXlin(v); ctx.fillStyle=C.bluelight; ctx.beginPath(); ctx.arc(x,yT,4,0,7); ctx.fill();
+      ctx.fillStyle=C.muted; ctx.fillText(v,x,yT-10); });
+    ctx.fillStyle=C.bluelight; ctx.textAlign='left'; ctx.fillText('valores: cada um o DOBRO do anterior (desigual)',x0,yT-26);
+    // bottom: log axis (linear position by log)
+    const yB=H-50, toXlog=l=>x0+(l/4)*(x1-x0);
+    ctx.strokeStyle=C.border; ctx.beginPath(); ctx.moveTo(x0,yB); ctx.lineTo(x1,yB); ctx.stroke();
+    [0,1,2,3,4].forEach(l=>{ const x=toXlog(l); ctx.fillStyle=C.green; ctx.beginPath(); ctx.arc(x,yB,4,0,7); ctx.fill();
+      ctx.fillStyle=C.muted; ctx.textAlign='center'; ctx.fillText(l,x,yB+18); });
+    ctx.fillStyle=C.green; ctx.textAlign='left'; ctx.fillText('log₂: igualmente espaçados (uniforme)',x0,yB+34);
+    // connector for current value
+    const xt=toXlin(val), xb=toXlog(L);
+    ctx.strokeStyle=C.amber; ctx.setLineDash([4,3]); ctx.beginPath(); ctx.moveTo(xt,yT); ctx.lineTo(xb,yB); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=C.amber; ctx.beginPath(); ctx.arc(xt,yT,5,0,7); ctx.fill(); ctx.beginPath(); ctx.arc(xb,yB,5,0,7); ctx.fill();
+    xV.textContent=val; out.textContent=L.toFixed(2); lbl.textContent='log₂('+val+') = '+L.toFixed(2);
+  }
+  xS.addEventListener('input',draw); draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F7 — círculo vira seno
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('sine-canvas'); if(!cv)return;
+  const fS=document.getElementById('sine-freq'),fV=document.getElementById('sine-freq-v'),lbl=document.getElementById('sine-lbl');
+  let t=0,raf;
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const freq=+fS.value, cy=H/2, R=H*0.34, ccx=70;
+    // circle
+    ctx.strokeStyle=C.border; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(ccx,cy,R,0,7); ctx.stroke();
+    const ang=t*freq; const px=ccx+R*Math.cos(ang), py=cy-R*Math.sin(ang);
+    ctx.strokeStyle=C.geo; ctx.beginPath(); ctx.moveTo(ccx,cy); ctx.lineTo(px,py); ctx.stroke();
+    ctx.fillStyle=C.amber; ctx.beginPath(); ctx.arc(px,py,5,0,7); ctx.fill();
+    // projection line
+    const wave0=ccx+R+20;
+    ctx.strokeStyle=C.faint; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(wave0,py); ctx.stroke(); ctx.setLineDash([]);
+    // wave
+    ctx.strokeStyle=C.green; ctx.lineWidth=1.6; ctx.beginPath();
+    for(let x=0;x<=(W-wave0);x++){ const a=t*freq - x*0.025; const y=cy-R*Math.sin(a); x?ctx.lineTo(wave0+x,y):ctx.moveTo(wave0+x,y); }
+    ctx.stroke();
+    ctx.fillStyle=C.amber; ctx.beginPath(); ctx.arc(wave0,py,4,0,7); ctx.fill();
+    lbl.textContent='θ = '+((ang)%(2*Math.PI)).toFixed(2);
+    t+=0.03; raf=requestAnimationFrame(draw);
+  }
+  fS.addEventListener('input',()=>{fV.textContent=(+fS.value).toFixed(1);});
+  document.getElementById('sine-play').addEventListener('click',()=>playSines([220*(+fS.value)],1.2,0.14));
+  draw(); onRedraw(()=>{});
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F8 — somatório de senoides
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('sum-canvas'); if(!cv)return;
+  const nS=document.getElementById('sum-n'),nV=document.getElementById('sum-n-v'),lbl=document.getElementById('sum-lbl');
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const N=+nS.value, cy=H/2;
+    ctx.strokeStyle=C.border; ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
+    // individual harmonics faint
+    for(let n=1;n<=N;n++){
+      ctx.strokeStyle=C.faint; ctx.lineWidth=0.8; ctx.beginPath();
+      for(let x=0;x<=W;x++){ const ph=(x/W)*4*Math.PI; const y=cy-(1/n)*Math.sin(ph*n)*(H*0.12); x?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+      ctx.stroke();
+    }
+    // sum bold
+    ctx.strokeStyle=C.green; ctx.lineWidth=1.8; ctx.beginPath();
+    for(let x=0;x<=W;x++){ const ph=(x/W)*4*Math.PI; let y=0; for(let n=1;n<=N;n++) y+=(1/n)*Math.sin(ph*n); const sy=cy-y*(H*0.12); x?ctx.lineTo(x,sy):ctx.moveTo(x,sy); }
+    ctx.stroke();
+    nV.textContent=N; lbl.textContent=N+(N===1?' termo':' termos');
+  }
+  nS.addEventListener('input',draw);
+  document.getElementById('sum-play').addEventListener('click',()=>{
+    const N=+nS.value,amps=[]; for(let n=1;n<=N;n++)amps.push(1/n); playAdditive(220,amps,1.5,0.18);
+  });
+  draw(); onRedraw(draw);
+})();
+// ═══════════════════════════════════════════════════════════
+// F9 — derivada: posição → velocidade → aceleração
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('deriv-canvas'); if(!cv)return;
+  const tS=document.getElementById('deriv-t'),tV=document.getElementById('deriv-t-v'),lbl=document.getElementById('deriv-lbl');
+  // pos = sin(x); vel = cos(x); acc = -sin(x)
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const tCur=+tS.value, panels=[
+      {f:x=>Math.sin(x), c:C.bluelight, name:'posição  y = sin(t)'},
+      {f:x=>Math.cos(x), c:C.green, name:'velocidade  y′ = cos(t)  (inclinação de cima)'},
+      {f:x=>-Math.sin(x), c:C.amber, name:'aceleração  y″ = −sin(t)  (inclinação do meio)'},
+    ];
+    const ph=H/3, xmax=2*Math.PI;
+    panels.forEach((p,i)=>{
+      const cy=ph*i+ph/2, A=ph*0.32, x0=10, x1=W-10;
+      ctx.strokeStyle=C.border; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x0,cy); ctx.lineTo(x1,cy); ctx.stroke();
+      ctx.strokeStyle=p.c; ctx.lineWidth=1.6; ctx.beginPath();
+      for(let px=x0;px<=x1;px++){ const xv=((px-x0)/(x1-x0))*xmax; const y=cy-p.f(xv)*A; px===x0?ctx.moveTo(px,y):ctx.lineTo(px,y); }
+      ctx.stroke();
+      // marker at tCur
+      const mx=x0+(tCur/xmax)*(x1-x0), my=cy-p.f(tCur)*A;
+      ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(mx,my,5,0,7); ctx.fill();
+      // tangent line on position panel: slope of sin(t) is cos(t)
+      if(i===0){ const len=44;
+        const dydx = -Math.cos(tCur)*A*(xmax/(x1-x0)); // screen dY/dX
+        ctx.strokeStyle=C.green; ctx.lineWidth=1.4; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(mx-len,my-dydx*(-len)); ctx.lineTo(mx+len,my-dydx*(len)); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle=C.green; ctx.font='9px "Courier New"'; ctx.fillText('tangente = derivada',mx+8,my-8);
+      }
+      ctx.fillStyle=C.muted; ctx.font='10px "Courier New"'; ctx.textAlign='left';
+      ctx.fillText(p.name,x0+4,ph*i+14);
+    });
+    tV.textContent=tCur.toFixed(1); lbl.textContent='t = '+tCur.toFixed(1);
+  }
+  tS.addEventListener('input',draw); draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// F10 — integral como área (soma de Riemann)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('integ-canvas'); if(!cv)return;
+  const nS=document.getElementById('integ-n'),nV=document.getElementById('integ-n-v'),
+        out=document.getElementById('integ-area'),lbl=document.getElementById('integ-lbl');
+  const f=x=>0.5+Math.sin(x)*0.4+0.3; // positive curve on [0, π]
+  const a=0,b=Math.PI;
+  function trueArea(){ // ∫(0.8 + 0.4 sin x) = 0.8x -0.4cos x | 0..π
+    const F=x=>0.8*x-0.4*Math.cos(x); return F(b)-F(a);
+  }
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv); ctx.clearRect(0,0,W,H);
+    const N=+nS.value, x0=40,x1=W-20,y0=H-30, gh=H-60;
+    const toX=x=>x0+((x-a)/(b-a))*(x1-x0), toY=y=>y0-y*gh/1.6;
+    // axes
+    ctx.strokeStyle=C.border; ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x0,20); ctx.stroke();
+    // rectangles
+    const dx=(b-a)/N; let area=0;
+    for(let i=0;i<N;i++){ const xm=a+(i+0.5)*dx, h=f(xm); area+=h*dx;
+      const rx=toX(a+i*dx), rw=toX(a+(i+1)*dx)-rx, ry=toY(h);
+      ctx.fillStyle=C.green+'33'; ctx.strokeStyle=C.green+'88'; ctx.lineWidth=0.8;
+      ctx.fillRect(rx,ry,rw,y0-ry); ctx.strokeRect(rx,ry,rw,y0-ry);
+    }
+    // curve
+    ctx.strokeStyle=C.amber; ctx.lineWidth=1.8; ctx.beginPath();
+    for(let x=a;x<=b;x+=0.02){ const sx=toX(x),sy=toY(f(x)); x===a?ctx.moveTo(sx,sy):ctx.lineTo(sx,sy); }
+    ctx.stroke();
+    nV.textContent=N; out.textContent=area.toFixed(3)+' (real: '+trueArea().toFixed(3)+')';
+    lbl.textContent=N+' fatias';
+  }
+  nS.addEventListener('input',draw); draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// RENDER EXERCÍCIOS + PROGRESS/NAV
+// ═══════════════════════════════════════════════════════════
+['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11'].forEach(id=>{
+  renderExercises(id,'ex-'+id);
+});
+
+(function(){
+  const bar=document.getElementById('progress');
+  const ids=['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11'];
+  const links=document.querySelectorAll('#nav a');
+  addEventListener('scroll',()=>{
+    const sc=scrollY, dh=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(dh>0?(sc/dh*100):0)+'%';
+    let act='f1';
+    ids.forEach(id=>{ const el=document.getElementById(id); if(el&&el.offsetTop<=sc+90) act=id; });
+    links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+act));
+  },{passive:true});
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Matemática da Música — um caderno dedutivo</title>
+<style>
+:root{
+  --bg:#0b0b0e;--bg2:#0f0f13;--surface:#15151b;--surface2:#1c1c24;
+  --border:#262631;--border2:#34343f;--text:#cdcdd8;--text-dim:#9494a6;
+  --muted:#5e5e72;--faint:#3a3a48;--amber:#e8a838;--amber-dim:#b8842c;
+  --blue:#5d8fcc;--blue-dim:#4a6fa5;--bluelight:#8fb4e0;--green:#4fb87a;
+  --green-dim:#3a8a5b;--red:#d05a5a;--red-dim:#a04545;--violet:#9b7fd4;
+  /* epistemic status colors */
+  --epi-math:#5d8fcc;     /* necessidade matemática */
+  --epi-phys:#4fb87a;     /* mecanismo físico-perceptivo */
+  --epi-hist:#e8a838;     /* convenção histórica */
+  --epi-peda:#9b7fd4;     /* inferência pedagógica */
+  --font-mono:'Courier New',monospace;
+  --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --maxw:820px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:60px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased}
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--amber),var(--violet));z-index:200;transition:width .1s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,11,14,.93);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);display:flex;align-items:center;padding:0 1.5rem;height:54px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nav-logo{font-family:var(--font-mono);font-size:.72rem;color:var(--amber);padding-right:1.2rem;margin-right:1rem;border-right:1px solid var(--border);letter-spacing:.04em;flex-shrink:0}
+nav a{color:var(--muted);text-decoration:none;font-size:.74rem;padding:.5rem .6rem;letter-spacing:.02em;flex-shrink:0;transition:color .2s;font-family:var(--font-mono)}
+nav a:hover{color:var(--text)}
+nav a.active{color:var(--amber)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.5rem}
+section{padding:4.5rem 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+#hero-canvas{position:absolute;inset:0;opacity:.4;pointer-events:none}
+.hero-content{position:relative;z-index:2}
+.hero-kicker{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.28em;color:var(--amber);text-transform:uppercase;margin-bottom:1.8rem}
+h1{font-family:var(--font-mono);font-weight:700;font-size:clamp(2.1rem,6.5vw,4.2rem);line-height:1.08;color:#fff;margin-bottom:1.8rem;letter-spacing:-.01em}
+h1 em{color:var(--amber);font-style:normal}
+.hero-lead{font-size:1.05rem;color:var(--text-dim);max-width:620px;line-height:1.85;margin-bottom:2.5rem}
+.hero-thesis{font-family:var(--font-mono);font-size:.9rem;color:var(--bluelight);border-left:2px solid var(--amber);padding-left:1.2rem;max-width:620px;line-height:1.9}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:.68rem;color:var(--muted);letter-spacing:.15em;z-index:2;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+.level-tag{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.8rem;display:inline-block;padding:.25rem .7rem;border:1px solid var(--border2);border-radius:2px;color:var(--amber)}
+.level-tag.physics{color:var(--blue);border-color:var(--blue-dim)}
+.level-tag.percept{color:var(--green);border-color:var(--green-dim)}
+.level-tag.system{color:var(--amber);border-color:var(--amber-dim)}
+.level-tag.structure{color:var(--violet);border-color:#6b5499}
+h2{font-family:var(--font-mono);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.18;color:#fff;margin-bottom:1.4rem;letter-spacing:-.005em}
+h3{font-family:var(--font-mono);font-size:1.05rem;color:var(--amber);margin:2.5rem 0 1rem;letter-spacing:.01em}
+h4{font-family:var(--font-mono);font-size:.85rem;color:var(--bluelight);margin:1.8rem 0 .8rem;letter-spacing:.05em;text-transform:uppercase}
+p{margin-bottom:1.1rem;color:var(--text)}
+p.lead{font-size:1.08rem;color:var(--text-dim);line-height:1.8}
+strong{color:#fff;font-weight:600}
+em.term{color:var(--amber);font-style:italic}
+code{font-family:var(--font-mono);color:var(--bluelight);background:rgba(93,143,204,.1);padding:0 .3em;border-radius:2px;font-size:.92em}
+.aside{font-size:.9rem;color:var(--text-dim);background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--muted);padding:1rem 1.3rem;margin:1.5rem 0;border-radius:0 4px 4px 0}
+.aside .aside-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.4rem}
+.key-insight{background:linear-gradient(135deg,rgba(232,168,56,.07),rgba(155,127,212,.04));border:1px solid var(--border2);border-left:3px solid var(--amber);padding:1.3rem 1.5rem;margin:1.8rem 0;border-radius:0 4px 4px 0}
+.key-insight .ki-label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:.6rem}
+.key-insight p:last-child{margin-bottom:0}
+
+/* ── EPISTEMIC STATUS TAGS ── */
+.epi{display:inline-flex;align-items:center;gap:.3em;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.12rem .5rem;border-radius:10px;border:1px solid;vertical-align:middle;white-space:nowrap;font-weight:600}
+.epi::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.epi.math{color:var(--epi-math);border-color:var(--epi-math)}
+.epi.phys{color:var(--epi-phys);border-color:var(--epi-phys)}
+.epi.hist{color:var(--epi-hist);border-color:var(--epi-hist)}
+.epi.peda{color:var(--epi-peda);border-color:var(--epi-peda)}
+.claim{display:flex;gap:.7rem;align-items:flex-start;margin:1.1rem 0;padding:.5rem 0 .5rem .9rem;border-left:2px solid var(--border2)}
+.claim .epi{flex-shrink:0;margin-top:.18rem}
+.claim p{margin:0}
+.epi-legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.4rem 0;padding:1rem 1.2rem;background:var(--bg2);border:1px solid var(--border);border-radius:6px}
+.epi-legend .epi-item{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:150px}
+.epi-legend .epi-desc{font-size:.74rem;color:var(--muted);line-height:1.5}
+
+.eq{font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.5rem;margin:1.5rem 0;overflow-x:auto;font-size:1rem;line-height:1.9;color:var(--text)}
+.eq .lbl{color:var(--muted);font-size:.8rem}
+.derivation{font-family:var(--font-mono);font-size:.92rem;line-height:2.1;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem;margin:1.5rem 0;overflow-x:auto}
+.derivation .step{display:block}
+.derivation .annot{color:var(--muted);font-size:.78rem}
+.hl-amber{color:var(--amber)}.hl-blue{color:var(--bluelight)}.hl-green{color:var(--green)}.hl-red{color:var(--red)}
+.viz{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.4rem;margin:2rem 0}
+.viz-head{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.viz-head span:last-child{color:var(--bluelight);text-align:right}
+.viz canvas{width:100%;display:block;border-radius:3px}
+.viz-caption{font-size:.82rem;color:var(--muted);margin-top:.9rem;line-height:1.6}
+.viz-caption strong{color:var(--text-dim)}
+.model-warn{display:inline-block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.05em;color:var(--amber-dim);border:1px dashed var(--amber-dim);border-radius:3px;padding:.15rem .5rem;margin-top:.6rem}
+.controls{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:1.2rem;align-items:flex-end}
+.ctrl{display:flex;flex-direction:column;gap:.35rem;flex:1;min-width:140px}
+.ctrl label{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.ctrl label .v{color:var(--bluelight)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--border2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--amber);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--amber);border:none;cursor:pointer}
+input[type=range]:focus-visible{outline:2px solid var(--bluelight);outline-offset:4px}
+button{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;background:transparent;border:1px solid var(--amber);color:var(--amber);padding:.5rem 1.1rem;cursor:pointer;text-transform:uppercase;transition:all .18s;border-radius:3px;white-space:nowrap;flex-shrink:0}
+button:hover{background:var(--amber);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--bluelight);outline-offset:3px}
+button.playing{background:var(--amber);color:var(--bg)}
+button.sec{border-color:var(--blue-dim);color:var(--bluelight)}
+button.sec:hover{background:var(--blue-dim);color:#fff}
+button.danger{border-color:var(--red-dim);color:var(--red)}
+button.danger:hover{background:var(--red-dim);color:#fff}
+button.sm{font-size:.62rem;padding:.3rem .7rem}
+.btn-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+/* audio button with sonic-description tooltip/caption */
+.snd{display:inline-flex;flex-direction:column;gap:.25rem;align-items:flex-start}
+.snd .snd-desc{font-size:.6rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.02em;max-width:130px;line-height:1.3;text-transform:none}
+.readout{font-family:var(--font-mono);font-size:.85rem;color:var(--bluelight);display:flex;flex-direction:column;gap:.2rem;flex-shrink:0}
+.readout .rl{color:var(--muted);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em}
+.tbl{width:100%;border-collapse:collapse;margin:1.5rem 0;font-family:var(--font-mono);font-size:.84rem}
+.tbl th{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--border2);color:var(--muted);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:400}
+.tbl td{padding:.55rem .7rem;border-bottom:1px solid rgba(38,38,49,.5)}
+.tbl tr:hover td{background:var(--surface)}
+.tbl .num{color:var(--bluelight)}.tbl .nm{color:var(--amber)}.tbl .gd{color:var(--green)}.tbl .bd{color:var(--red)}
+.harm-stack{display:flex;flex-direction:column;gap:3px;margin:1.2rem 0}
+.harm-row{display:grid;grid-template-columns:56px 1fr 70px;gap:.8rem;align-items:center;font-family:var(--font-mono);font-size:.72rem;cursor:pointer;padding:.2rem 0;transition:background .15s;border:none;background:none;text-align:left;width:100%}
+.harm-row:hover{background:var(--surface2)}
+.harm-row:focus-visible{outline:2px solid var(--bluelight);outline-offset:2px}
+.harm-row .hn{color:var(--amber)}
+.harm-row .hbar-wrap{height:18px;background:var(--bg2);border-radius:2px;overflow:hidden;position:relative}
+.harm-row .hbar{height:100%;background:linear-gradient(90deg,var(--blue-dim),var(--blue));border-radius:2px}
+.harm-row .hf{color:var(--text-dim);text-align:right}
+.harm-row .hlabel{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:.6rem;color:rgba(255,255,255,.75)}
+.threecol{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
+.threecol .col{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.1rem}
+.threecol .col h5{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem;color:var(--bluelight)}
+.threecol .col p{font-size:.82rem;color:var(--text-dim);margin:0;line-height:1.6}
+@media(max-width:640px){.threecol{grid-template-columns:1fr}}
+footer{padding:4rem 1.5rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.74rem;letter-spacing:.06em;line-height:2}
+footer .sig{color:var(--text-dim)}
+.skip-link{position:absolute;left:-999px;top:0;background:var(--amber);color:#000;padding:.6rem 1rem;z-index:300;font-family:var(--font-mono);font-size:.8rem}
+.skip-link:focus{left:0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+@media(max-width:600px){body{font-size:14.5px}.controls{gap:.9rem}.ctrl{min-width:110px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a href="#corda" class="skip-link">Pular para o conteúdo</a>
+<div id="progress"></div>
+
+<nav id="nav" aria-label="Navegação dos níveis">
+  <span class="nav-logo">&#8706;&#178;y/&#8706;t&#178; = c&#178;&#8706;&#178;y/&#8706;x&#178;</span>
+  <a href="#corda">0 &middot; Corda</a>
+  <a href="#timbre">1 &middot; Timbre</a>
+  <a href="#consonancia">2 &middot; Conson&acirc;ncia</a>
+  <a href="#batimentos">3 &middot; Batimentos</a>
+  <a href="#cents">4 &middot; Cents</a>
+  <a href="#escala">5 &middot; Escala</a>
+  <a href="#temperamento">6 &middot; Temperamento</a>
+  <a href="#tonal">7 &middot; Estrutura</a>
+  <a href="#modelo">8 &middot; Modelo mental</a>
+  <a href="#beethoven">9 &middot; Beethoven</a>
+</nav>
+
+<header id="hero">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="wrap hero-content">
+    <div class="hero-kicker">Um caderno dedutivo</div>
+    <h1>A matem&aacute;tica<br>da <em>m&uacute;sica</em></h1>
+    <p class="hero-lead">
+      N&atilde;o come&ccedil;amos por "d&oacute;, r&eacute;, mi". Come&ccedil;amos por uma corda esticada e uma
+      equa&ccedil;&atilde;o diferencial. Grande parte da teoria tonal ocidental pode ser entendida como
+      <strong>explora&ccedil;&atilde;o, aproxima&ccedil;&atilde;o e compromisso</strong> entre rela&ccedil;&otilde;es num&eacute;ricas que
+      emergem da f&iacute;sica. A nota &eacute; consequ&ecirc;ncia, n&atilde;o ponto de partida.
+    </p>
+    <div class="hero-thesis">
+      Tese: a estrutura musical &eacute; um sistema formal.<br>
+      A audi&ccedil;&atilde;o &eacute; uma das interfaces sensoriais com esse sistema.<br>
+      &Eacute; por isso que se p&ocirc;de compor sem ouvir externamente.
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">&darr; a corda vibrante</div>
+</header>
+
+<main>
+<section id="corda">
+  <div class="wrap">
+    <span class="level-tag physics">N&iacute;vel 0 &mdash; F&iacute;sica pura</span>
+    <h2>A corda vibrante<br>e por que a natureza conta de 1 em 1</h2>
+
+    <p class="lead">
+      Antes de qualquer conven&ccedil;&atilde;o musical, existe um fato f&iacute;sico: uma corda presa nas duas
+      pontas n&atilde;o vibra de qualquer jeito. Ela vibra apenas em certos padr&otilde;es &mdash; e esses
+      padr&otilde;es formam uma sequ&ecirc;ncia de inteiros. Isto n&atilde;o &eacute; observa&ccedil;&atilde;o emp&iacute;rica; &eacute;
+      <strong>consequ&ecirc;ncia dedut&iacute;vel</strong> de uma equa&ccedil;&atilde;o.
+    </p>
+
+    <div class="epi-legend" aria-label="Legenda dos r&oacute;tulos epist&ecirc;micos">
+      <div class="epi-item"><span class="epi math">necessidade matem&aacute;tica</span><span class="epi-desc">verdade que decorre logicamente de defini&ccedil;&otilde;es e axiomas. N&atilde;o poderia ser diferente.</span></div>
+      <div class="epi-item"><span class="epi phys">mecanismo f&iacute;sico-perceptivo</span><span class="epi-desc">como o mundo f&iacute;sico ou o sistema auditivo de fato se comporta. Emp&iacute;rico.</span></div>
+      <div class="epi-item"><span class="epi hist">conven&ccedil;&atilde;o hist&oacute;rica</span><span class="epi-desc">escolha cultural que poderia ter sido outra. Contingente.</span></div>
+      <div class="epi-item"><span class="epi peda">infer&ecirc;ncia pedag&oacute;gica</span><span class="epi-desc">interpreta&ccedil;&atilde;o ou estrat&eacute;gia de ensino, n&atilde;o fato estabelecido.</span></div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted)">
+      Cada afirma&ccedil;&atilde;o forte deste caderno carrega um destes r&oacute;tulos. &Eacute; o ant&iacute;doto contra o
+      erro mais comum ao falar de m&uacute;sica: confundir o que &eacute; <em>matematicamente necess&aacute;rio</em>
+      com o que &eacute; apenas <em>historicamente habitual</em>.
+    </p>
+
+    <p>
+      Uma corda de comprimento <code>L</code>, presa nas extremidades, obedece &agrave;
+      <em class="term">equa&ccedil;&atilde;o de onda</em> &mdash; uma lei da f&iacute;sica que governa qualquer meio
+      el&aacute;stico cont&iacute;nuo. O deslocamento lateral <code>y</code> de cada ponto evolui no tempo segundo:
+    </p>
+    <div class="eq">
+      &part;&sup2;y/&part;t&sup2; = c&sup2; &middot; &part;&sup2;y/&part;x&sup2;
+      <br><span class="lbl">// y(x,t) = deslocamento no ponto x, instante t; c = velocidade da onda na corda</span>
+    </div>
+
+    <p>
+      A restri&ccedil;&atilde;o decisiva s&atilde;o as <strong>condi&ccedil;&otilde;es de contorno</strong>: as pontas est&atilde;o
+      fixas, ent&atilde;o <code>y(0,t)=0</code> e <code>y(L,t)=0</code> em todo instante. Procuramos
+      solu&ccedil;&otilde;es separ&aacute;veis <code>y(x,t)=X(x)&middot;T(t)</code>. Substituindo na equa&ccedil;&atilde;o e dividindo,
+      cada lado depende de uma vari&aacute;vel s&oacute;, logo ambos igualam uma constante &minus;k&sup2;:
+    </p>
+    <div class="derivation">
+      <span class="step"><span class="annot">// a parte espacial vira um oscilador:</span></span>
+      <span class="step">X''(x) + k&sup2;X(x) = 0 &nbsp;&rarr;&nbsp; X(x) = A&middot;sin(kx) + B&middot;cos(kx)</span>
+      <span class="step"></span>
+      <span class="step"><span class="annot">// contorno y(0,t)=0 &rarr; B=0. Contorno y(L,t)=0 &rarr; sin(kL)=0:</span></span>
+      <span class="step">sin(kL) = 0 &nbsp;&rarr;&nbsp; kL = n&pi; &nbsp;&rarr;&nbsp; <span class="hl-blue">k<sub>n</sub> = n&pi;/L</span>&nbsp;&nbsp;<span class="annot">n = 1, 2, 3, &hellip;</span></span>
+      <span class="step"></span>
+      <span class="step"><span class="annot">// o inteiro n n&atilde;o foi escolhido &mdash; foi FOR&Ccedil;ADO pela condi&ccedil;&atilde;o de contorno.</span></span>
+      <span class="step"><span class="annot">// comprimento de onda &lambda;=2&pi;/k e frequ&ecirc;ncia f=ck/2&pi; d&atilde;o:</span></span>
+      <span class="step"><span class="hl-amber">f<sub>n</sub> = n &middot; (c / 2L) = n &middot; f<sub>1</sub></span></span>
+    </div>
+
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>As frequ&ecirc;ncias de uma corda ideal s&atilde;o <strong>m&uacute;ltiplos inteiros exatos</strong> de uma
+      fundamental: <code>f, 2f, 3f, &hellip;</code> Isto decorre de <code>sin(kL)=0</code>. O inteiro
+      emerge da exig&ecirc;ncia f&iacute;sica "n&atilde;o se mexer onde est&aacute; preso" &mdash; n&atilde;o de conven&ccedil;&atilde;o alguma.</p>
+    </div>
+
+    <div class="key-insight">
+      <span class="ki-label">O fato gerador &mdash; agora demonstrado, n&atilde;o postulado</span>
+      <p>
+        Isto &eacute; a <em class="term">s&eacute;rie harm&ocirc;nica</em>. A diferen&ccedil;a entre "uma corda produz
+        harm&ocirc;nicos" (observa&ccedil;&atilde;o) e "uma corda <em>tem de</em> produzir harm&ocirc;nicos porque
+        <code>sin(kL)=0</code>" (teorema) &eacute; a diferen&ccedil;a entre f&iacute;sica descritiva e matem&aacute;tica da
+        m&uacute;sica. Tudo o que segue &mdash; conson&acirc;ncia, escalas, harmonia &mdash; &eacute; constru&iacute;do sobre
+        estes inteiros. <strong>Corpos reais</strong> (cordas com rigidez, sinos, placas) desviam
+        dessa s&eacute;rie ideal; essa inarmonicidade &eacute; mensur&aacute;vel e importa para o timbre.
+      </p>
+    </div>
+
+    <h3>Veja e ou&ccedil;a os modos</h3>
+    <p>
+      Cada modo <code>n</code> tem <code>n&minus;1</code> n&oacute;s internos (pontos parados) e vibra a
+      <code>n&middot;f<sub>1</sub></code>. Uma corda real vibra em <strong>todos</strong> simultaneamente.
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>Modos normais de uma corda presa nas pontas</span><span id="corda-mode-lbl">n = 1</span></div>
+      <canvas id="corda-canvas" height="220" role="img" aria-label="Anima&ccedil;&atilde;o de onda estacion&aacute;ria. O modo selecionado mostra n meios-comprimentos de onda com n menos 1 n&oacute;s parados."></canvas>
+      <div class="controls">
+        <div class="ctrl">
+          <label for="corda-n">Modo <span class="v" id="corda-n-v">1</span></label>
+          <input type="range" id="corda-n" min="1" max="8" step="1" value="1" aria-label="Selecionar n&uacute;mero do modo, de 1 a 8">
+        </div>
+        <div class="snd">
+          <button id="corda-play" aria-label="Ouvir o modo selecionado: um tom puro">&#9654; Ouvir este modo</button>
+          <span class="snd-desc">tom puro, mais agudo conforme n sobe</span>
+        </div>
+        <div class="snd">
+          <button id="corda-all" class="sec" aria-label="Ouvir a soma de todos os modos: um som rico como o de uma corda real">&#9654; Ouvir a soma</button>
+          <span class="snd-desc">som cheio, "encorpado" (corda real)</span>
+        </div>
+      </div>
+      <div class="viz-caption">
+        <strong>Branco:</strong> a forma vibrante. <strong>Pontos vermelhos:</strong> n&oacute;s (parados).
+        A frequ&ecirc;ncia sobe linearmente com <code>n</code>: o modo 2 soa uma oitava acima do modo 1;
+        o modo 3, uma oitava + quinta. As raz&otilde;es musicais j&aacute; est&atilde;o aqui, antes de existir "m&uacute;sica".
+      </div>
+    </div>
+
+    <h3>A s&eacute;rie harm&ocirc;nica como tabela de raz&otilde;es</h3>
+    <p>
+      A raz&atilde;o entre o harm&ocirc;nico 3 e o 2 &eacute; <code>3/2</code> &mdash; o que viremos a chamar quinta.
+      Entre 4 e 3, <code>4/3</code> &mdash; a quarta. Os intervalos historicamente tratados como
+      consonantes s&atilde;o raz&otilde;es entre harm&ocirc;nicos de baixa ordem. Clique para ouvir cada um.
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>Os 16 primeiros harm&ocirc;nicos de f&#8321; = 65.4 Hz (D&oacute; grave)</span></div>
+      <div class="harm-stack" id="harm-stack" role="list" aria-label="Lista dos 16 harm&ocirc;nicos; cada bot&atilde;o toca o harm&ocirc;nico correspondente"></div>
+      <div class="viz-caption">
+        Altura da barra &prop; frequ&ecirc;ncia. Os r&oacute;tulos mostram o intervalo que <strong>emerge</strong>
+        da raz&atilde;o com o harm&ocirc;nico anterior. O 7&ordm; harm&ocirc;nico (~31 cents abaixo da 7&ordf; menor temperada)
+        j&aacute; "escapa" da grade de 12 notas &mdash; um aviso pr&eacute;vio de que f&iacute;sica e grade cultural n&atilde;o coincidem.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timbre">
+  <div class="wrap">
+    <span class="level-tag physics">N&iacute;vel 1 &mdash; S&iacute;ntese de Fourier</span>
+    <h2>Timbre:<br>por que violino e flauta no mesmo L&aacute; soam diferentes</h2>
+    <p class="lead">
+      Se ambos tocam "440 Hz", o que os distingue? A resposta dissolve a ideia ing&ecirc;nua de que
+      uma nota &eacute; uma frequ&ecirc;ncia. Uma nota &eacute; uma <strong>receita espectral</strong> &mdash; quais
+      harm&ocirc;nicos est&atilde;o presentes e com que for&ccedil;a.
+    </p>
+    <p>
+      Uma corda real vibra em todos os modos simultaneamente. Pelo teorema de Fourier, qualquer
+      onda peri&oacute;dica &eacute; uma <em class="term">soma</em> de senoides harm&ocirc;nicas, cada uma com sua
+      amplitude <code>a<sub>n</sub></code>:
+    </p>
+    <div class="eq">
+      y(t) = &Sigma;<sub>n</sub> a<sub>n</sub> &middot; sin(2&pi; &middot; n&middot;f&#8321; &middot; t + &phi;<sub>n</sub>)
+      <br><span class="lbl">// f&#8321; define a ALTURA percebida; o vetor {a&#8345;} define o TIMBRE</span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>Que toda onda peri&oacute;dica se decomp&otilde;e em harm&ocirc;nicos &eacute; um teorema (Fourier), n&atilde;o um fato
+      sobre m&uacute;sica. Vale para qualquer sinal peri&oacute;dico no universo.</p>
+    </div>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>Que <code>f&#8321;</code> governe a altura e <code>{a&#8345;}</code> governe a "cor" do som &eacute; um fato
+      sobre como o sistema auditivo humano interpreta o espectro &mdash; emp&iacute;rico, n&atilde;o dedut&iacute;vel a priori.</p>
+    </div>
+    <h3>Construa um timbre, harm&ocirc;nico por harm&ocirc;nico</h3>
+    <p>
+      Comece com a fundamental pura. Some o 2&ordm; harm&ocirc;nico &mdash; a onda muda de forma, mas
+      <strong>n&atilde;o de altura</strong>. Voc&ecirc; est&aacute; fazendo s&iacute;ntese aditiva: o inverso da decomposi&ccedil;&atilde;o de Fourier.
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>S&iacute;ntese aditiva &mdash; some harm&ocirc;nicos, veja a forma nascer</span></div>
+      <canvas id="timbre-canvas" height="200" role="img" aria-label="Forma de onda resultante da soma dos harm&ocirc;nicos ativados pelos controles deslizantes."></canvas>
+      <div id="timbre-sliders" style="display:flex;gap:.5rem;margin-top:1rem;align-items:flex-end;flex-wrap:wrap"></div>
+      <div class="btn-row">
+        <div class="snd"><button id="timbre-play" aria-label="Ouvir o timbre atual">&#9654; Ouvir timbre atual</button><span class="snd-desc">a "cor" da mistura atual</span></div>
+        <button class="sec sm" data-preset="flute" aria-label="Predefini&ccedil;&atilde;o flauta: som puro">flauta &mdash; puro</button>
+        <button class="sec sm" data-preset="violin" aria-label="Predefini&ccedil;&atilde;o serra: som brilhante de cordas">serra &mdash; brilhante</button>
+        <button class="sec sm" data-preset="clarinet" aria-label="Predefini&ccedil;&atilde;o clarinete: s&oacute; harm&ocirc;nicos &iacute;mpares, som oco">clarinete &mdash; oco</button>
+        <button class="sec sm" data-preset="square" aria-label="Predefini&ccedil;&atilde;o onda quadrada: som &aacute;spero">quadrada &mdash; &aacute;spero</button>
+        <button class="danger sm" data-preset="reset" aria-label="Zerar para s&oacute; a fundamental">zerar</button>
+      </div>
+      <div class="viz-caption">
+        Cada slider controla <code>a<sub>n</sub></code> de um harm&ocirc;nico.
+        <strong>A altura nunca muda</strong> &mdash; s&oacute; a forma e a cor do som. Serra (1/n em todos)
+        soa como cordas; s&oacute; &iacute;mpares soa como clarinete (mais "oco").
+      </div>
+    </div>
+    <div class="aside">
+      <span class="aside-label">Ponte para a conson&acirc;ncia</span>
+      Como cada nota carrega uma pilha inteira de harm&ocirc;nicos, quando duas notas tocam juntas o que
+      interage s&atilde;o <strong>duas pilhas</strong>. A conson&acirc;ncia depender&aacute; de quanto elas coincidem
+      ou colidem. &Eacute; o pr&oacute;ximo n&iacute;vel.
+    </div>
+  </div>
+</section>
+
+<section id="consonancia">
+  <div class="wrap">
+    <span class="level-tag percept">N&iacute;vel 2 &mdash; Psicoac&uacute;stica</span>
+    <h2>Conson&acirc;ncia:<br>de "raz&otilde;es simples" a um mecanismo perceptivo</h2>
+    <p class="lead">
+      Por que 3:2 tende a soar est&aacute;vel e 16:15 &aacute;spero? H&aacute; uma progress&atilde;o hist&oacute;rica de respostas,
+      cada uma mais mecan&iacute;stica que a anterior &mdash; e nenhuma &eacute; a palavra final.
+    </p>
+    <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Resposta</th><th>&Eacute;poca</th><th>Tipo de explica&ccedil;&atilde;o</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Pit&aacute;goras</td><td>Antiguidade</td><td>descritiva: raz&otilde;es simples soam bem (sem mecanismo)</td></tr>
+        <tr><td class="nm">Helmholtz</td><td>s&eacute;c. XIX</td><td>coincid&ecirc;ncia de harm&ocirc;nicos + aspereza</td></tr>
+        <tr><td class="nm">Plomp&ndash;Levelt</td><td>1965</td><td>bandas cr&iacute;ticas da c&oacute;clea (psicof&iacute;sica)</td></tr>
+        <tr><td class="nm">Modelos cognitivos</td><td>atual</td><td>+ harmonicidade, aprendizado, expectativa, cultura</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>O mecanismo: bandas cr&iacute;ticas</h3>
+    <p>
+      A c&oacute;clea &eacute; um analisador de frequ&ecirc;ncias f&iacute;sico. Dois tons muito pr&oacute;ximos excitam a
+      <strong>mesma regi&atilde;o</strong> da membrana basilar e brigam &mdash; percebe-se aspereza
+      (<em class="term">roughness</em>). Tons separados o bastante coexistem sem atrito. A zona de
+      atrito &eacute; a <em class="term">banda cr&iacute;tica</em> (Plomp &amp; Levelt, 1965).
+    </p>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>A coincid&ecirc;ncia de harm&ocirc;nicos e a aspereza por banda cr&iacute;tica s&atilde;o <strong>um mecanismo
+      central</strong> da conson&acirc;ncia sensorial &mdash; mas n&atilde;o "a causa" &uacute;nica.</p>
+    </div>
+    <div class="claim">
+      <span class="epi hist">conven&ccedil;&atilde;o hist&oacute;rica</span>
+      <p>Quais intervalos uma cultura <em>trata</em> como consonantes depende tamb&eacute;m de aprendizado e
+      estil&iacute;stica. H&aacute; popula&ccedil;&otilde;es (ex.: estudos com os Tsiman&eacute;) sem a prefer&ecirc;ncia ocidental
+      conson&acirc;ncia/disson&acirc;ncia &mdash; prova de que f&iacute;sica n&atilde;o fixa tudo.</p>
+    </div>
+    <h3>Veja por que 3:2 se destaca</h3>
+    <p>
+      Duas notas e suas pilhas de harm&ocirc;nicos. Em <code>3:2</code>, v&aacute;rios harm&ocirc;nicos
+      <strong>coincidem</strong> &mdash; refor&ccedil;o, pouca aspereza. Mova para uma raz&atilde;o complexa e veja-os
+      desalinhar, caindo nas bandas cr&iacute;ticas uns dos outros (zonas vermelhas).
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>Coincid&ecirc;ncia de harm&ocirc;nicos entre duas notas</span><span id="cons-ratio-lbl">3 : 2</span></div>
+      <canvas id="cons-canvas" height="260" role="img" aria-label="Linhas verticais azuis e &acirc;mbar representam harm&ocirc;nicos das duas notas; marcas verdes indicam coincid&ecirc;ncia, vermelhas indicam choque na banda cr&iacute;tica."></canvas>
+      <div class="controls">
+        <div class="ctrl">
+          <label for="cons-ratio">Raz&atilde;o f&#8322;/f&#8321; <span class="v" id="cons-ratio-v">1.500</span></label>
+          <input type="range" id="cons-ratio" min="1.0" max="2.0" step="0.001" value="1.5" aria-label="Ajustar a raz&atilde;o entre as duas frequ&ecirc;ncias, de 1 a 2">
+        </div>
+        <div class="readout"><span class="rl">Aspereza estimada</span><span id="cons-diss" aria-live="polite">baixa</span></div>
+        <div class="snd"><button id="cons-play" aria-label="Ouvir as duas notas juntas">&#9654; Ouvir</button><span class="snd-desc">duas notas juntas</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="sec sm" data-r="1.5" aria-label="quinta 3 para 2, soa est&aacute;vel">quinta 3:2 &mdash; est&aacute;vel</button>
+        <button class="sec sm" data-r="1.3333" aria-label="quarta 4 para 3">quarta 4:3</button>
+        <button class="sec sm" data-r="1.25" aria-label="ter&ccedil;a maior 5 para 4">ter&ccedil;a M 5:4</button>
+        <button class="sec sm" data-r="1.4983" aria-label="quinta temperada, quase id&ecirc;ntica &agrave; pura">quinta temperada</button>
+        <button class="danger sm" data-r="1.0667" aria-label="semitom 16 para 15, soa &aacute;spero">semitom 16:15 &mdash; &aacute;spero</button>
+        <button class="danger sm" data-r="1.4142" aria-label="tr&iacute;tono raiz de 2, muito inst&aacute;vel">tr&iacute;tono &radic;2 &mdash; tenso</button>
+      </div>
+      <div class="viz-caption">
+        <strong style="color:var(--blue)">Azul:</strong> harm&ocirc;nicos da nota 1.
+        <strong style="color:var(--amber)">&Acirc;mbar:</strong> nota 2.
+        <strong style="color:var(--green)">Verde:</strong> coincid&ecirc;ncia.
+        <strong style="color:var(--red)">Vermelho:</strong> par dentro da banda cr&iacute;tica.
+        Raz&otilde;es simples = muitas coincid&ecirc;ncias verdes.
+      </div>
+      <span class="model-warn">modelo qualitativo para ensino &mdash; n&atilde;o &eacute; m&eacute;trica psicof&iacute;sica calibrada</span>
+    </div>
+    <h3>A curva de disson&acirc;ncia</h3>
+    <p>
+      Varrendo todas as raz&otilde;es de 1:1 a 2:1 e somando a aspereza de cada par de harm&ocirc;nicos, obt&eacute;m-se
+      uma curva. Os <strong>vales</strong> caem sobre as raz&otilde;es simples.
+    </p>
+    <div class="viz">
+      <div class="viz-head"><span>Disson&acirc;ncia sensorial vs. raz&atilde;o (modelo Plomp&ndash;Levelt)</span><span id="diss-hover">&mdash;</span></div>
+      <canvas id="diss-curve" height="240" role="img" aria-label="Curva de disson&acirc;ncia em fun&ccedil;&atilde;o da raz&atilde;o de frequ&ecirc;ncias; vales verdes marcam intervalos consonantes como quinta e quarta."></canvas>
+      <div class="viz-caption">
+        Cada <strong style="color:var(--green)">vale</strong> &eacute; um intervalo de baixa aspereza; sua posi&ccedil;&atilde;o
+        emerge do c&aacute;lculo. Passe o mouse para ler a raz&atilde;o.
+      </div>
+      <span class="model-warn">modelo qualitativo &mdash; ilustra a forma da curva, n&atilde;o valores cl&iacute;nicos</span>
+    </div>
+    <div class="claim">
+      <span class="epi peda">infer&ecirc;ncia pedag&oacute;gica</span>
+      <p>Que a curva "justifique a escala" &eacute; leitura did&aacute;tica &uacute;til, mas parcial: a escala real resulta
+      de aspereza <em>mais</em> condu&ccedil;&atilde;o de voz, harmonia e hist&oacute;ria. A f&iacute;sica fornece os vales; a
+      cultura escolhe quais habitar.</p>
+    </div>
+  </div>
+</section>
+
+<section id="batimentos">
+  <div class="wrap">
+    <span class="level-tag percept">N&iacute;vel 3 &mdash; A &aacute;lgebra do "wah-wah"</span>
+    <h2>Batimentos:<br>quando duas notas quase iguais pulsam</h2>
+    <p class="lead">
+      Toque 440 e 442 Hz. Voc&ecirc; n&atilde;o ouve duas notas &mdash; ouve uma s&oacute;, pulsando duas vezes por
+      segundo. Esse pulso &eacute; uma identidade trigonom&eacute;trica exata, e &eacute; como afinadores ouvem desafina&ccedil;&atilde;o.
+    </p>
+    <p>Some duas senoides pr&oacute;ximas e aplique soma-para-produto:</p>
+    <div class="derivation">
+      <span class="step">sin(2&pi;f&#8321;t) + sin(2&pi;f&#8322;t)</span>
+      <span class="step">&nbsp;&nbsp;= <span class="hl-amber">2&middot;cos(2&pi;&middot;<sup>&Delta;f</sup>&frasl;&#8322;&middot;t)</span> &middot; <span class="hl-blue">sin(2&pi;&middot;f&#772;&middot;t)</span></span>
+      <span class="step"></span>
+      <span class="step"><span class="annot">// f&#772; = (f&#8321;+f&#8322;)/2 = portadora (a altura ouvida)</span></span>
+      <span class="step"><span class="annot">// &Delta;f = |f&#8321;&minus;f&#8322;| = define a taxa do envelope</span></span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>A identidade &eacute; &aacute;lgebra exata. O envelope matem&aacute;tico <code>2cos(2&pi;&middot;&Delta;f/2&middot;t)</code> cruza
+      zero a uma taxa de <code>&Delta;f/2</code> Hz.</p>
+    </div>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>Mas o <em>ouvido</em> percebe intensidade pelo <strong>valor absoluto</strong> da amplitude. Como
+      <code>|cos|</code> tem o dobro da frequ&ecirc;ncia do <code>cos</code>, ouvem-se
+      <strong>&Delta;f pulsos por segundo</strong>, n&atilde;o &Delta;f/2. A figura abaixo mostra os dois: a
+      envoltória matemática e a taxa de pulso audível diferem por um fator 2 &mdash; uma distin&ccedil;&atilde;o
+      que costuma passar despercebida.</p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Batimento &mdash; envoltória matemática vs. pulso percebido</span><span id="beat-lbl">&Delta;f = 2 Hz</span></div>
+      <canvas id="beat-canvas" height="220" role="img" aria-label="Onda de batimento: a portadora r&aacute;pida preenchida por um envelope lento; linhas tracejadas mostram a envolt&oacute;ria matem&aacute;tica e o pulso percebido."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="beat-f1">f&#8321; <span class="v" id="beat-f1-v">440</span></label><input type="range" id="beat-f1" min="430" max="450" step="0.5" value="440" aria-label="Frequ&ecirc;ncia 1, de 430 a 450 Hz"></div>
+        <div class="ctrl"><label for="beat-f2">f&#8322; <span class="v" id="beat-f2-v">442</span></label><input type="range" id="beat-f2" min="430" max="450" step="0.5" value="442" aria-label="Frequ&ecirc;ncia 2, de 430 a 450 Hz"></div>
+        <div class="readout"><span class="rl">Pulsos / s (percebido)</span><span id="beat-rate" aria-live="polite">2.0 Hz</span></div>
+        <div class="snd"><button id="beat-play" aria-label="Ouvir o batimento entre as duas frequ&ecirc;ncias">&#9654; Ouvir</button><span class="snd-desc">pulsa &Delta;f vezes por segundo</span></div>
+      </div>
+      <div class="viz-caption">
+        <strong style="color:var(--amber)">&Acirc;mbar tracejado:</strong> a envolt&oacute;ria matem&aacute;tica &plusmn;2cos(2&pi;&middot;&Delta;f/2&middot;t), que cruza zero a &Delta;f/2 Hz.
+        <strong style="color:var(--green)">Verde pontilhado:</strong> |envelope|, o que o ouvido segue &mdash; &Delta;f picos/s.
+        <strong>Branco:</strong> a onda real. Iguale f&#8321; e f&#8322; &rarr; o envelope para &rarr; afina&ccedil;&atilde;o perfeita.
+      </div>
+      <span class="model-warn">visualiza&ccedil;&atilde;o desacelerada e normalizada &mdash; o tempo no eixo x n&atilde;o est&aacute; em segundos reais</span>
+    </div>
+    <div class="aside">
+      <span class="aside-label">Ponte para o temperamento</span>
+      Batimentos s&atilde;o a moeda do compromisso. Uma quinta temperada n&atilde;o &eacute; pura: ela bate levemente,
+      porque <code>2^(7/12) &ne; 3/2</code>. Para medir esse erro com precis&atilde;o, precisamos de uma r&eacute;gua
+      logar&iacute;tmica para a percep&ccedil;&atilde;o &mdash; os <em class="term">cents</em>.
+    </div>
+  </div>
+</section>
+
+<section id="cents">
+  <div class="wrap">
+    <span class="level-tag percept">N&iacute;vel 4 &mdash; A r&eacute;gua certa</span>
+    <h2>Cents:<br>por que a percep&ccedil;&atilde;o de altura &eacute; logar&iacute;tmica</h2>
+    <p class="lead">
+      Subir de 100 para 200 Hz soa como o "mesmo salto" que de 400 para 800 Hz &mdash; ambos uma oitava.
+      Mas em Hz absoluto, um salto &eacute; de 100 e o outro de 400. O ouvido n&atilde;o mede diferen&ccedil;a, mede
+      <strong>raz&atilde;o</strong>. Isso exige uma r&eacute;gua logar&iacute;tmica.
+    </p>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>Que raz&otilde;es iguais soem como dist&acirc;ncias iguais &eacute; um fato perceptivo (afim &agrave; lei de
+      Weber&ndash;Fechner). Define a oitava como unidade recorrente.</p>
+    </div>
+    <p>
+      Definimos a unidade <em class="term">cent</em> de modo que a oitava (raz&atilde;o 2) valha 1200 cents:
+    </p>
+    <div class="eq">
+      cents(r) = 1200 &middot; log&#8322;(r)
+      <br><span class="lbl">// oitava: 1200&middot;log&#8322;(2)=1200 | semitom temperado: 100 | quinta pura 3/2: 701.96</span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>O logaritmo transforma <strong>produto em soma</strong>: empilhar intervalos (multiplicar raz&otilde;es)
+      vira somar cents. Isso &eacute; identidade alg&eacute;brica, e torna o erro do temperamento aditivo e leg&iacute;vel:
+      a quinta temperada (700) erra a pura (701.96) por exatamente <code>&minus;1.96 cents</code>.</p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Hz (linear) vs. cents (log) &mdash; o mesmo intervalo, duas r&eacute;guas</span></div>
+      <canvas id="cents-canvas" height="200" role="img" aria-label="Duas r&eacute;guas: em Hz os semitons se comprimem no agudo; em cents ficam uniformes."></canvas>
+      <div class="controls">
+        <div class="ctrl"><label for="cents-slider">Intervalo (cents) <span class="v" id="cents-v">700</span></label><input type="range" id="cents-slider" min="0" max="1200" step="1" value="700" aria-label="Intervalo em cents, de 0 a 1200"></div>
+        <div class="readout"><span class="rl">Raz&atilde;o</span><span id="cents-ratio" aria-live="polite">1.4983</span></div>
+        <div class="snd"><button id="cents-play" aria-label="Ouvir o intervalo">&#9654; Ouvir intervalo</button><span class="snd-desc">duas notas em sequ&ecirc;ncia</span></div>
+      </div>
+      <div class="viz-caption">
+        Em cima, posi&ccedil;&atilde;o em <strong>Hz</strong> (comprime no agudo). Embaixo, em <strong>cents</strong>
+        (uniforme). O mesmo intervalo "salta" dist&acirc;ncias diferentes em Hz, mas sempre a mesma em cents.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="escala">
+  <div class="wrap">
+    <span class="level-tag system">N&iacute;vel 5 &mdash; Construindo a escala</span>
+    <h2>Empilhar quintas<br>e o problema que n&atilde;o fecha</h2>
+    <p class="lead">
+      Temos a quinta (3:2) como intervalo muito consonante depois da oitava. Pit&aacute;goras teve a ideia:
+      construir toda a escala empilhando quintas. Funciona? Quase. E o "quase" &eacute; um dos fatos mais
+      profundos da teoria musical.
+    </p>
+    <p>
+      Empilhe quintas (&times;3/2); sempre que passar de uma oitava, divida por 2 para voltar. Ap&oacute;s 12
+      quintas, voc&ecirc; deveria cair exatamente em 7 oitavas acima. Compare:
+    </p>
+    <div class="derivation">
+      <span class="step">12 quintas: (3/2)<sup>12</sup> = 531441 / 4096 = <span class="hl-amber">129.746&hellip;</span></span>
+      <span class="step">&nbsp;7 oitavas: 2<sup>7</sup> &nbsp;= <span class="hl-blue">128.000</span></span>
+      <span class="step"></span>
+      <span class="step"><span class="annot">// raz&atilde;o do desencontro:</span></span>
+      <span class="step"><span class="hl-red">129.746 / 128 = 1.01364&hellip; = 23.46 cents</span></span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>Esse gap &mdash; a <em class="term">v&iacute;rgula pitag&oacute;rica</em> &mdash; &eacute; <strong>imposs&iacute;vel de eliminar</strong>.
+      Fechar exigiria <code>(3/2)<sup>a</sup> = 2<sup>b</sup></code>, ou seja <code>3<sup>a</sup> = 2<sup>a+b</sup></code>,
+      o que viola a fatora&ccedil;&atilde;o &uacute;nica (3 e 2 s&atilde;o primos distintos). Nenhuma pilha de quintas puras
+      cai jamais sobre um inteiro de oitavas. A natureza n&atilde;o deixa a escala fechar &mdash; e isso &eacute; teorema.</p>
+    </div>
+    <p>Clique nos passos para empilhar quintas e ver o gap aparecer no fechamento:</p>
+    <div class="viz">
+      <div class="viz-head"><span>C&iacute;rculo de quintas &mdash; 12 passos de &times;(3/2)</span><span id="circle-step">passo 0</span></div>
+      <canvas id="circle-canvas" height="440" role="img" aria-label="C&iacute;rculo de doze posi&ccedil;&otilde;es; ao empilhar 12 quintas o ponto final n&atilde;o retorna &agrave; origem, ficando 23 cents acima."></canvas>
+      <div class="controls">
+        <div class="snd"><button id="circle-play" aria-label="Percorrer as doze quintas automaticamente">&#9654; Percorrer</button><span class="snd-desc">12 notas subindo por quintas</span></div>
+        <button id="circle-reset" class="sec" aria-label="Reiniciar o c&iacute;rculo">&#8635; Reiniciar</button>
+        <div class="readout"><span class="rl">Desvio no fechamento</span><span id="circle-gap" aria-live="polite">0 cents</span></div>
+      </div>
+      <div class="viz-caption">
+        Cada n&oacute; &eacute; uma quinta empilhada. No 12&ordm; passo, o ponto deveria voltar a C, mas cai
+        <strong style="color:var(--red)">23.5 cents acima</strong> &mdash; a v&iacute;rgula. Esse &eacute; o erro que o
+        temperamento ter&aacute; de distribuir.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="temperamento">
+  <div class="wrap">
+    <span class="level-tag system">N&iacute;vel 6 &mdash; Temperamento como otimiza&ccedil;&atilde;o</span>
+    <h2>Por que 12?<br>Aritm&eacute;tica profunda <em>e</em> escolha hist&oacute;rica</h2>
+    <p class="lead">
+      Se a escala n&atilde;o fecha com quintas puras, a sa&iacute;da &eacute; for&ccedil;&aacute;-la a fechar por defini&ccedil;&atilde;o:
+      dividir a oitava em N partes iguais. Mas por que <strong>12</strong>? A resposta tem duas camadas
+      que n&atilde;o devem ser confundidas.
+    </p>
+    <p>
+      No temperamento igual de N tons, cada passo &eacute; <code>2^(1/N)</code>. Queremos que algum n&uacute;mero
+      <code>k</code> de passos aproxime a quinta pura: <code>k/N &asymp; log&#8322;(3/2) = 0.58496&hellip;</code>.
+      O problema vira: qual fra&ccedil;&atilde;o <code>k/N</code> aproxima melhor esse irracional com denominador pequeno?
+    </p>
+    <div class="derivation">
+      <span class="step"><span class="annot">// expans&atilde;o em fra&ccedil;&atilde;o cont&iacute;nua de log&#8322;(3/2):</span></span>
+      <span class="step">log&#8322;(3/2) = [0; 1, 1, 2, 2, 3, 1, 5, &hellip;]</span>
+      <span class="step"></span>
+      <span class="step"><span class="annot">// convergentes (melhores aproxima&ccedil;&otilde;es racionais):</span></span>
+      <span class="step">1/2,&nbsp; <span class="hl-blue">3/5</span>,&nbsp; <span class="hl-amber">7/12</span>,&nbsp; <span class="hl-green">24/41</span>,&nbsp; 31/53, &hellip;</span>
+    </div>
+    <div class="claim">
+      <span class="epi math">necessidade matem&aacute;tica</span>
+      <p>A convergente <code>7/12</code> &eacute; um fato aritm&eacute;tico: 7 passos de 12 aproximam a quinta com
+      erro de ~2 cents. Os "bons" N (12, 19, 31, 41, 53) s&atilde;o exatamente os denominadores das
+      convergentes. Isso n&atilde;o &eacute; opini&atilde;o &mdash; &eacute; teoria dos n&uacute;meros.</p>
+    </div>
+    <div class="claim">
+      <span class="epi hist">conven&ccedil;&atilde;o hist&oacute;rica</span>
+      <p>Mas <strong>53-TET aproxima melhor que 12</strong> e n&atilde;o venceu. A ado&ccedil;&atilde;o do 12 tamb&eacute;m &eacute;
+      organol&oacute;gica (12 teclas por oitava s&atilde;o manej&aacute;veis), hist&oacute;rica e cultural. O 12 n&atilde;o &eacute;
+      arbitr&aacute;rio &mdash; tem justificativa aritm&eacute;tica profunda &mdash; mas sua <em>domin&acirc;ncia</em> &eacute;
+      contingente. Aritm&eacute;tica explica por que 12 &eacute; <em>bom</em>; n&atilde;o por que <em>venceu</em>.</p>
+    </div>
+    <h3>Compare os sistemas: erro real de cada N-TET</h3>
+    <div class="viz">
+      <div class="viz-head"><span>Erro da quinta por temperamento N-TET (cents)</span></div>
+      <canvas id="tet-canvas" height="240" role="img" aria-label="Barras de erro da quinta para v&aacute;rios N; 12, 19, 31, 41 e 53 t&ecirc;m erro baixo."></canvas>
+      <div class="viz-caption">
+        Barras curtas = quinta boa. <strong style="color:var(--green)">12, 19, 31, 41, 53</strong> se
+        destacam (s&atilde;o convergentes). 53-TET tem erro quase nulo, mas 53 teclas por oitava &eacute;
+        impratic&aacute;vel &mdash; o que ilustra por que o melhor matem&aacute;tico n&atilde;o &eacute; o vencedor hist&oacute;rico.
+      </div>
+    </div>
+    <h3>O custo aud&iacute;vel: pura vs. temperada</h3>
+    <div class="viz">
+      <div class="viz-head"><span>Quinta pura (701.96&cent;) vs. temperada (700&cent;)</span></div>
+      <canvas id="puretemp-canvas" height="170" role="img" aria-label="Formas de onda da quinta pura e da temperada; a temperada apresenta um leve descompasso peri&oacute;dico."></canvas>
+      <div class="btn-row">
+        <div class="snd"><button class="sec" id="pt-pure" aria-label="Ouvir a quinta pura 3 para 2">&#9654; Pura 3:2</button><span class="snd-desc">est&aacute;vel, sem batimento</span></div>
+        <div class="snd"><button id="pt-temp" aria-label="Ouvir a quinta temperada">&#9654; Temperada</button><span class="snd-desc">quase igual &agrave; pura</span></div>
+        <div class="snd"><button id="pt-both" aria-label="Ouvir as duas para perceber o batimento lento">&#9654; As duas juntas</button><span class="snd-desc">batem ~1 vez/seg</span></div>
+      </div>
+      <div class="viz-caption">
+        A temperada bate ~1&times;/s contra a pura. Esse batimento &eacute; o pre&ccedil;o, distribu&iacute;do
+        igualmente nas 12 tonalidades.
+      </div>
+    </div>
+    <div class="claim">
+      <span class="epi hist">conven&ccedil;&atilde;o hist&oacute;rica</span>
+      <p>O <strong>Cravo Bem-Temperado</strong> de Bach (1722) &eacute; prova de <em>exist&ecirc;ncia pr&aacute;tica</em>:
+      24 pe&ccedil;as, uma por tonalidade, tocáveis no mesmo instrumento. Demonstra que o compromisso
+      <em>funciona</em> &mdash; n&atilde;o que ele seja o &uacute;nico poss&iacute;vel.</p>
+    </div>
+  </div>
+</section>
+
+<section id="tonal">
+  <div class="wrap">
+    <span class="level-tag structure">N&iacute;vel 7 &mdash; Estrutura tonal</span>
+    <h2>Tens&atilde;o e resolu&ccedil;&atilde;o:<br>a m&uacute;sica como grafo de estados</h2>
+    <p class="lead">
+      Com 12 notas fixas, a m&uacute;sica deixa de ser sobre frequ&ecirc;ncias individuais e passa a ser sobre
+      <strong>rela&ccedil;&otilde;es de fun&ccedil;&atilde;o</strong>. Cada acorde ocupa um papel &mdash; repouso, tens&atilde;o, condu&ccedil;&atilde;o
+      &mdash; e a m&uacute;sica &eacute; um percurso entre esses papeis.
+    </p>
+    <p>
+      Numa tonalidade, a <em class="term">t&ocirc;nica</em> (I) &eacute; repouso. A <em class="term">dominante</em>
+      (V) &eacute; tens&atilde;o que "pede" resolu&ccedil;&atilde;o para I &mdash; porque cont&eacute;m a <em class="term">sens&iacute;vel</em>,
+      a meio-tom da t&ocirc;nica. A <em class="term">subdominante</em> (IV) &eacute; tens&atilde;o intermedi&aacute;ria.
+    </p>
+    <div class="claim">
+      <span class="epi hist">conven&ccedil;&atilde;o hist&oacute;rica</span>
+      <p>As <em>fun&ccedil;&otilde;es</em> tonais (t&ocirc;nica/dominante/subdominante) e a "atra&ccedil;&atilde;o" da sens&iacute;vel s&atilde;o
+      gram&aacute;tica da tonalidade ocidental, aprendida. N&atilde;o s&atilde;o universais &mdash; modos, ragas e outras
+      gram&aacute;ticas organizam tens&atilde;o de outros modos.</p>
+    </div>
+    <div class="claim">
+      <span class="epi peda">infer&ecirc;ncia pedag&oacute;gica</span>
+      <p>Modelar harmonia como <strong>grafo de estados</strong> com transi&ccedil;&otilde;es prov&aacute;veis &eacute; uma
+      lente &uacute;til (e formaliz&aacute;vel como aut&ocirc;mato), mas &eacute; um modelo, n&atilde;o "a verdade" da harmonia.
+      Seu valor: torna expl&iacute;cito que a estrutura existe como rela&ccedil;&atilde;o abstrata &mdash; <strong>sem
+      depender de som</strong>. Esse &eacute; o gancho para o pr&oacute;ximo n&iacute;vel.</p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Grafo de fun&ccedil;&otilde;es tonais &mdash; clique para ouvir e percorrer</span></div>
+      <canvas id="tonal-canvas" height="320" role="img" aria-label="Grafo com n&oacute;s I, ii, IV, V, vi posicionados por tens&atilde;o; setas mostram progress&otilde;es t&iacute;picas que sobem em tens&atilde;o e resolvem na t&ocirc;nica."></canvas>
+      <div class="btn-row">
+        <div class="snd"><button id="tonal-cadence" aria-label="Tocar cad&ecirc;ncia um, quatro, cinco, um">&#9654; Cad&ecirc;ncia I&rarr;IV&rarr;V&rarr;I</button><span class="snd-desc">sobe tens&atilde;o, resolve no repouso</span></div>
+        <div class="snd"><button class="sec" id="tonal-deceptive" aria-label="Tocar cad&ecirc;ncia de engano cinco para seis">&#9654; Engano V&rarr;vi</button><span class="snd-desc">promete repouso e desvia</span></div>
+        <div class="snd"><button class="sec" id="tonal-twofive" aria-label="Tocar dois cinco um de jazz">&#9654; ii&rarr;V&rarr;I (jazz)</button><span class="snd-desc">condu&ccedil;&atilde;o suave ao repouso</span></div>
+      </div>
+      <div class="viz-caption">
+        Os n&oacute;s s&atilde;o fun&ccedil;&otilde;es; a <strong>altura vertical</strong> codifica tens&atilde;o (alto = tenso).
+        As setas s&atilde;o transi&ccedil;&otilde;es idiom&aacute;ticas. Toda progress&atilde;o &eacute; um caminho que sobe em tens&atilde;o e
+        resolve descendo para a t&ocirc;nica.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="modelo">
+  <div class="wrap">
+    <span class="level-tag structure">N&iacute;vel 8 &mdash; A ponte</span>
+    <h2>Som externo, som interno<br>e o modelo mental</h2>
+    <p class="lead">
+      At&eacute; aqui mostramos que a estrutura musical &eacute; formal &mdash; existe como rela&ccedil;&atilde;o, n&atilde;o como
+      sensa&ccedil;&atilde;o. Mas falta o elo humano: <strong>como</strong> uma pessoa opera essa estrutura por
+      dentro, sem precisar do som no ar? A resposta &eacute; o <em class="term">modelo mental</em>, e ela
+      precede &mdash; logicamente &mdash; o caso Beethoven.
+    </p>
+    <p>
+      Quem domina m&uacute;sica n&atilde;o guarda apenas "como as coisas soam". Constr&oacute;i, ao longo de anos, um
+      <strong>simulador interno</strong> que opera em pelo menos tr&ecirc;s camadas acopladas:
+    </p>
+    <div class="threecol">
+      <div class="col">
+        <h5 style="color:var(--green)">Mem&oacute;ria auditiva</h5>
+        <p>O arquivo de como sons e rela&ccedil;&otilde;es soam, constru&iacute;do por exposi&ccedil;&atilde;o. Permite "ouvir na
+        cabe&ccedil;a" um intervalo ou timbre sem est&iacute;mulo externo. <strong>Depende de escuta pr&eacute;via.</strong></p>
+      </div>
+      <div class="col">
+        <h5 style="color:var(--amber)">Representa&ccedil;&atilde;o motora</h5>
+        <p>O saber corporal do instrumento: que gesto produz que som, que tens&atilde;o na m&atilde;o gera que
+        intervalo. A m&uacute;sica vira tamb&eacute;m <strong>a&ccedil;&atilde;o e propriocep&ccedil;&atilde;o</strong>, n&atilde;o s&oacute; audi&ccedil;&atilde;o.</p>
+      </div>
+      <div class="col">
+        <h5 style="color:var(--violet)">Representa&ccedil;&atilde;o formal</h5>
+        <p>O grafo de fun&ccedil;&otilde;es, as raz&otilde;es, as simetrias do n&iacute;vel 7. Pura estrutura abstrata &mdash;
+        manipul&aacute;vel como &aacute;lgebra, <strong>independente de qualquer canal sensorial</strong>.</p>
+      </div>
+    </div>
+    <div class="claim">
+      <span class="epi peda">infer&ecirc;ncia pedag&oacute;gica</span>
+      <p>Compor com surdez adquirida n&atilde;o &eacute; compor "apesar de n&atilde;o ouvir". &Eacute; operar um simulador
+      interno j&aacute; treinado &mdash; substituir a <strong>escuta online</strong> do ambiente pela
+      <strong>escuta internalizada</strong> sustentada por essas tr&ecirc;s camadas. Isto &eacute; interpreta&ccedil;&atilde;o
+      de evid&ecirc;ncias (cartas, neuroci&ecirc;ncia da imagem&ccedil;&atilde;o musical), n&atilde;o medi&ccedil;&atilde;o direta de uma
+      experi&ecirc;ncia interna inacess&iacute;vel.</p>
+    </div>
+    <div class="key-insight">
+      <span class="ki-label">Por que isto precede Beethoven</span>
+      <p>
+        O caso Beethoven s&oacute; faz sentido <em>depois</em> de entender o modelo mental, porque ele &eacute; uma
+        <strong>aplica&ccedil;&atilde;o</strong> dele, n&atilde;o sua introdu&ccedil;&atilde;o. A pergunta decisiva n&atilde;o &eacute; "como algu&eacute;m
+        surdo comp&otilde;e?", mas "o que, no simulador interno, depende de escuta pr&eacute;via e o que n&atilde;o
+        depende?". A camada formal sobrevive sem audi&ccedil;&atilde;o. A camada de mem&oacute;ria auditiva
+        <strong>precisa ter sido constru&iacute;da antes</strong> &mdash; e &eacute; exatamente a&iacute; que a distin&ccedil;&atilde;o
+        entre surdez pr&eacute;- e p&oacute;s-lingual se torna decisiva.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>O simulador interno &mdash; tr&ecirc;s camadas e o que cada perda preserva</span></div>
+      <canvas id="model-canvas" height="300" role="img" aria-label="Diagrama das tr&ecirc;s camadas do modelo mental e como surdez p&oacute;s-lingual versus pr&eacute;-lingual afeta cada uma."></canvas>
+      <div class="btn-row">
+        <button id="model-pre" class="sec" aria-label="Mostrar o caso p&oacute;s-lingual">caso p&oacute;s-lingual (ex.: Beethoven)</button>
+        <button id="model-post" class="sec" aria-label="Mostrar o caso pr&eacute;-lingual">caso pr&eacute;-lingual / cong&ecirc;nito</button>
+      </div>
+      <div class="viz-caption">
+        <strong>P&oacute;s-lingual:</strong> as tr&ecirc;s camadas foram constru&iacute;das antes da perda &mdash; o simulador
+        permanece operante. <strong>Pr&eacute;-lingual:</strong> a camada de mem&oacute;ria auditiva nunca foi
+        treinada por essa via; a musicalidade se constr&oacute;i por <strong>outros canais</strong> (t&aacute;til,
+        visual, vibratório) com igual legitimidade. <strong>Mesma estrutura formal, rotas de acesso diferentes.</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="beethoven">
+  <div class="wrap">
+    <span class="level-tag structure">N&iacute;vel 9 &mdash; A aplica&ccedil;&atilde;o</span>
+    <h2>Beethoven:<br>um caso espec&iacute;fico, n&atilde;o um modelo universal</h2>
+    <p class="lead">
+      Beethoven come&ccedil;ou a perder a audi&ccedil;&atilde;o por volta de 1798; por volta de 1818, surdez profunda.
+      A 9&ordf; Sinfonia (1824) foi composta sem que ele a ouvisse externamente. Isto &eacute; extraordin&aacute;rio
+      &mdash; mas precisa ser lido com precis&atilde;o, n&atilde;o como mito de supera&ccedil;&atilde;o.
+    </p>
+    <div class="claim">
+      <span class="epi phys">mecanismo f&iacute;sico-perceptivo</span>
+      <p>Beethoven foi um ensurdecido <strong>p&oacute;s-lingual</strong>: passou d&eacute;cadas ouvindo e tocando
+      antes da perda. Seu simulador interno &mdash; as tr&ecirc;s camadas do n&iacute;vel 8 &mdash; j&aacute; estava
+      plenamente constru&iacute;do quando a escuta online se foi.</p>
+    </div>
+    <p>
+      &Eacute; por isso que a composi&ccedil;&atilde;o sobreviveu: ele substituiu a entrada sensorial pela manipula&ccedil;&atilde;o
+      interna da estrutura formal (n&iacute;veis 4&ndash;7), ancorada na mem&oacute;ria auditiva pr&eacute;via e na
+      representa&ccedil;&atilde;o motora do piano. Buscava ativamente <strong>vibra&ccedil;&atilde;o mec&acirc;nica</strong> &mdash;
+      hastes presas ao piano, dispositivos para concentrar som &mdash; antecipando a l&oacute;gica da
+      condu&ccedil;&atilde;o &oacute;ssea e da percep&ccedil;&atilde;o vibrot&aacute;til de hoje.
+    </p>
+    <div class="key-insight">
+      <span class="ki-label">A formula&ccedil;&atilde;o cuidadosa &mdash; o que se pode e o que n&atilde;o se pode afirmar</span>
+      <p>
+        N&atilde;o se pode afirmar que Beethoven "ouvia perfeitamente na cabe&ccedil;a", nem reconstruir sua
+        experi&ecirc;ncia interna: ela &eacute; inacess&iacute;vel. O que se sustenta com rigor: a composi&ccedil;&atilde;o pode
+        <strong>persistir operacionalmente</strong> como manipula&ccedil;&atilde;o de forma, propor&ccedil;&atilde;o,
+        expectativa e mem&oacute;ria, mesmo sem monitoramento sensorial imediato. "Operacionalmente" &mdash;
+        n&atilde;o "intactamente". A diferen&ccedil;a importa: preserva-se a <em>capacidade de operar a estrutura</em>,
+        n&atilde;o a integridade da experi&ecirc;ncia vivida.
+      </p>
+    </div>
+    <div class="claim">
+      <span class="epi peda">infer&ecirc;ncia pedag&oacute;gica</span>
+      <p>Por isso Beethoven <strong>n&atilde;o generaliza</strong> para toda surdez. Para a surdez
+      pr&eacute;-lingual, a camada de mem&oacute;ria auditiva nunca foi constru&iacute;da por essa via &mdash; e a
+      musicalidade floresce por rotas t&aacute;teis, visuais e vibratórias, n&atilde;o por uma "escuta interna"
+      herdada. Usar Beethoven como exig&ecirc;ncia de "superar a surdez" &eacute; pedagogicamente nocivo e
+      cientificamente impreciso. Seu caso ilustra uma coisa espec&iacute;fica: a persist&ecirc;ncia da composi&ccedil;&atilde;o
+      em quem j&aacute; tinha o simulador treinado.</p>
+    </div>
+    <h3>A tese, corrigida</h3>
+    <p>
+      A vers&atilde;o ing&ecirc;nua diz "surdez n&atilde;o impede m&uacute;sica". A vers&atilde;o precisa &mdash; que este caderno
+      inteiro construiu &mdash; &eacute;:
+    </p>
+    <div class="key-insight" style="border-left-color:var(--violet)">
+      <span class="ki-label" style="color:var(--violet)">Formula&ccedil;&atilde;o final</span>
+      <p>
+        A estrutura musical &eacute; formal e acess&iacute;vel por m&uacute;ltiplos canais sensoriais. Diferentes formas
+        de percep&ccedil;&atilde;o musical existem e s&atilde;o leg&iacute;timas. O caso Beethoven ilustra
+        <strong>especificamente</strong> a persist&ecirc;ncia da composi&ccedil;&atilde;o em indiv&iacute;duos
+        <strong>p&oacute;s-linguais com mem&oacute;ria auditiva consolidada</strong> &mdash; n&atilde;o um dever de supera&ccedil;&atilde;o
+        imposto a toda a experi&ecirc;ncia surda.
+      </p>
+    </div>
+    <div class="viz">
+      <div class="viz-head"><span>Interface vs. estrutura &mdash; a mesma harmonia, tr&ecirc;s acessos</span></div>
+      <canvas id="beet-canvas" height="220" role="img" aria-label="Tr&ecirc;s acessos &agrave; mesma progress&atilde;o harm&ocirc;nica: com timbre, com ondas puras, e em sil&ecirc;ncio mostrando apenas as barras de tens&atilde;o."></canvas>
+      <div class="btn-row">
+        <div class="snd"><button id="beet-full" aria-label="Tocar com timbre rico, audi&ccedil;&atilde;o normal">&#9654; Com timbre</button><span class="snd-desc">acesso auditivo pleno</span></div>
+        <div class="snd"><button class="sec" id="beet-pure" aria-label="Tocar com ondas puras, a estrutura nua">&#9654; Ondas puras</button><span class="snd-desc">estrutura "nua"</span></div>
+        <div class="snd"><button class="danger" id="beet-silent" aria-label="Mostrar em sil&ecirc;ncio, apenas o grafo de tens&atilde;o">&#9654; Sil&ecirc;ncio (s&oacute; o grafo)</button><span class="snd-desc">sem som: s&oacute; rela&ccedil;&atilde;o</span></div>
+      </div>
+      <div class="viz-caption">
+        Cada bloco &eacute; um acorde da progress&atilde;o; a barra &eacute; a tens&atilde;o funcional. No modo sil&ecirc;ncio, a
+        estrutura segue completa e leg&iacute;vel <strong>sem nenhum som</strong> &mdash; a demonstra&ccedil;&atilde;o direta
+        de que a m&uacute;sica, no n&uacute;cleo, &eacute; rela&ccedil;&atilde;o que pode ser acessada por v&aacute;rios canais.
+      </div>
+    </div>
+    <div class="aside">
+      <span class="aside-label">Fecho</span>
+      Partimos de <code>&part;&sup2;y/&part;t&sup2; = c&sup2;&part;&sup2;y/&part;x&sup2;</code> e chegamos a uma tese sobre
+      percep&ccedil;&atilde;o, cogni&ccedil;&atilde;o e inclus&atilde;o. Cada elo foi marcado: o que &eacute; <span class="epi math" style="font-size:.55rem">necessidade matem&aacute;tica</span>,
+      o que &eacute; <span class="epi phys" style="font-size:.55rem">mecanismo f&iacute;sico</span>, o que &eacute;
+      <span class="epi hist" style="font-size:.55rem">conven&ccedil;&atilde;o</span> e o que &eacute;
+      <span class="epi peda" style="font-size:.55rem">infer&ecirc;ncia</span>. Essa disciplina &mdash; nunca confundir
+      o necess&aacute;rio com o habitual &mdash; &eacute; a li&ccedil;&atilde;o mais transfer&iacute;vel do caderno, para muito al&eacute;m da m&uacute;sica.
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="sig">A matem&aacute;tica da m&uacute;sica &mdash; um caderno dedutivo</div>
+  da corda vibrante &agrave; percep&ccedil;&atilde;o multimodal &middot; 10 n&iacute;veis, cada um for&ccedil;ando o pr&oacute;ximo<br>
+  cada afirma&ccedil;&atilde;o rotulada por estatuto epist&ecirc;mico &middot; WebAudio + Canvas &middot; sem depend&ecirc;ncias externas &middot; offline-first<br>
+  <a href="matematica-fundamental.html" style="color:var(--green)">&larr; comece pelos fundamentos matem&aacute;ticos</a>
+</footer>
+<script>
+// ═══════════════════════════════════════════════════════════
+// AUDIO ENGINE — com limiter master, normalização e stopAll
+// ═══════════════════════════════════════════════════════════
+let actx = null, masterLimiter = null;
+const activeNodes = new Set();   // rastreia osciladores vivos p/ stopAll
+function AC() {
+  if (!actx) {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    // limiter master: impede clipping quando vários botões somam
+    masterLimiter = actx.createDynamicsCompressor();
+    masterLimiter.threshold.value = -6;
+    masterLimiter.knee.value = 6;
+    masterLimiter.ratio.value = 12;
+    masterLimiter.attack.value = 0.002;
+    masterLimiter.release.value = 0.15;
+    masterLimiter.connect(actx.destination);
+  }
+  if (actx.state === 'suspended') actx.resume();
+  return actx;
+}
+function busOut() { AC(); return masterLimiter; }
+function trackOsc(osc) {
+  activeNodes.add(osc);
+  osc.addEventListener('ended', () => activeNodes.delete(osc));
+}
+// para TODO som em curso
+function stopAll() {
+  activeNodes.forEach(o => { try { o.stop(); } catch(e){} });
+  activeNodes.clear();
+  if (window._beatStop) { window._beatStop(); window._beatStop = null; }
+}
+// soma harmônicos (timbre) — normalizado, roteado pelo limiter
+function playAdditive(f0, harmonics, dur = 1.4, vol = 0.16) {
+  const ac = AC(), t0 = ac.currentTime;
+  const master = ac.createGain(); master.connect(busOut());
+  master.gain.setValueAtTime(0, t0);
+  master.gain.linearRampToValueAtTime(vol, t0 + 0.02);
+  master.gain.setValueAtTime(vol, t0 + dur - 0.08);
+  master.gain.linearRampToValueAtTime(0, t0 + dur);
+  const norm = harmonics.reduce((s, a) => s + Math.abs(a), 0) || 1;
+  harmonics.forEach((amp, i) => {
+    if (Math.abs(amp) < 0.001) return;
+    const osc = ac.createOscillator(), g = ac.createGain();
+    osc.type = 'sine'; osc.frequency.value = f0 * (i + 1);
+    g.gain.value = amp / norm;
+    osc.connect(g); g.connect(master);
+    osc.start(t0); osc.stop(t0 + dur); trackOsc(osc);
+  });
+  return master;
+}
+// soma de senoides puras (acordes) — NORMALIZADO por nº de vozes
+function playSines(freqs, dur = 1.5, vol = 0.13) {
+  const ac = AC(), t0 = ac.currentTime;
+  const perVoice = vol / Math.max(1, Math.sqrt(freqs.length)); // evita clipping na soma
+  freqs.forEach(f => {
+    const osc = ac.createOscillator(), g = ac.createGain();
+    osc.type = 'sine'; osc.frequency.value = f;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(perVoice, t0 + 0.02);
+    g.gain.setValueAtTime(perVoice, t0 + dur - 0.08);
+    g.gain.linearRampToValueAtTime(0, t0 + dur);
+    osc.connect(g); g.connect(busOut());
+    osc.start(t0); osc.stop(t0 + dur); trackOsc(osc);
+  });
+}
+// dois tons contínuos (batimentos) — retorna stop fn
+function startTwoTone(f1, f2, vol = 0.12) {
+  const ac = AC();
+  const o1 = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain();
+  o1.frequency.value = f1; o2.frequency.value = f2;
+  g.gain.value = vol / Math.sqrt(2);
+  o1.connect(g); o2.connect(g); g.connect(busOut());
+  o1.start(); o2.start(); trackOsc(o1); trackOsc(o2);
+  return () => { try { o1.stop(); o2.stop(); } catch(e){} };
+}
+
+// ═══════════════════════════════════════════════════════════
+// CANVAS HELPER (DPR-aware, cached intended height — offline safe)
+// ═══════════════════════════════════════════════════════════
+function fit(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  if (!canvas.dataset.cssH)
+    canvas.dataset.cssH = parseInt(canvas.getAttribute('height')) || canvas.clientHeight || 200;
+  const cssH = parseInt(canvas.dataset.cssH);
+  const cssW = canvas.clientWidth || canvas.parentElement.clientWidth || 600;
+  canvas.style.height = cssH + 'px';
+  canvas.width = Math.round(cssW * dpr);
+  canvas.height = Math.round(cssH * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { w: cssW, h: cssH, ctx };
+}
+const _hooks = [];
+function onRedraw(fn) { _hooks.push(fn); }
+function redrawAll() { _hooks.forEach(f => { try { f(); } catch(e){} }); }
+let _rt;
+window.addEventListener('resize', () => { clearTimeout(_rt); _rt = setTimeout(redrawAll, 120); });
+window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(redrawAll)));
+
+const C = {
+  amber:'#e8a838', blue:'#5d8fcc', bluedim:'#4a6fa5', bluelight:'#8fb4e0',
+  green:'#4fb87a', red:'#d05a5a', violet:'#9b7fd4', muted:'#5e5e72',
+  faint:'#3a3a48', text:'#cdcdd8', border:'#262631', white:'#ffffff'
+};
+const MONO = '11px "Courier New", monospace';
+// ═══════════════════════════════════════════════════════════
+// HERO — breathing harmonic waves
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv = document.getElementById('hero-canvas'), ctx = cv.getContext('2d');
+  let t = 0;
+  function rs(){ cv.width = innerWidth; cv.height = innerHeight; }
+  rs(); addEventListener('resize', rs);
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const W=cv.width, H=cv.height, cy=H/2;
+    const harm=[1,2,3,4,5], cols=['#5d8fcc22','#e8a83820','#9b7fd420','#4fb87a18','#8fb4e015'];
+    harm.forEach((n,i)=>{
+      ctx.beginPath(); ctx.strokeStyle=cols[i]; ctx.lineWidth=1.4;
+      for(let x=0;x<W;x++){
+        const ph=(x/W)*4*Math.PI;
+        const y=cy+Math.sin(ph*n + t*0.6 + i*0.7)*(H*0.10)/Math.sqrt(n);
+        x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke();
+    });
+    ctx.beginPath(); ctx.strokeStyle='rgba(232,168,56,0.28)'; ctx.lineWidth=1.6;
+    for(let x=0;x<W;x++){
+      const ph=(x/W)*4*Math.PI;
+      let y=cy; harm.forEach((n,i)=>{ y+=Math.sin(ph*n+t*0.6+i*0.7)*(H*0.05)/Math.sqrt(n); });
+      x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+    t+=0.012; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 0a — string modes
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('corda-canvas');
+  const nS=document.getElementById('corda-n'), nV=document.getElementById('corda-n-v');
+  const lbl=document.getElementById('corda-mode-lbl');
+  let phase=0, raf=null;
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    const n=+nS.value, cy=H/2, A=H*0.32, margin=30;
+    ctx.clearRect(0,0,W,H);
+    // string baseline
+    ctx.strokeStyle=C.faint; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(margin,cy); ctx.lineTo(W-margin,cy); ctx.stroke();
+    // standing wave
+    ctx.beginPath(); ctx.strokeStyle=C.white; ctx.lineWidth=2;
+    for(let x=margin;x<=W-margin;x++){
+      const u=(x-margin)/(W-2*margin);
+      const y=cy+Math.sin(n*Math.PI*u)*A*Math.cos(phase);
+      x===margin?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // faint envelope
+    ctx.strokeStyle=C.bluedim+'55'; ctx.lineWidth=1;
+    [1,-1].forEach(s=>{
+      ctx.beginPath();
+      for(let x=margin;x<=W-margin;x++){
+        const u=(x-margin)/(W-2*margin);
+        const y=cy+s*Math.sin(n*Math.PI*u)*A;
+        x===margin?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    });
+    // nodes
+    for(let k=0;k<=n;k++){
+      const x=margin+(k/n)*(W-2*margin);
+      ctx.fillStyle=C.red; ctx.beginPath(); ctx.arc(x,cy,4,0,7); ctx.fill();
+    }
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('f'+sub(n)+' = '+n+' \u00d7 f\u2081  ('+(n*65.4).toFixed(1)+' Hz se f\u2081=65.4)', margin, H-10);
+  }
+  function sub(n){ return ('\u2080\u2081\u2082\u2083\u2084\u2085\u2086\u2087\u2088\u2089')[n]||n; }
+  function anim(){ phase+=0.08; draw(); raf=requestAnimationFrame(anim); }
+  nS.addEventListener('input',()=>{ nV.textContent=nS.value; lbl.textContent='n = '+nS.value; draw(); });
+  document.getElementById('corda-play').addEventListener('click',()=>{
+    const n=+nS.value; playSines([n*65.4],1.2,0.15);
+  });
+  document.getElementById('corda-all').addEventListener('click',()=>{
+    playAdditive(65.4,[1,0.5,0.33,0.25,0.2,0.16,0.14,0.12],1.6,0.18);
+  });
+  draw(); onRedraw(draw);
+  if(!raf) anim();
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 0b — harmonic series stack
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const box=document.getElementById('harm-stack');
+  const f1=65.4;
+  const intervals={2:'oitava',3:'+ quinta',4:'+ quarta',5:'ter\u00e7a M',6:'ter\u00e7a m',7:'~7\u00aa',8:'oitava',9:'tom',10:'ter\u00e7a m',11:'~tr\u00edt',12:'quinta',13:'~6\u00aa',14:'~7\u00aa',15:'7\u00aa M',16:'oitava'};
+  for(let n=1;n<=16;n++){
+    const f=f1*n;
+    const row=document.createElement('div'); row.className='harm-row';
+    const pct=(n/16)*100;
+    row.innerHTML='<span class="hn">H'+n+'</span>'+
+      '<div class="hbar-wrap"><div class="hbar" style="width:'+pct+'%"></div>'+
+      '<span class="hlabel">'+(n>1?(intervals[n]||''):'fundamental')+'</span></div>'+
+      '<span class="hf">'+f.toFixed(0)+' Hz</span>';
+    row.addEventListener('click',()=>playSines([f],1.0,0.15));
+    box.appendChild(row);
+  }
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 1 — timbre additive synthesis
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('timbre-canvas');
+  const slidersBox=document.getElementById('timbre-sliders');
+  const N=8;
+  let amps=[1,0,0,0,0,0,0,0];
+  // build sliders
+  for(let i=0;i<N;i++){
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:30px';
+    const s=document.createElement('input');
+    s.type='range'; s.min=0; s.max=1; s.step=0.01; s.value=amps[i];
+    s.style.cssText='writing-mode:vertical-lr;direction:rtl;width:16px;height:70px';
+    s.addEventListener('input',()=>{ amps[i]=+s.value; draw(); });
+    s.dataset.idx=i;
+    const lab=document.createElement('span');
+    lab.textContent='H'+(i+1); lab.style.cssText='font:10px "Courier New";color:'+C.muted;
+    wrap.appendChild(s); wrap.appendChild(lab); slidersBox.appendChild(wrap);
+  }
+  function syncSliders(){ slidersBox.querySelectorAll('input').forEach(s=>{ s.value=amps[s.dataset.idx]; }); }
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    const cy=H/2, A=H*0.36;
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle=C.faint; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
+    // individual harmonics faint
+    amps.forEach((a,i)=>{
+      if(a<0.01) return;
+      ctx.beginPath(); ctx.strokeStyle=C.bluedim+'40'; ctx.lineWidth=1;
+      for(let x=0;x<W;x++){
+        const y=cy+a*Math.sin((x/W)*Math.PI*2*(i+1)*2)*A*0.5;
+        x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke();
+    });
+    // sum
+    const norm=amps.reduce((s,a)=>s+Math.abs(a),0)||1;
+    ctx.beginPath(); ctx.strokeStyle=C.amber; ctx.lineWidth=2;
+    for(let x=0;x<W;x++){
+      let y=cy;
+      amps.forEach((a,i)=>{ y+=(a/norm)*Math.sin((x/W)*Math.PI*2*(i+1)*2)*A; });
+      x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('soma = forma de onda resultante (altura fixa = f\u2081)',10,16);
+  }
+  const presets={
+    flute:[1,0.25,0.05,0,0,0,0,0],
+    violin:[1,0.5,0.33,0.25,0.2,0.16,0.14,0.12],
+    clarinet:[1,0,0.4,0,0.25,0,0.15,0],
+    square:[1,0,0.33,0,0.2,0,0.14,0],
+    reset:[1,0,0,0,0,0,0,0]
+  };
+  slidersBox.parentElement.querySelectorAll('[data-preset]').forEach(b=>{
+    b.addEventListener('click',()=>{ amps=presets[b.dataset.preset].slice(); syncSliders(); draw(); });
+  });
+  document.getElementById('timbre-play').addEventListener('click',()=>playAdditive(220,amps,1.5,0.18));
+  draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 2a — harmonic coincidence
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('cons-canvas');
+  const rS=document.getElementById('cons-ratio'), rV=document.getElementById('cons-ratio-v');
+  const lbl=document.getElementById('cons-ratio-lbl'), diss=document.getElementById('cons-diss');
+  const f1=220, NH=8;
+  function ratioLabel(r){
+    const known={1.5:'3 : 2',1.3333:'4 : 3',1.25:'5 : 4',1.2:'6 : 5',1.6667:'5 : 3',2:'2 : 1',1.125:'9 : 8'};
+    for(const k in known) if(Math.abs(r-k)<0.004) return known[k];
+    return r.toFixed(3);
+  }
+  // Plomp-Levelt roughness between two freqs
+  function rough(fa,fb){
+    const fmin=Math.min(fa,fb); const df=Math.abs(fa-fb);
+    const s=0.24/(0.0207*fmin+18.96);
+    const x=s*df;
+    return Math.exp(-3.5*x)-Math.exp(-5.75*x);
+  }
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    const r=+rS.value;
+    ctx.clearRect(0,0,W,H);
+    const fmax=f1*NH*2.05;
+    const xOf=f=> 30+(f/fmax)*(W-50);
+    const y1=H*0.30, y2=H*0.62, baseY=H-30;
+    // axes labels
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('nota 1  (f\u2081='+f1+')', 30, y1-30);
+    ctx.fillText('nota 2  (f\u2082='+(f1*r).toFixed(1)+', raz\u00e3o '+r.toFixed(3)+')', 30, y2-30);
+    const h1=[], h2=[];
+    for(let n=1;n<=NH;n++){ h1.push(f1*n); h2.push(f1*r*n); }
+    // detect coincidences and roughness
+    let totalRough=0, coincid=0;
+    h1.forEach(a=>h2.forEach(b=>{
+      const cents=Math.abs(1200*Math.log2(a/b));
+      if(cents<8) coincid++;
+      totalRough+=rough(a,b);
+    }));
+    // draw harmonics
+    function drawStack(hars,y,col){
+      hars.forEach((f,i)=>{
+        const x=xOf(f);
+        ctx.strokeStyle=col; ctx.lineWidth=1.4;
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,baseY); ctx.stroke();
+        ctx.fillStyle=col; ctx.font='9px "Courier New"';
+      });
+    }
+    drawStack(h1,y1,C.blue);
+    drawStack(h2,y2,C.amber);
+    // coincidences (green) and critical-band clashes (red) on base line
+    h1.forEach(a=>h2.forEach(b=>{
+      const cents=Math.abs(1200*Math.log2(a/b));
+      const x=xOf((a+b)/2);
+      if(cents<8){
+        ctx.strokeStyle=C.green; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(x,baseY-8); ctx.lineTo(x,baseY+8); ctx.stroke();
+        ctx.fillStyle=C.green; ctx.beginPath(); ctx.arc(x,baseY,3,0,7); ctx.fill();
+      } else {
+        const rgh=rough(a,b);
+        if(rgh>0.15){
+          ctx.fillStyle='rgba(208,90,90,'+Math.min(rgh,0.9)+')';
+          ctx.fillRect(x-3,baseY-6,6,12);
+        }
+      }
+    }));
+    ctx.strokeStyle=C.faint; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(30,baseY); ctx.lineTo(W-20,baseY); ctx.stroke();
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('coincid\u00eancias: '+coincid+'  \u00b7  aspereza total: '+totalRough.toFixed(2), 30, H-8);
+    // verdict
+    let verdict;
+    if(totalRough<1.2) verdict='baixa (consonante)';
+    else if(totalRough<2.5) verdict='m\u00e9dia';
+    else verdict='alta (dissonante)';
+    diss.textContent=verdict;
+    diss.style.color = totalRough<1.2?C.green:(totalRough<2.5?C.amber:C.red);
+    lbl.textContent=ratioLabel(r);
+  }
+  rS.addEventListener('input',()=>{ rV.textContent=(+rS.value).toFixed(3); draw(); });
+  document.getElementById('cons-play').addEventListener('click',()=>{
+    playAdditive(f1,[1,0.5,0.33,0.25,0.2,0.16,0.14,0.12],1.6,0.10);
+    playAdditive(f1*(+rS.value),[1,0.5,0.33,0.25,0.2,0.16,0.14,0.12],1.6,0.10);
+  });
+  cv.parentElement.querySelectorAll('[data-r]').forEach(b=>{
+    b.addEventListener('click',()=>{ rS.value=b.dataset.r; rV.textContent=(+b.dataset.r).toFixed(3); draw();
+      playAdditive(f1,[1,0.5,0.33,0.25,0.2,0.16,0.14,0.12],1.4,0.10);
+      playAdditive(f1*(+b.dataset.r),[1,0.5,0.33,0.25,0.2,0.16,0.14,0.12],1.4,0.10);
+    });
+  });
+  draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 2b — dissonance curve
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('diss-curve');
+  const hover=document.getElementById('diss-hover');
+  const f1=261.6, NH=6;
+  function rough(fa,fb){
+    const fmin=Math.min(fa,fb), df=Math.abs(fa-fb);
+    const s=0.24/(0.0207*fmin+18.96), x=s*df;
+    return Math.exp(-3.5*x)-Math.exp(-5.75*x);
+  }
+  function dissAt(r){
+    let d=0;
+    for(let m=1;m<=NH;m++)for(let n=1;n<=NH;n++) d+=rough(f1*m, f1*r*n);
+    return d;
+  }
+  let pts=[];
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    const m=36, x0=m, x1=W-12, y0=H-26, y1=14;
+    pts=[];
+    let maxD=0;
+    for(let i=0;i<=300;i++){ const r=1+(i/300); const d=dissAt(r); pts.push([r,d]); if(d>maxD)maxD=d; }
+    // grid + consonant ratios
+    const marks=[[1,'1:1'],[1.2,'6:5'],[1.25,'5:4'],[1.3333,'4:3'],[1.5,'3:2'],[1.6667,'5:3'],[1.875,'15:8'],[2,'2:1']];
+    marks.forEach(([r,nm])=>{
+      const x=x0+((r-1)/1)*(x1-x0);
+      ctx.strokeStyle=C.border; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y0); ctx.stroke();
+      ctx.fillStyle=C.muted; ctx.font='9px "Courier New"'; ctx.textAlign='center';
+      ctx.fillText(nm,x,y0+14);
+    });
+    ctx.textAlign='left';
+    // curve
+    ctx.beginPath(); ctx.strokeStyle=C.red; ctx.lineWidth=2;
+    pts.forEach(([r,d],i)=>{
+      const x=x0+((r-1)/1)*(x1-x0);
+      const y=y0-(d/maxD)*(y0-y1);
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    });
+    ctx.stroke();
+    // mark valleys (consonant)
+    marks.forEach(([r])=>{
+      const d=dissAt(r);
+      const x=x0+((r-1)/1)*(x1-x0);
+      const y=y0-(d/maxD)*(y0-y1);
+      ctx.fillStyle=C.green; ctx.beginPath(); ctx.arc(x,y,3.5,0,7); ctx.fill();
+    });
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('\u2193 disson\u00e2ncia', x0, y1+4);
+  }
+  cv.addEventListener('mousemove',e=>{
+    const rect=cv.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    const r=1+((x-36)/(cv.clientWidth-48));
+    if(r>=1&&r<=2) hover.textContent='r \u2248 '+r.toFixed(3)+'  ('+(1200*Math.log2(r)).toFixed(0)+' cents)';
+  });
+  draw(); onRedraw(draw);
+})();
+
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 3 — beats (envelope matemático vs. percebido)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('beat-canvas');
+  const f1S=document.getElementById('beat-f1'), f2S=document.getElementById('beat-f2');
+  const f1V=document.getElementById('beat-f1-v'), f2V=document.getElementById('beat-f2-v');
+  const lbl=document.getElementById('beat-lbl'), rate=document.getElementById('beat-rate');
+  let btn=document.getElementById('beat-play');
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    const f1=+f1S.value, f2=+f2S.value, df=Math.abs(f1-f2);
+    ctx.clearRect(0,0,W,H);
+    const cy=H/2, A=H*0.34;
+    const scale=0.05; // compressão temporal visual (NÃO são segundos reais)
+    // envelope MATEMÁTICO: 2cos(2π·(Δf/2)·t) — cruza zero a Δf/2 Hz (pode ir negativo)
+    ctx.strokeStyle=C.amber; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+    [1,-1].forEach(s=>{
+      ctx.beginPath();
+      for(let x=0;x<W;x++){
+        const tt=(x/W)/scale;
+        const env=Math.cos(Math.PI*df*tt); // = cos(2π·(Δf/2)·t)
+        const y=cy - s*env*A; // simétrico: desenha +env e -env
+        x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke();
+    });
+    // envelope PERCEBIDO: |env| — o que o ouvido segue, Δf picos/s (verde pontilhado)
+    ctx.setLineDash([2,3]); ctx.strokeStyle=C.green; ctx.lineWidth=1.2;
+    [1,-1].forEach(s=>{
+      ctx.beginPath();
+      for(let x=0;x<W;x++){
+        const tt=(x/W)/scale;
+        const env=Math.abs(Math.cos(Math.PI*df*tt));
+        const y=cy - s*env*A;
+        x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    // onda real: env · portadora
+    ctx.beginPath(); ctx.strokeStyle=C.white; ctx.lineWidth=1.3;
+    const fbar=(f1+f2)/2;
+    for(let x=0;x<W;x++){
+      const tt=(x/W)/scale;
+      const env=Math.cos(Math.PI*df*tt);
+      const carrier=Math.sin(2*Math.PI*fbar*tt*0.5);
+      const y=cy - env*carrier*A;
+      x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+    // anotações de taxa
+    ctx.fillStyle=C.amber; ctx.font='10px "Courier New"';
+    ctx.fillText('envelope mat.: cruza zero a Δf/2 = '+(df/2).toFixed(1)+' Hz', 8, 14);
+    ctx.fillStyle=C.green;
+    ctx.fillText('pulso percebido |env|: Δf = '+df.toFixed(1)+' picos/s', 8, H-8);
+    lbl.textContent='Δf = '+df.toFixed(1)+' Hz';
+    rate.textContent=df.toFixed(1)+' Hz';
+    rate.style.color = df<0.6?C.green:C.bluelight;
+  }
+  function up(){ f1V.textContent=(+f1S.value).toFixed(1); f2V.textContent=(+f2S.value).toFixed(1); draw();
+    if(window._beatStop){ window._beatStop(); window._beatStop=startTwoTone(+f1S.value,+f2S.value); }
+  }
+  f1S.addEventListener('input',up); f2S.addEventListener('input',up);
+  btn.addEventListener('click',()=>{
+    if(window._beatStop){ window._beatStop(); window._beatStop=null; btn.classList.remove('playing'); btn.innerHTML='\u25b6 Ouvir'; }
+    else { window._beatStop=startTwoTone(+f1S.value,+f2S.value); btn.classList.add('playing'); btn.innerHTML='\u25fc Parar'; }
+  });
+  draw(); onRedraw(draw);
+})();
+// ═══════════════════════════════════════════════════════════
+// MODULE 4 — cents (linear vs log)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('cents-canvas');
+  const cS=document.getElementById('cents-slider'), cV=document.getElementById('cents-v');
+  const rOut=document.getElementById('cents-ratio');
+  const base=220;
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    const cents=+cS.value, r=Math.pow(2,cents/1200);
+    ctx.clearRect(0,0,W,H);
+    const m=30, x0=m, x1=W-m;
+    const yHz=H*0.32, yC=H*0.72;
+    // Hz ruler (linear from base to 2*base)
+    ctx.strokeStyle=C.faint; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x0,yHz); ctx.lineTo(x1,yHz); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x0,yC); ctx.lineTo(x1,yC); ctx.stroke();
+    // ticks every semitone
+    for(let s=0;s<=12;s++){
+      const f=base*Math.pow(2,s/12);
+      const xLin=x0+((f-base)/base)*(x1-x0);
+      const xLog=x0+(s/12)*(x1-x0);
+      ctx.strokeStyle=C.border; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(xLin,yHz-6); ctx.lineTo(xLin,yHz+6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(xLog,yC-6); ctx.lineTo(xLog,yC+6); ctx.stroke();
+    }
+    // current interval marker
+    const fNow=base*r;
+    const xLin=x0+((fNow-base)/base)*(x1-x0);
+    const xLog=x0+(cents/1200)*(x1-x0);
+    ctx.strokeStyle=C.amber; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(x0,yHz); ctx.lineTo(xLin,yHz); ctx.stroke();
+    ctx.beginPath(); ctx.arc(xLin,yHz,5,0,7); ctx.fillStyle=C.amber; ctx.fill();
+    ctx.strokeStyle=C.green; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(x0,yC); ctx.lineTo(xLog,yC); ctx.stroke();
+    ctx.beginPath(); ctx.arc(xLog,yC,5,0,7); ctx.fillStyle=C.green; ctx.fill();
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('Hz (linear) \u2014 o intervalo comprime no agudo', x0, yHz-16);
+    ctx.fillText('cents (log) \u2014 dist\u00e2ncia perceptual uniforme', x0, yC-16);
+    cV.textContent=cents; rOut.textContent=r.toFixed(4);
+  }
+  cS.addEventListener('input',draw);
+  document.getElementById('cents-play').addEventListener('click',()=>{
+    const r=Math.pow(2,(+cS.value)/1200);
+    playSines([base, base*r],1.4,0.13);
+  });
+  draw(); onRedraw(draw);
+})();
+
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 5 — circle of fifths / pythagorean comma (simplificado)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('circle-canvas');
+  const stepLbl=document.getElementById('circle-step'), gapLbl=document.getElementById('circle-gap');
+  const names=['C','G','D','A','E','B','F#','C#','G#','D#','A#','F','C'];
+  let step=0, timer=null;
+  function freqAt(s){ let f=261.63; for(let i=0;i<s;i++){ f*=1.5; if(f>523.26) f/=2; } return f; }
+  function draw(s){
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2, R=Math.min(W,H)*0.36;
+    ctx.strokeStyle=C.border; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.stroke();
+    for(let i=0;i<s;i++){
+      const a1=(i/12)*2*Math.PI-Math.PI/2, a2=((i+1)/12)*2*Math.PI-Math.PI/2;
+      const x1=cx+R*Math.cos(a1), y1=cy+R*Math.sin(a1);
+      const x2=cx+R*Math.cos(a2), y2=cy+R*Math.sin(a2);
+      ctx.strokeStyle=C.amber+'70'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(x1,y1);
+      const mx=(x1+x2)/2,my=(y1+y2)/2,dx=cx-mx,dy=cy-my;
+      ctx.quadraticCurveTo(mx+dx*0.18,my+dy*0.18,x2,y2); ctx.stroke();
+    }
+    for(let i=0;i<=12;i++){
+      const a=(i/12)*2*Math.PI-Math.PI/2;
+      const x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+      const on=i<=s, gap=(i===12&&s===12);
+      ctx.beginPath(); ctx.arc(x,y,17,0,7);
+      ctx.fillStyle= gap?C.red : on?C.amber : '#1c1c24';
+      ctx.fill();
+      ctx.strokeStyle= on?C.amber:C.muted; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.fillStyle= on?'#000':C.muted; ctx.font='bold 10px "Courier New"';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(names[i],x,y);
+    }
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=C.amber; ctx.font='bold 14px "Courier New"';
+    ctx.fillText('passo '+s+' / 12', cx, cy-12);
+    ctx.fillStyle=C.bluelight; ctx.font='11px "Courier New"';
+    ctx.fillText('(3/2)^'+s, cx, cy+8);
+    if(s===12){
+      ctx.fillStyle=C.red; ctx.font='bold 11px "Courier New"';
+      ctx.fillText('não fecha: +23.46 cents', cx, cy+30);
+    }
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    stepLbl.textContent='passo '+s;
+    // SIMPLIFICADO: só mostra o fechamento final, sem fórmula decorativa intermediária
+    gapLbl.textContent = s===12 ? '23.46 cents' : (s===0?'0 cents':'(acumulando…)');
+    gapLbl.style.color = s===12 ? C.red : C.bluelight;
+  }
+  document.getElementById('circle-play').addEventListener('click',()=>{
+    if(timer){clearInterval(timer);timer=null;}
+    stopAll(); step=0; draw(0);
+    timer=setInterval(()=>{
+      step++; draw(step); playSines([freqAt(step-1)],0.5,0.14);
+      if(step>=12){clearInterval(timer);timer=null;}
+    },650);
+  });
+  document.getElementById('circle-reset').addEventListener('click',()=>{
+    if(timer){clearInterval(timer);timer=null;} step=0; draw(0);
+  });
+  cv.addEventListener('click',e=>{
+    const rect=cv.getBoundingClientRect();
+    const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+    const W=cv.clientWidth,H=cv.clientHeight,cx=W/2,cy=H/2,R=Math.min(W,H)*0.36;
+    for(let i=0;i<=12;i++){
+      const a=(i/12)*2*Math.PI-Math.PI/2;
+      const x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+      if(Math.hypot(mx-x,my-y)<20){ step=i; draw(i); if(i>0)playSines([freqAt(i-1)],0.7,0.14); break; }
+    }
+  });
+  draw(0); onRedraw(()=>draw(step));
+})();
+// ═══════════════════════════════════════════════════════════
+// MODULE 6a — N-TET error bars
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('tet-canvas');
+  const pureFifth=1200*Math.log2(1.5); // 701.955
+  function bestFifthError(N){
+    const step=1200/N;
+    const k=Math.round(pureFifth/step);
+    return Math.abs(k*step-pureFifth);
+  }
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    const Ns=[5,7,12,17,19,22,24,31,41,53];
+    const m=36, x0=m, y0=H-30, y1=18;
+    let maxE=0; const errs=Ns.map(N=>{const e=bestFifthError(N); if(e>maxE)maxE=e; return e;});
+    const bw=(W-m-12)/Ns.length*0.6, gap=(W-m-12)/Ns.length;
+    Ns.forEach((N,i)=>{
+      const e=errs[i];
+      const x=x0+i*gap+gap*0.2;
+      const bh=(e/maxE)*(y0-y1);
+      const good=e<6;
+      ctx.fillStyle= good?C.green:(e<12?C.amber:C.red);
+      ctx.fillRect(x,y0-bh,bw,bh);
+      ctx.fillStyle=C.text; ctx.font='10px "Courier New"'; ctx.textAlign='center';
+      ctx.fillText(N,x+bw/2,y0+14);
+      ctx.fillStyle=C.muted; ctx.font='8px "Courier New"';
+      ctx.fillText(e.toFixed(1),x+bw/2,y0-bh-4);
+    });
+    ctx.textAlign='left'; ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText('erro da quinta (cents) \u2014 menor \u00e9 melhor',x0,y1-2);
+    ctx.fillText('N (divis\u00f5es da oitava)',x0,H-6);
+  }
+  draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 6b — pure vs tempered fifth
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('puretemp-canvas');
+  let mode='pure';
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    const base=220;
+    const r = mode==='pure'?1.5: (mode==='temp'?Math.pow(2,7/12):null);
+    const cy=H/2, A=H*0.16, cyc=5;
+    if(mode==='both'){
+      // show both sums slightly apart, highlight beat
+      const r1=1.5, r2=Math.pow(2,7/12);
+      ctx.beginPath(); ctx.strokeStyle=C.green; ctx.lineWidth=1.4;
+      for(let x=0;x<W;x++){
+        const v=Math.sin((x/W)*cyc*Math.PI*2)+Math.sin((x/W)*cyc*Math.PI*2*r1);
+        ctx.lineTo(x,H*0.32+v*A*0.6);
+      } ctx.stroke();
+      ctx.beginPath(); ctx.strokeStyle=C.amber; ctx.lineWidth=1.4;
+      for(let x=0;x<W;x++){
+        const v=Math.sin((x/W)*cyc*Math.PI*2)+Math.sin((x/W)*cyc*Math.PI*2*r2);
+        ctx.lineTo(x,H*0.70+v*A*0.6);
+      } ctx.stroke();
+      ctx.fillStyle=C.green; ctx.font=MONO; ctx.fillText('pura 3:2',10,H*0.32-18);
+      ctx.fillStyle=C.amber; ctx.fillText('temperada 2^(7/12) \u2014 note o leve descompasso',10,H*0.70-18);
+      return;
+    }
+    ctx.strokeStyle=C.bluedim; ctx.lineWidth=1.2;
+    ctx.beginPath(); for(let x=0;x<W;x++){const y=H*0.30+Math.sin((x/W)*cyc*Math.PI*2)*A; x?ctx.lineTo(x,y):ctx.moveTo(x,y);} ctx.stroke();
+    ctx.strokeStyle=mode==='pure'?C.green:C.amber; ctx.lineWidth=1.2;
+    ctx.beginPath(); for(let x=0;x<W;x++){const y=H*0.52+Math.sin((x/W)*cyc*Math.PI*2*r)*A; x?ctx.lineTo(x,y):ctx.moveTo(x,y);} ctx.stroke();
+    ctx.strokeStyle=C.white; ctx.lineWidth=1.6;
+    ctx.beginPath(); for(let x=0;x<W;x++){const v=Math.sin((x/W)*cyc*Math.PI*2)+Math.sin((x/W)*cyc*Math.PI*2*r); const y=H*0.80+v*A*0.6; x?ctx.lineTo(x,y):ctx.moveTo(x,y);} ctx.stroke();
+    ctx.fillStyle=C.muted; ctx.font=MONO;
+    ctx.fillText(mode==='pure'?'quinta pura 3:2 = 701.96 cents':'quinta temperada = 700.00 cents (erro \u22122 cents)',10,16);
+  }
+  document.getElementById('pt-pure').addEventListener('click',()=>{mode='pure';draw();playSines([220,330],1.8,0.12);});
+  document.getElementById('pt-temp').addEventListener('click',()=>{mode='temp';draw();playSines([220,220*Math.pow(2,7/12)],1.8,0.12);});
+  document.getElementById('pt-both').addEventListener('click',()=>{mode='both';draw();
+    playSines([220,330],2.4,0.09); playSines([220,220*Math.pow(2,7/12)],2.4,0.09);});
+  draw(); onRedraw(draw);
+})();
+
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 7 — tonal function graph (bug volume-zero REMOVIDO)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('tonal-canvas');
+  const nodes={
+    I:  {label:'I (tônica)',  tens:0.0, x:0.5,  freqs:[261.6,329.6,392.0]},
+    ii: {label:'ii',          tens:0.45,x:0.25, freqs:[293.7,349.2,440.0]},
+    IV: {label:'IV (subdom)', tens:0.4, x:0.18, freqs:[349.2,440.0,523.3]},
+    V:  {label:'V (dominante)',tens:0.85,x:0.82,freqs:[392.0,493.9,587.3]},
+    vi: {label:'vi (rel.)',   tens:0.3, x:0.7,  freqs:[440.0,523.3,659.3]},
+  };
+  function pos(id,W,H){ const n=nodes[id]; return { x:40+n.x*(W-80), y:30+(1-n.tens)*(H-90) }; }
+  let active=[];
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle=C.border; ctx.lineWidth=1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(20,30); ctx.lineTo(20,H-40); ctx.stroke(); ctx.setLineDash([]);
+    ctx.save(); ctx.translate(14,H/2); ctx.rotate(-Math.PI/2);
+    ctx.fillStyle=C.muted; ctx.font='9px "Courier New"'; ctx.textAlign='center';
+    ctx.fillText('← repouso     tensão →',0,0); ctx.restore(); ctx.textAlign='left';
+    const edges=[['I','IV'],['I','ii'],['IV','V'],['ii','V'],['V','I'],['V','vi']];
+    edges.forEach(([a,b])=>{
+      const pa=pos(a,W,H), pb=pos(b,W,H);
+      const isActive=active.some((id,i)=> i<active.length-1 && active[i]===a && active[i+1]===b);
+      ctx.strokeStyle= isActive? C.amber : C.faint; ctx.lineWidth= isActive?2.5:1;
+      ctx.beginPath(); ctx.moveTo(pa.x,pa.y); ctx.lineTo(pb.x,pb.y); ctx.stroke();
+      const ang=Math.atan2(pb.y-pa.y,pb.x-pa.x);
+      ctx.fillStyle=isActive?C.amber:C.faint;
+      const ax=pb.x-18*Math.cos(ang), ay=pb.y-18*Math.sin(ang);
+      ctx.beginPath(); ctx.moveTo(ax,ay);
+      ctx.lineTo(ax-6*Math.cos(ang-0.4),ay-6*Math.sin(ang-0.4));
+      ctx.lineTo(ax-6*Math.cos(ang+0.4),ay-6*Math.sin(ang+0.4)); ctx.fill();
+    });
+    Object.keys(nodes).forEach(id=>{
+      const p=pos(id,W,H), on=active.includes(id);
+      const col = nodes[id].tens>0.7?C.red : nodes[id].tens<0.15?C.green : C.amber;
+      ctx.beginPath(); ctx.arc(p.x,p.y,16,0,7);
+      ctx.fillStyle= on? col : '#1c1c24'; ctx.fill();
+      ctx.strokeStyle=col; ctx.lineWidth=1.6; ctx.stroke();
+      ctx.fillStyle= on?'#000':col; ctx.font='bold 11px "Courier New"';
+      ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(id,p.x,p.y);
+      ctx.fillStyle=C.muted; ctx.font='8px "Courier New"'; ctx.textBaseline='top';
+      ctx.fillText(nodes[id].label,p.x,p.y+20);
+    });
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  }
+  function playSeq(seq){
+    stopAll(); active=[]; let i=0;
+    function stepF(){
+      active=seq.slice(0,i+1); draw();
+      if(i<seq.length){ playSines(nodes[seq[i]].freqs,0.9,0.12); }  // bug volume-zero removido
+      i++;
+      if(i<=seq.length) setTimeout(stepF,950);
+      else setTimeout(()=>{active=[];draw();},900);
+    }
+    stepF();
+  }
+  document.getElementById('tonal-cadence').addEventListener('click',()=>playSeq(['I','IV','V','I']));
+  document.getElementById('tonal-deceptive').addEventListener('click',()=>playSeq(['I','V','vi']));
+  document.getElementById('tonal-twofive').addEventListener('click',()=>playSeq(['ii','V','I']));
+  draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 8 — modelo mental (três camadas, pós vs pré-lingual)
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('model-canvas');
+  let mode='pre'; // 'pre' = pós-lingual (Beethoven); 'post' = pré-lingual/congênito
+  const layers=[
+    {name:'Memória auditiva', col:C.green,  desc:'como soa'},
+    {name:'Repres. motora',   col:C.amber,  desc:'gesto/instrumento'},
+    {name:'Repres. formal',   col:C.violet, desc:'razões, grafo, simetria'},
+  ];
+  function draw(){
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    const isPos = mode==='pre'; // pós-lingual preserva tudo
+    const colW=(W-80)/3, x0=40, boxH=H*0.42, top=40;
+    ctx.font='bold 12px "Courier New"'; ctx.textAlign='center';
+    ctx.fillStyle=C.text;
+    ctx.fillText(isPos?'PÓS-LINGUAL (escuta antes da perda)':'PRÉ-LINGUAL / CONGÊNITO', W/2, 22);
+    layers.forEach((L,i)=>{
+      const x=x0+i*colW+colW*0.12, w=colW*0.76;
+      // memória auditiva (i=0) é a única camada afetada no pré-lingual
+      const preserved = isPos || i>0;
+      ctx.globalAlpha = preserved ? 1 : 0.28;
+      ctx.fillStyle=L.col+'22'; ctx.strokeStyle=L.col; ctx.lineWidth=1.6;
+      ctx.fillRect(x,top,w,boxH); ctx.strokeRect(x,top,w,boxH);
+      ctx.fillStyle=preserved?L.col:C.muted; ctx.font='bold 10px "Courier New"';
+      // wrap name
+      const words=L.name.split(' ');
+      words.forEach((wd,k)=> ctx.fillText(wd, x+w/2, top+24+k*15));
+      ctx.fillStyle=C.muted; ctx.font='8px "Courier New"';
+      ctx.fillText(L.desc, x+w/2, top+boxH-14);
+      ctx.globalAlpha=1;
+      if(!preserved){
+        ctx.strokeStyle=C.red; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(x+10,top+10); ctx.lineTo(x+w-10,top+boxH-10); ctx.stroke();
+        ctx.fillStyle=C.red; ctx.font='7px "Courier New"';
+        ctx.fillText('não por esta via', x+w/2, top+boxH+14);
+      }
+    });
+    // bottom verdict
+    ctx.textAlign='center'; ctx.font='10px "Courier New"';
+    const by=top+boxH+42;
+    if(isPos){
+      ctx.fillStyle=C.green;
+      ctx.fillText('simulador interno OPERANTE → composição persiste (escuta internalizada)', W/2, by);
+    } else {
+      ctx.fillStyle=C.bluelight;
+      ctx.fillText('musicalidade por OUTRAS ROTAS: tátil, visual, vibratória — igualmente legítima', W/2, by);
+    }
+    ctx.fillStyle=C.muted; ctx.font='9px "Courier New"';
+    ctx.fillText('A camada formal (violeta) sobrevive em ambos os casos.', W/2, by+20);
+    ctx.textAlign='left';
+  }
+  document.getElementById('model-pre').addEventListener('click',()=>{mode='pre';draw();});
+  document.getElementById('model-post').addEventListener('click',()=>{mode='post';draw();});
+  draw(); onRedraw(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 9 — Beethoven interface vs structure
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('beet-canvas');
+  const chords=[
+    {name:'I',  roman:'C', tens:0.0, freqs:[261.6,329.6,392.0]},
+    {name:'IV', roman:'F', tens:0.4, freqs:[349.2,440.0,523.3]},
+    {name:'V',  roman:'G', tens:0.85,freqs:[392.0,493.9,587.3]},
+    {name:'I',  roman:'C', tens:0.0, freqs:[261.6,329.6,392.0]},
+  ];
+  let lastIdx=-1, lastMode='silent', anim=null;
+  function draw(idx,mode){
+    lastIdx=idx; lastMode=mode;
+    const {w:W,h:H,ctx}=fit(cv);
+    ctx.clearRect(0,0,W,H);
+    const slot=W/4;
+    chords.forEach((ch,i)=>{
+      const sx=i*slot, on=i===idx;
+      if(on){ ctx.fillStyle='#1c1c24'; ctx.fillRect(sx,0,slot,H); }
+      const bh=ch.tens*(H-70);
+      const col=ch.tens>0.7?C.red:ch.tens<0.15?C.green:C.amber;
+      ctx.fillStyle=col+(on?'aa':'33'); ctx.fillRect(sx+10,H-30-bh,slot-20,bh);
+      if(on && mode!=='silent'){
+        const harms = mode==='full'?[1,0.5,0.3,0.2]:[1];
+        ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.beginPath();
+        for(let x=0;x<slot;x++){
+          let y=H*0.42;
+          ch.freqs.forEach((f)=>{ harms.forEach((a,hi)=>{ y+=a*Math.sin((x/slot)*(f/60)*Math.PI*2*(hi+1))*8; }); });
+          x?ctx.lineTo(sx+x,y):ctx.moveTo(sx+x,y);
+        }
+        ctx.stroke();
+      }
+      ctx.fillStyle= on?col:C.muted; ctx.font='bold 13px "Courier New"';
+      ctx.textAlign='center'; ctx.fillText(ch.name+'  ('+ch.roman+')',sx+slot/2,24);
+      ctx.fillStyle=C.muted; ctx.font='8px "Courier New"'; ctx.fillText('tensão',sx+slot/2,H-12);
+      if(i>0){ ctx.strokeStyle=C.border; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(sx,0); ctx.lineTo(sx,H); ctx.stroke(); }
+    });
+    ctx.textAlign='left';
+    if(idx<0){ ctx.fillStyle=C.muted; ctx.font=MONO;
+      ctx.fillText('progressão I → IV → V → I',12,H-44); }
+  }
+  function run(mode){
+    if(anim){clearTimeout(anim);anim=null;} stopAll(); let i=0;
+    function s(){
+      draw(i,mode);
+      if(mode==='full') playSines(chords[i].freqs,1.5,0.11);
+      else if(mode==='pure') playSines([chords[i].freqs[0]],1.5,0.13);
+      i++;
+      if(i<chords.length) anim=setTimeout(s,1600);
+      else anim=setTimeout(()=>draw(-1,'silent'),1600);
+    }
+    s();
+  }
+  document.getElementById('beet-full').addEventListener('click',()=>run('full'));
+  document.getElementById('beet-pure').addEventListener('click',()=>run('pure'));
+  document.getElementById('beet-silent').addEventListener('click',()=>run('silent'));
+  draw(-1,'silent'); onRedraw(()=>draw(lastIdx,lastMode));
+})();
+
+// ═══════════════════════════════════════════════════════════
+// PROGRESS BAR + NAV ACTIVE
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const bar=document.getElementById('progress');
+  const ids=['corda','timbre','consonancia','batimentos','cents','escala','temperamento','tonal','modelo','beethoven'];
+  const links=document.querySelectorAll('#nav a');
+  addEventListener('scroll',()=>{
+    const sc=scrollY, dh=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(dh>0?(sc/dh*100):0)+'%';
+    let act='corda';
+    ids.forEach(id=>{ const el=document.getElementById(id); if(el && el.offsetTop<=sc+90) act=id; });
+    links.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+act));
+  },{passive:true});
+})();
+
+</script>
+</body>
+</html>

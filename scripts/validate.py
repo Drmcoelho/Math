@@ -64,7 +64,7 @@ def main() -> None:
         fail(f"referências locais ausentes: {missing}")
 
     sections = re.findall(r'<section\s+id="([^"]+)"', html)
-    expected = [f"c{i}" for i in range(1, 13)] + ["epi"]
+    expected = ["p1", "p2", "p3", "p4"] + [f"c{i}" for i in range(1, 13)] + ["epi"]
     if sections != expected:
         fail(f"ordem de seções inesperada: {sections}")
 
@@ -73,8 +73,25 @@ def main() -> None:
         if cid not in canvases:
             fail(f"canvas ausente: {cid}")
 
+    # Cadernos irmãos (trilha de Matemática da Música): precisam existir e
+    # seus links locais (inclusive o cruzamento entre eles) não podem quebrar.
+    extra_pages = ["matematica-fundamental.html", "musica-matematica.html"]
+    for name in extra_pages:
+        page_path = ROOT / name
+        if not page_path.exists():
+            fail(f"caderno ausente: {name}")
+        pp = Parser(); pp.feed(page_path.read_text(encoding="utf-8"))
+        for ref in pp.hrefs + pp.srcs:
+            if not ref or ref.startswith("#") or ref.startswith("data:"):
+                continue
+            parsed = urlparse(ref)
+            if parsed.scheme or parsed.netloc:
+                continue
+            if parsed.path and not (ROOT / parsed.path).exists():
+                fail(f"{name}: referência local ausente: {parsed.path}")
+
     print("OK: estrutura validada")
-    print(f"sections={len(sections)} canvases={len(canvases)} ids={len(idset)}")
+    print(f"sections={len(sections)} canvases={len(canvases)} ids={len(idset)} extra_pages={len(extra_pages)}")
 
 if __name__ == "__main__":
     main()

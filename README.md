@@ -4,11 +4,13 @@ Caderno técnico interativo, em português, sobre a matemática por trás de apr
 
 `vetor → produto escalar → erro → gradiente → profundidade → generalização`
 
-O projeto é propositalmente simples: um `index.html` estático, sem build obrigatório, com KaTeX via CDN e três laboratórios interativos em `<canvas>`: perceptron, gradiente descendente e PCA.
+O projeto é propositalmente simples: um `index.html` estático, sem build obrigatório, com KaTeX embarcado localmente (`vendor/katex/`, sem dependência de CDN) e três laboratórios interativos em `<canvas>`: perceptron, gradiente descendente e PCA.
 
 ## Conteúdo
 
-- `index.html` — caderno principal, single-file.
+- `index.html` — caderno principal *Why Machines Learn*, single-file.
+- `matematica-fundamental.html` — pré-caderno de matemática do zero (variável, razão, fração, potências, função, logaritmo, seno, somatório, derivada, integral, equação de onda). Offline-first, sem dependências.
+- `musica-matematica.html` — caderno dedutivo *A Matemática da Música* (corda vibrante, timbre, consonância, batimentos, cents, escala, temperamento, tonalidade). Offline-first, sem dependências.
 - `favicon.svg` — ícone vetorial.
 - `og-image.svg` — imagem vetorial para preview social.
 - `.nojekyll` — impede o GitHub Pages de passar o site pelo Jekyll.
@@ -16,6 +18,7 @@ O projeto é propositalmente simples: um `index.html` estático, sem build obrig
 - `docs/REFERENCES.md` — referências conceituais e bibliográficas.
 - `docs/DEPLOY.md` — instruções operacionais de publicação.
 - `scripts/validate.py` — checagem local sem dependências externas.
+- `vendor/katex/` — KaTeX 0.16.9 embarcado (CSS, JS, auto-render e fontes).
 
 ## Publicação no GitHub Pages
 
