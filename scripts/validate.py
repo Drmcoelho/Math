@@ -64,7 +64,7 @@ def main() -> None:
         fail(f"referências locais ausentes: {missing}")
 
     sections = re.findall(r'<section\s+id="([^"]+)"', html)
-    expected = [f"c{i}" for i in range(1, 13)] + ["epi"]
+    expected = ["p1", "p2", "p3", "p4"] + [f"c{i}" for i in range(1, 13)] + ["epi"]
     if sections != expected:
         fail(f"ordem de seções inesperada: {sections}")
 
