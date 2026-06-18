@@ -141,12 +141,25 @@ button.sm{font-size:.62rem;padding:.3rem .7rem}
 .ex-hint.show{display:block}
 .ex-sol{border-top:1px solid var(--border);padding:1.1rem 1.2rem;background:var(--surface);display:none;font-size:.9rem;line-height:1.75}
 .ex-sol.show{display:block}
-.ex-sol .sol-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.7rem}
+.ex-sol .sol-label,.mcq-fb .sol-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.7rem}
 .ex-sol .sstep{font-family:var(--font-mono);font-size:.86rem;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.5rem .8rem;margin:.5rem 0;line-height:1.7;overflow-x:auto}
 .ex-sol .sstep .an{color:var(--muted);font-size:.78rem}
 .ex-sol p{margin:.6rem 0}
 .ex-sol .ans{color:var(--green);font-weight:600}
 .ex-sol strong{color:#fff}
+.ex-group-label{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bluelight);border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:2.2rem 0 1.1rem}
+.ex-group-label .gl-sub{color:var(--muted);letter-spacing:.04em;text-transform:none;font-size:.7rem}
+.ex-list{margin:0}
+.mcq-opts{display:flex;flex-direction:column;gap:.5rem;margin:.2rem 0 0}
+.mcq-opt{text-align:left;border:1px solid var(--border);background:var(--bg2);color:var(--text);padding:.6rem .9rem;border-radius:5px;cursor:pointer;font-family:var(--font-body);font-size:.9rem;text-transform:none;letter-spacing:0;transition:border-color .15s,background .15s}
+.mcq-opt:hover{border-color:var(--blue-dim)}
+.mcq-opt .mk{font-family:var(--font-mono);color:var(--muted);margin-right:.6rem}
+.mcq-opt.correct{border-color:var(--green);background:rgba(79,184,122,.12);color:#fff}
+.mcq-opt.correct .mk{color:var(--green)}
+.mcq-opt.wrong{border-color:var(--red);background:rgba(208,90,90,.1)}
+.mcq-opt.wrong .mk{color:var(--red)}
+.mcq-fb{border-top:1px solid var(--border);margin-top:.7rem;padding-top:.7rem;font-size:.88rem;line-height:1.7;display:none}
+.mcq-fb.show{display:block}
 
 footer{padding:4rem 1.5rem;text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:.74rem;letter-spacing:.06em;line-height:2}
 footer .sig{color:var(--text-dim)}
@@ -839,71 +852,95 @@ const EX = {}; // preenchido por cada fundamento: EX.f1 = [...]
 const LEVEL_LABEL = {facil:'fácil', medio:'médio', dificil:'difícil', desafio:'desafio'};
 
 function renderExercises(setId, containerId){
-  const data = EX[setId] || [];
+  const data = EX[setId];
   const box = document.getElementById(containerId);
-  if(!box) return;
-  let solvedCount = 0;
-  const prog = document.createElement('div'); prog.className='ex-progress';
-  prog.id = containerId+'-prog';
-  function updateProg(){
-    prog.textContent = solvedCount+' / '+data.length+' solu\u00e7\u00f5es abertas';
-  }
-  // filter bar
-  const filter = document.createElement('div'); filter.className='ex-filter';
-  const levels = ['todos','facil','medio','dificil','desafio'];
-  let activeFilter='todos';
-  levels.forEach(lv=>{
-    const b=document.createElement('button');
-    b.textContent = lv==='todos'?'todos':LEVEL_LABEL[lv];
-    if(lv==='todos') b.classList.add('on');
-    b.addEventListener('click',()=>{
-      activeFilter=lv;
-      filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
-      b.classList.add('on');
-      list.querySelectorAll('.ex').forEach(card=>{
-        card.style.display = (lv==='todos'||card.dataset.level===lv)?'':'none';
-      });
-    });
-    filter.appendChild(b);
-  });
-  const head = document.createElement('div'); head.className='ex-head';
-  const h3 = document.createElement('h3'); h3.textContent='Exerc\u00edcios';
-  head.appendChild(h3); head.appendChild(prog);
-  box.appendChild(head); box.appendChild(filter);
+  if(!box || !data) return;
+  let solved = 0, total = 0;
+  const prog = document.createElement('div'); prog.className='ex-progress'; prog.id = containerId+'-prog';
+  const bump = ()=>{ solved++; prog.textContent = solved+' / '+total+' resolvidos'; };
 
-  const list = document.createElement('div');
-  data.forEach((ex,i)=>{
+  function buildFree(ex, n){
     const card=document.createElement('div'); card.className='ex'; card.dataset.level=ex.level;
     const q=document.createElement('div'); q.className='ex-q';
-    const num=document.createElement('div'); num.className='ex-num'; num.textContent=(i+1)+'.';
+    const num=document.createElement('div'); num.className='ex-num'; num.textContent=n+'.';
     const body=document.createElement('div'); body.className='ex-body';
     const qt=document.createElement('div'); qt.className='ex-qtext';
     qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
     const actions=document.createElement('div'); actions.className='ex-actions';
-    const hintBtn = ex.hint ? document.createElement('button') : null;
-    const solBtn=document.createElement('button'); solBtn.className='sec'; solBtn.textContent='ver solu\u00e7\u00e3o';
-    const hint = ex.hint ? document.createElement('div') : null;
-    if(hint){ hint.className='ex-hint'; hint.innerHTML='<strong>Dica:</strong> '+ex.hint;
-      hintBtn.className='sm'; hintBtn.textContent='dica';
-      hintBtn.addEventListener('click',()=>hint.classList.toggle('show'));
-      actions.appendChild(hintBtn);
-    }
-    actions.appendChild(solBtn);
-    const sol=document.createElement('div'); sol.className='ex-sol';
-    sol.innerHTML='<span class="sol-label">solu\u00e7\u00e3o passo a passo</span>'+ex.sol;
-    solBtn.addEventListener('click',()=>{
-      const wasShown=sol.classList.contains('show');
-      sol.classList.toggle('show');
-      solBtn.textContent = sol.classList.contains('show')?'ocultar solu\u00e7\u00e3o':'ver solu\u00e7\u00e3o';
-      if(!wasShown && !sol.dataset.counted){ sol.dataset.counted='1'; solvedCount++; updateProg(); }
-    });
+    let hint=null;
+    if(ex.hint){ hint=document.createElement('div'); hint.className='ex-hint'; hint.innerHTML='<strong>Dica:</strong> '+ex.hint;
+      const hb=document.createElement('button'); hb.className='sm'; hb.textContent='dica';
+      hb.addEventListener('click',()=>hint.classList.toggle('show')); actions.appendChild(hb); }
+    const solBtn=document.createElement('button'); solBtn.className='sec'; solBtn.textContent='ver solu\u00e7\u00e3o'; actions.appendChild(solBtn);
+    const sol=document.createElement('div'); sol.className='ex-sol'; sol.innerHTML='<span class="sol-label">solu\u00e7\u00e3o passo a passo</span>'+ex.sol;
+    solBtn.addEventListener('click',()=>{ const was=sol.classList.contains('show'); sol.classList.toggle('show');
+      solBtn.textContent=sol.classList.contains('show')?'ocultar solu\u00e7\u00e3o':'ver solu\u00e7\u00e3o';
+      if(!was && !sol.dataset.counted){ sol.dataset.counted='1'; bump(); } });
     body.appendChild(qt); body.appendChild(actions); if(hint) body.appendChild(hint);
-    q.appendChild(num); q.appendChild(body);
-    card.appendChild(q); card.appendChild(sol);
-    list.appendChild(card);
+    q.appendChild(num); q.appendChild(body); card.appendChild(q); card.appendChild(sol);
+    return card;
+  }
+  function buildMCQ(ex, n){
+    const card=document.createElement('div'); card.className='ex'; card.dataset.level=ex.level;
+    const q=document.createElement('div'); q.className='ex-q';
+    const num=document.createElement('div'); num.className='ex-num'; num.textContent=n+'.';
+    const body=document.createElement('div'); body.className='ex-body';
+    const qt=document.createElement('div'); qt.className='ex-qtext';
+    qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const opts=document.createElement('div'); opts.className='mcq-opts';
+    const fb=document.createElement('div'); fb.className='mcq-fb'; fb.innerHTML='<span class="sol-label">por qu\u00ea</span>'+(ex.sol||'');
+    let answered=false;
+    ex.options.forEach((opt,oi)=>{
+      const b=document.createElement('button'); b.className='mcq-opt'; b.type='button';
+      b.innerHTML='<span class="mk">'+String.fromCharCode(65+oi)+'</span>'+opt;
+      b.addEventListener('click',()=>{ if(answered) return; answered=true;
+        const ok = oi===ex.answer; b.classList.add(ok?'correct':'wrong');
+        if(!ok) opts.children[ex.answer].classList.add('correct');
+        fb.classList.add('show'); bump(); });
+      opts.appendChild(b);
+    });
+    body.appendChild(qt); body.appendChild(opts); body.appendChild(fb);
+    q.appendChild(num); q.appendChild(body); card.appendChild(q);
+    return card;
+  }
+
+  let groups;
+  if(Array.isArray(data)){
+    groups=[{label:'Exerc\u00edcios', sub:'', type:'free', items:data}];
+  } else {
+    groups=[
+      {label:'Aquecimento', sub:'pr\u00e9-requisitos \u2014 ainda mais b\u00e1sico que o m\u00f3dulo', type:'free', items:data.basico||[]},
+      {label:'Consolida\u00e7\u00e3o', sub:'fixar e conectar com o que j\u00e1 vimos', type:'free', items:data.consolida||[]},
+      {label:'M\u00faltipla escolha', sub:'dificuldade crescente', type:'mcq', items:data.mcq||[]},
+    ];
+  }
+  total = groups.reduce((s,g)=>s+g.items.length,0);
+
+  // filter bar (por n\u00edvel, vale para todos os grupos)
+  const filter = document.createElement('div'); filter.className='ex-filter';
+  ['todos','facil','medio','dificil','desafio'].forEach(lv=>{
+    const b=document.createElement('button'); b.textContent = lv==='todos'?'todos':LEVEL_LABEL[lv];
+    if(lv==='todos') b.classList.add('on');
+    b.addEventListener('click',()=>{ filter.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      box.querySelectorAll('.ex').forEach(card=>{ card.style.display=(lv==='todos'||card.dataset.level===lv)?'':'none'; }); });
+    filter.appendChild(b);
   });
-  box.appendChild(list);
-  updateProg();
+  const head = document.createElement('div'); head.className='ex-head';
+  const h3 = document.createElement('h3'); h3.textContent='Exerc\u00edcios'; head.appendChild(h3); head.appendChild(prog);
+  box.appendChild(head); box.appendChild(filter);
+  prog.textContent = '0 / '+total+' resolvidos';
+
+  groups.forEach(g=>{
+    if(!g.items.length) return;
+    if(groups.length>1){
+      const gl=document.createElement('div'); gl.className='ex-group-label';
+      gl.innerHTML='<span>'+g.label+'</span><span class="gl-sub">'+g.sub+' \u00b7 '+g.items.length+'</span>';
+      box.appendChild(gl);
+    }
+    const list=document.createElement('div'); list.className='ex-list';
+    g.items.forEach((ex,i)=> list.appendChild(g.type==='mcq'?buildMCQ(ex,i+1):buildFree(ex,i+1)));
+    box.appendChild(list);
+  });
 }
 // ── EXERCÍCIOS F1: equação como balança ──
 EX.f1 = [
@@ -1563,6 +1600,65 @@ const C={amber:'#e8a838',blue:'#5d8fcc',bluedim:'#4a6fa5',bluelight:'#8fb4e0',
 // ═══════════════════════════════════════════════════════════
 // RENDER EXERCÍCIOS + PROGRESS/NAV
 // ═══════════════════════════════════════════════════════════
+// ── F1 EXPANDIDO: 10 aquecimento + 20 consolidação + 20 MCQ (substitui a lista antiga acima) ──
+EX.f1 = {
+basico:[
+ {level:'facil',q:'Quanto é <code>7 + 5</code>?',sol:'<div class="sstep">7 + 5 = 12</div><p class="ans">12</p>'},
+ {level:'facil',q:'Quanto é <code>13 − 8</code>? (a subtração desfaz a soma)',sol:'<div class="sstep">13 − 8 = 5<br><span class="an">// subtrair desfaz somar</span></div><p class="ans">5</p>'},
+ {level:'facil',q:'Quanto é <code>6 × 7</code>?',sol:'<div class="sstep">6 × 7 = 42</div><p class="ans">42</p>'},
+ {level:'facil',q:'Quanto é <code>56 ÷ 8</code>? (a divisão desfaz a multiplicação)',sol:'<div class="sstep">56 ÷ 8 = 7<br><span class="an">// dividir desfaz multiplicar</span></div><p class="ans">7</p>'},
+ {level:'facil',q:'Qual operação <strong>desfaz</strong> “somar 9”?',hint:'O oposto de somar.',sol:'<div class="sstep"><span class="an">// a inversa da soma é a subtração</span><br>desfaz(+9) = −9</div><p class="ans">Subtrair 9.</p>'},
+ {level:'facil',q:'Qual operação <strong>desfaz</strong> “multiplicar por 4”?',sol:'<div class="sstep"><span class="an">// a inversa da multiplicação é a divisão</span><br>desfaz(×4) = ÷4</div><p class="ans">Dividir por 4.</p>'},
+ {level:'facil',q:'Se <code>5 + 2 = 7</code>, é verdade que <code>7 = 5 + 2</code>?',hint:'A igualdade é uma via de mão dupla.',sol:'<div class="sstep"><span class="an">// igualdade é simétrica</span></div><p class="ans">Sim — vale nos dois sentidos.</p>'},
+ {level:'facil',q:'Uma balança está equilibrada. Coloco <strong>3 kg em cada</strong> prato. Continua equilibrada?',sol:'<div class="sstep"><span class="an">// mesma coisa dos dois lados → equilíbrio preservado</span></div><p class="ans">Sim. É a regra de ouro das equações.</p>'},
+ {level:'facil',q:'Qual é o <strong>dobro</strong> de 110?',sol:'<div class="sstep">2 × 110 = 220</div><p class="ans">220 (uma oitava acima).</p>'},
+ {level:'facil',q:'Qual é a <strong>metade</strong> de 220? (a metade desfaz o dobro)',sol:'<div class="sstep">220 ÷ 2 = 110<br><span class="an">// metade desfaz o dobro</span></div><p class="ans">110.</p>'}
+],
+consolida:[
+ {level:'facil',q:'Resolva <code>x + 7 = 12</code>.',hint:'Aquecimento: o que desfaz “+7”? Subtrair 7 — dos DOIS lados.',sol:'<div class="sstep">x + 7 = 12<br><span class="an">// −7 dos dois lados (balança):</span><br>x = 12 − 7<br>x = 5</div><p class="ans">x = 5</p>'},
+ {level:'facil',q:'Resolva <code>x − 4 = 9</code>.',sol:'<div class="sstep">x − 4 = 9<br><span class="an">// +4 dos dois lados:</span><br>x = 13</div><p class="ans">x = 13</p>'},
+ {level:'facil',q:'Resolva <code>5x = 60</code>.',hint:'O que desfaz “×5”? (aquecimento nº 6)',sol:'<div class="sstep">5x = 60<br><span class="an">// ÷5 dos dois lados:</span><br>x = 12</div><p class="ans">x = 12</p>'},
+ {level:'facil',q:'Resolva <code>x / 3 = 7</code>.',sol:'<div class="sstep">x/3 = 7<br><span class="an">// ×3 dos dois lados:</span><br>x = 21</div><p class="ans">x = 21</p>'},
+ {level:'medio',q:'Resolva <code>3x − 4 = 20</code>.',hint:'Primeiro o número (+4), depois o coeficiente (÷3).',sol:'<div class="sstep">3x − 4 = 20<br><span class="an">// +4:</span><br>3x = 24<br><span class="an">// ÷3:</span><br>x = 8</div><p class="ans">x = 8</p>'},
+ {level:'medio',q:'Resolva <code>2x + 5 = 21</code>.',sol:'<div class="sstep">2x + 5 = 21<br><span class="an">// −5:</span><br>2x = 16<br><span class="an">// ÷2:</span><br>x = 8</div><p class="ans">x = 8</p>'},
+ {level:'medio',q:'Resolva <code>4x + 3 = x + 12</code> (x dos dois lados).',hint:'Junte os x de um lado fazendo a operação inversa nos dois lados.',sol:'<div class="sstep">4x + 3 = x + 12<br><span class="an">// −x:</span><br>3x + 3 = 12<br><span class="an">// −3:</span><br>3x = 9<br><span class="an">// ÷3:</span><br>x = 3</div><p class="ans">x = 3</p>'},
+ {level:'medio',q:'Resolva <code>7 − 2x = 1</code>.',sol:'<div class="sstep">7 − 2x = 1<br><span class="an">// −7:</span><br>−2x = −6<br><span class="an">// ÷(−2):</span><br>x = 3</div><p class="ans">x = 3</p>'},
+ {level:'medio',q:'Resolva <code>(x/2) + 5 = 11</code>.',sol:'<div class="sstep">(x/2) + 5 = 11<br><span class="an">// −5:</span><br>x/2 = 6<br><span class="an">// ×2:</span><br>x = 12</div><p class="ans">x = 12</p>'},
+ {level:'facil',q:'Uma corda soa a 110 Hz. Uma <strong>oitava acima</strong> dobra a frequência. Qual é?',hint:'Dobrar (aquecimento nº 9).',sol:'<div class="sstep">f = 2 × 110 = 220</div><p class="ans">220 Hz</p>'},
+ {level:'medio',q:'<strong>Duas</strong> oitavas acima de 55 Hz (dobra duas vezes). Qual frequência?',sol:'<div class="sstep">55 × 2 = 110<br>110 × 2 = 220<br><span class="an">// dobrar duas vezes = ×4</span></div><p class="ans">220 Hz</p>'},
+ {level:'medio',q:'Uma nota está uma oitava <strong>abaixo</strong> de 440 Hz. Monte e resolva <code>2f = 440</code>.',hint:'Uma oitava abaixo é a metade — a inversa de dobrar.',sol:'<div class="sstep">2f = 440<br><span class="an">// ÷2:</span><br>f = 220</div><p class="ans">f = 220 Hz</p>'},
+ {level:'medio',q:'Resolva <code>6(x − 1) = 30</code>.',hint:'Pode dividir por 6 primeiro, ou distribuir.',sol:'<div class="sstep">6(x − 1) = 30<br><span class="an">// ÷6:</span><br>x − 1 = 5<br><span class="an">// +1:</span><br>x = 6</div><p class="ans">x = 6</p>'},
+ {level:'medio',q:'Resolva <code>2(x + 3) = x + 10</code>.',sol:'<div class="sstep">2(x + 3) = x + 10<br><span class="an">// distribuo o 2:</span><br>2x + 6 = x + 10<br><span class="an">// −x:</span><br>x + 6 = 10<br><span class="an">// −6:</span><br>x = 4</div><p class="ans">x = 4</p>'},
+ {level:'facil',q:'Resolva <code>0,5x = 7</code>.',hint:'Multiplicar por 0,5 é dividir por 2; desfaça multiplicando por 2.',sol:'<div class="sstep">0,5x = 7<br><span class="an">// ×2:</span><br>x = 14</div><p class="ans">x = 14</p>'},
+ {level:'facil',q:'Resolva <code>10 − x = 3</code>.',sol:'<div class="sstep">10 − x = 3<br><span class="an">// −10:</span><br>−x = −7<br><span class="an">// ×(−1):</span><br>x = 7</div><p class="ans">x = 7</p>'},
+ {level:'medio',q:'Resolva <code>3x = 2x + 9</code>.',sol:'<div class="sstep">3x = 2x + 9<br><span class="an">// −2x:</span><br>x = 9</div><p class="ans">x = 9</p>'},
+ {level:'facil',q:'A frequência subiu 12 Hz e chegou a 60 Hz. De quanto partiu? (<code>x + 12 = 60</code>)',sol:'<div class="sstep">x + 12 = 60<br><span class="an">// −12:</span><br>x = 48</div><p class="ans">48 Hz</p>'},
+ {level:'dificil',q:'Resolva <code>5x − 2 = 3x + 10</code>.',hint:'x de um lado, números do outro.',sol:'<div class="sstep">5x − 2 = 3x + 10<br><span class="an">// −3x:</span><br>2x − 2 = 10<br><span class="an">// +2:</span><br>2x = 12<br><span class="an">// ÷2:</span><br>x = 6</div><p class="ans">x = 6</p>'},
+ {level:'dificil',q:'Resolva <code>(2x − 1)/3 = 5</code>.',hint:'Tire a fração de uma vez: ×3 primeiro.',sol:'<div class="sstep">(2x − 1)/3 = 5<br><span class="an">// ×3:</span><br>2x − 1 = 15<br><span class="an">// +1:</span><br>2x = 16<br><span class="an">// ÷2:</span><br>x = 8</div><p class="ans">x = 8</p>'}
+],
+mcq:[
+ {level:'facil',q:'Quanto é <code>3 + 9</code>?',options:['11','12','13','21'],answer:1,sol:'3 + 9 = 12.'},
+ {level:'facil',q:'Qual operação desfaz “+6”?',options:['somar 6','subtrair 6','multiplicar por 6','dividir por 6'],answer:1,sol:'A inversa da soma é a subtração.'},
+ {level:'facil',q:'Solução de <code>x + 2 = 9</code>:',options:['7','11','2','9'],answer:0,sol:'x = 9 − 2 = 7.'},
+ {level:'facil',q:'Solução de <code>4x = 20</code>:',options:['16','24','5','80'],answer:2,sol:'x = 20 ÷ 4 = 5.'},
+ {level:'facil',q:'Solução de <code>x − 5 = 5</code>:',options:['0','5','10','25'],answer:2,sol:'x = 5 + 5 = 10.'},
+ {level:'facil',q:'Solução de <code>x / 2 = 8</code>:',options:['4','10','16','6'],answer:2,sol:'x = 8 × 2 = 16.'},
+ {level:'medio',q:'Solução de <code>2x + 1 = 11</code>:',options:['5','6','4','10'],answer:0,sol:'2x = 10; x = 5.'},
+ {level:'medio',q:'Solução de <code>3x − 6 = 9</code>:',options:['1','3','5','15'],answer:2,sol:'3x = 15; x = 5.'},
+ {level:'medio',q:'Solução de <code>5 = 10 − x</code>:',options:['5','15','−5','2'],answer:0,sol:'−x = −5; x = 5.'},
+ {level:'facil',q:'Uma oitava acima de 220 Hz:',options:['110 Hz','330 Hz','440 Hz','660 Hz'],answer:2,sol:'Dobra: 2 × 220 = 440 Hz.'},
+ {level:'medio',q:'Duas oitavas acima de 110 Hz:',options:['220 Hz','330 Hz','440 Hz','880 Hz'],answer:2,sol:'×2 duas vezes = ×4: 110 × 4 = 440 Hz.'},
+ {level:'medio',q:'Uma oitava abaixo de 880 Hz:',options:['440 Hz','660 Hz','220 Hz','1760 Hz'],answer:0,sol:'Metade: 880 ÷ 2 = 440 Hz.'},
+ {level:'medio',q:'Solução de <code>4x + 2 = 2x + 10</code>:',options:['2','4','6','8'],answer:1,sol:'2x = 8; x = 4.'},
+ {level:'medio',q:'Solução de <code>6(x + 1) = 42</code>:',options:['5','6','7','8'],answer:1,sol:'x + 1 = 7; x = 6.'},
+ {level:'medio',q:'Solução de <code>(x/3) + 4 = 10</code>:',options:['6','18','2','30'],answer:1,sol:'x/3 = 6; x = 18.'},
+ {level:'dificil',q:'Solução de <code>7x − 3 = 4x + 9</code>:',options:['3','4','6','12'],answer:1,sol:'3x = 12; x = 4.'},
+ {level:'dificil',q:'Solução de <code>2(x − 3) = x + 1</code>:',options:['5','7','9','−7'],answer:1,sol:'2x − 6 = x + 1; x = 7.'},
+ {level:'dificil',q:'Solução de <code>(3x + 1)/2 = 8</code>:',options:['3','5','7','15'],answer:1,sol:'3x + 1 = 16; 3x = 15; x = 5.'},
+ {level:'dificil',q:'Três oitavas acima de 55 Hz:',options:['220 Hz','330 Hz','440 Hz','165 Hz'],answer:2,sol:'×2 três vezes = ×8: 55 × 8 = 440 Hz.'},
+ {level:'desafio',q:'Solução de <code>5(x − 2) = 3(x + 2) + 2</code>:',options:['7','8','9','10'],answer:2,sol:'5x − 10 = 3x + 8; 2x = 18; x = 9.'}
+]
+};
 ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11'].forEach(id=>{
   renderExercises(id,'ex-'+id);
 });
