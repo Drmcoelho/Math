@@ -9,7 +9,7 @@ O projeto é propositalmente simples: um `index.html` estático, sem build obrig
 ## Conteúdo
 
 - `index.html` — caderno principal *Why Machines Learn*, single-file.
-- `matematica-introdutoria.html` — pré-caderno com a matemática introdutória do livro, do zero e na ordem da cadeia causal (vetor, produto escalar, matriz, variância/PCA, probabilidade, gradiente). KaTeX local, offline-first.
+- `matematica-introdutoria.html` — pré-caderno com a matemática introdutória do livro, do zero e na ordem da cadeia causal (vetor, produto escalar, matriz, variância/PCA, probabilidade, gradiente), com exercícios e solução passo a passo. KaTeX local, offline-first.
 - `matematica-fundamental.html` — pré-caderno de matemática do zero (variável, razão, fração, potências, função, logaritmo, seno, somatório, derivada, integral, equação de onda). Offline-first, sem dependências.
 - `musica-matematica.html` — caderno dedutivo *A Matemática da Música* (corda vibrante, timbre, consonância, batimentos, cents, escala, temperamento, tonalidade). Offline-first, sem dependências.
 - `favicon.svg` — ícone vetorial.
