@@ -1836,6 +1836,183 @@ mcq:[
  {level:'desafio',q:'<code>(2^(1/12))²⁴</code> =',options:['2','4','8','16'],answer:1,sol:'2^(24/12) = 2² = 4.'}
 ]
 };
+// ── F5 EXPANDIDO: função (máquina entrada→saída) ──
+EX.f5 = {
+basico:[
+ {level:'facil',q:'Uma máquina “soma 3”. Entra 5, sai quanto?',sol:'<div class="sstep">5 + 3 = 8</div><p class="ans">8</p>'},
+ {level:'facil',q:'Uma máquina “dobra”. Entra 4, sai?',sol:'<div class="sstep">2 × 4 = 8</div><p class="ans">8</p>'},
+ {level:'facil',q:'Máquina “×10”. Entra 7, sai?',sol:'<div class="sstep">7 × 10 = 70</div><p class="ans">70</p>'},
+ {level:'facil',q:'Substitua x = 2 em <code>x + 1</code>.',sol:'<div class="sstep">2 + 1 = 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'Substitua x = 3 em <code>2x</code>.',sol:'<div class="sstep">2 × 3 = 6</div><p class="ans">6</p>'},
+ {level:'facil',q:'Substitua x = 0 em <code>5x + 1</code>.',sol:'<div class="sstep">5·0 + 1 = 1</div><p class="ans">1</p>'},
+ {level:'facil',q:'Máquina “subtrai 2”. Entra 10, sai?',sol:'<div class="sstep">10 − 2 = 8</div><p class="ans">8</p>'},
+ {level:'facil',q:'Substitua x = 4 em <code>x²</code>. (callback F4)',sol:'<div class="sstep">4² = 16</div><p class="ans">16</p>'},
+ {level:'facil',q:'Máquina “metade”. Entra 10, sai?',sol:'<div class="sstep">10 ÷ 2 = 5</div><p class="ans">5</p>'},
+ {level:'facil',q:'Que entrada faz a máquina “soma 3” devolver 10?',hint:'Inverta: desfaça o +3 (F1).',sol:'<div class="sstep">x + 3 = 10 → x = 7</div><p class="ans">7</p>'}
+],
+consolida:[
+ {level:'facil',q:'<code>f(x) = 2x + 1</code>. Quanto é f(3)?',sol:'<div class="sstep">2·3 + 1 = 7</div><p class="ans">7</p>'},
+ {level:'facil',q:'<code>f(x) = x² − 1</code>. Quanto é f(4)?',sol:'<div class="sstep">4² − 1 = 16 − 1 = 15</div><p class="ans">15</p>'},
+ {level:'facil',q:'<code>f(x) = 3x</code>. Quanto é f(0)?',sol:'<div class="sstep">3·0 = 0</div><p class="ans">0</p>'},
+ {level:'facil',q:'<code>g(x) = x/2 + 5</code>. Quanto é g(8)?',sol:'<div class="sstep">8/2 + 5 = 4 + 5 = 9</div><p class="ans">9</p>'},
+ {level:'medio',q:'<code>f(x) = 2x</code>. Para que x temos f(x) = 10?',hint:'Inverta: ÷2.',sol:'<div class="sstep">2x = 10 → x = 5</div><p class="ans">x = 5</p>'},
+ {level:'facil',q:'A função “oitava” dobra: <code>oct(f) = 2f</code>. oct(220)?',sol:'<div class="sstep">2 × 220 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Componha: <code>oct(oct(110))</code>.',hint:'Aplique a máquina duas vezes.',sol:'<div class="sstep">oct(110)=220<br>oct(220)=440</div><p class="ans">440 Hz (duas oitavas)</p>'},
+ {level:'medio',q:'O semitom <code>s(f) = f·2^(1/12)</code> aplicado 12 vezes multiplica f por quanto? (callback F4)',sol:'<div class="sstep">(2^(1/12))¹² = 2</div><p class="ans">×2 (uma oitava).</p>'},
+ {level:'medio',q:'Qual a inversa de <code>f(x) = x + 7</code>?',hint:'Desfaça o +7 (F1).',sol:'<div class="sstep"><span class="an">// a inversa subtrai 7</span><br>f⁻¹(x) = x − 7</div><p class="ans">x − 7</p>'},
+ {level:'medio',q:'Qual a inversa de <code>f(x) = 5x</code>?',sol:'<div class="sstep">f⁻¹(x) = x/5</div><p class="ans">x/5</p>'},
+ {level:'medio',q:'<code>f(x) = 2x + 1</code>. Quanto é f(f(0))?',sol:'<div class="sstep">f(0) = 1<br>f(1) = 2·1+1 = 3</div><p class="ans">3</p>'},
+ {level:'medio',q:'<code>f(x) = x²</code>. Quanto é f(−3)?',sol:'<div class="sstep">(−3)² = 9</div><p class="ans">9</p>'},
+ {level:'medio',q:'<code>h(t) = 1/t</code>. Quanto é h(0,01)? (callback F3)',sol:'<div class="sstep">1/0,01 = 100</div><p class="ans">100</p>'},
+ {level:'facil',q:'<code>f(x) = 10 − x</code>. Quanto é f(7)?',sol:'<div class="sstep">10 − 7 = 3</div><p class="ans">3</p>'},
+ {level:'medio',q:'<code>f(x) = 3x − 2</code>. Resolva f(x) = 10.',sol:'<div class="sstep">3x − 2 = 10<br>3x = 12<br>x = 4</div><p class="ans">x = 4</p>'},
+ {level:'medio',q:'Custo <code>c(n) = 2n + 5</code>. Quanto é c(10)?',sol:'<div class="sstep">2·10 + 5 = 25</div><p class="ans">25</p>'},
+ {level:'facil',q:'<code>f(x) = x/3</code>. Quanto é f(21)?',sol:'<div class="sstep">21/3 = 7</div><p class="ans">7</p>'},
+ {level:'dificil',q:'<code>f(x) = 2x + 1</code>, <code>g(x) = x − 1</code>. Quanto é f(g(4))?',hint:'Primeiro g, depois f.',sol:'<div class="sstep">g(4) = 3<br>f(3) = 2·3+1 = 7</div><p class="ans">7</p>'},
+ {level:'dificil',q:'Ache a inversa de <code>f(x) = 2x + 1</code>.',hint:'Desfaça na ordem inversa: −1, depois ÷2.',sol:'<div class="sstep">y = 2x + 1<br><span class="an">// −1:</span> y − 1 = 2x<br><span class="an">// ÷2:</span> x = (y−1)/2</div><p class="ans">f⁻¹(x) = (x − 1)/2</p>'},
+ {level:'desafio',q:'A função “quinta” é <code>q(f) = f·3/2</code>. Quanto é q(q(100))? (callback F2)',sol:'<div class="sstep">q(100) = 150<br>q(150) = 225</div><p class="ans">225 Hz</p>'}
+],
+mcq:[
+ {level:'facil',q:'Máquina “soma 3”, entra 5:',options:['2','8','15','3'],answer:1,sol:'5+3 = 8.'},
+ {level:'facil',q:'<code>f(x)=2x</code>, f(3):',options:['5','6','8','9'],answer:1,sol:'2·3 = 6.'},
+ {level:'facil',q:'x = 2 em <code>x + 1</code>:',options:['1','2','3','4'],answer:2,sol:'3.'},
+ {level:'facil',q:'<code>f(x)=x²</code>, f(4):',options:['8','12','16','20'],answer:2,sol:'4² = 16.'},
+ {level:'facil',q:'Inversa de “soma 7”:',options:['×7','subtrair 7','÷7','+7 de novo'],answer:1,sol:'Desfaz somando o oposto.'},
+ {level:'facil',q:'<code>f(x)=3x</code>, f(0):',options:['0','3','1','indefinido'],answer:0,sol:'3·0 = 0.'},
+ {level:'facil',q:'<code>oct(f)=2f</code>, oct(220):',options:['110','330','440','660'],answer:2,sol:'×2 = 440.'},
+ {level:'medio',q:'<code>f(x)=2x</code>, f(x)=10 → x:',options:['5','8','12','20'],answer:0,sol:'÷2 = 5.'},
+ {level:'medio',q:'<code>f(x)=x/2+5</code>, f(8):',options:['9','13','4','8'],answer:0,sol:'4+5 = 9.'},
+ {level:'facil',q:'<code>f(x)=x−2</code>, f(10):',options:['8','12','5','20'],answer:0,sol:'8.'},
+ {level:'medio',q:'<code>oct(oct(110))</code>:',options:['220','330','440','880'],answer:2,sol:'110→220→440.'},
+ {level:'medio',q:'Inversa de <code>f(x)=5x</code>:',options:['x/5','x−5','5x','x+5'],answer:0,sol:'÷5.'},
+ {level:'medio',q:'<code>f(x)=2x+1</code>, f(f(0)):',options:['1','2','3','5'],answer:2,sol:'f(0)=1, f(1)=3.'},
+ {level:'medio',q:'<code>h(t)=1/t</code>, h(0,01):',options:['10','100','1000','0,1'],answer:1,sol:'1/0,01 = 100.'},
+ {level:'medio',q:'<code>f(x)=3x−2</code>, f(x)=10 → x:',options:['3','4','6','12'],answer:1,sol:'3x=12, x=4.'},
+ {level:'medio',q:'<code>c(n)=2n+5</code>, c(10):',options:['20','25','15','30'],answer:1,sol:'25.'},
+ {level:'dificil',q:'f(g(4)) com f=2x+1, g=x−1:',options:['5','7','9','3'],answer:1,sol:'g(4)=3, f(3)=7.'},
+ {level:'dificil',q:'Inversa de <code>f(x)=2x+1</code>:',options:['(x−1)/2','2x−1','x/2+1','(x+1)/2'],answer:0,sol:'−1 depois ÷2.'},
+ {level:'dificil',q:'<code>2^(1/12)</code> aplicado 12 vezes multiplica f por:',options:['×2','×12','×1','×4'],answer:0,sol:'(2^(1/12))¹² = 2.'},
+ {level:'desafio',q:'Quinta (×3/2) aplicada duas vezes a 100 Hz:',options:['150','200','225','300'],answer:2,sol:'100→150→225.'}
+]
+};
+// ── F6 EXPANDIDO: logaritmo (a inversa da exponencial; × vira +) ──
+EX.f6 = {
+basico:[
+ {level:'facil',q:'<code>2^? = 8</code>. Qual o expoente?',hint:'Quantos 2 multiplicados dão 8?',sol:'<div class="sstep">2·2·2 = 8 → expoente 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'<code>10^? = 100</code>?',sol:'<div class="sstep">10² = 100 → 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'<code>2^? = 16</code>?',sol:'<div class="sstep">2⁴ = 16 → 4</div><p class="ans">4</p>'},
+ {level:'facil',q:'<code>3^? = 9</code>?',sol:'<div class="sstep">3² = 9 → 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'<code>10^? = 1000</code>?',sol:'<div class="sstep">10³ = 1000 → 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'<code>2^? = 2</code>?',sol:'<div class="sstep">2¹ = 2 → 1</div><p class="ans">1</p>'},
+ {level:'facil',q:'<code>2^? = 1</code>?',hint:'Qualquer base elevada a 0.',sol:'<div class="sstep">2⁰ = 1 → 0</div><p class="ans">0</p>'},
+ {level:'facil',q:'<code>5^? = 25</code>?',sol:'<div class="sstep">5² = 25 → 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'Em uma frase: o que o logaritmo pergunta?',sol:'<div class="sstep"><span class="an">// log_b(x) = “a que expoente elevo b para obter x?”</span></div><p class="ans">“A que expoente elevo a base?”</p>'},
+ {level:'facil',q:'<code>10^? = 10</code>?',sol:'<div class="sstep">10¹ = 10 → 1</div><p class="ans">1</p>'}
+],
+consolida:[
+ {level:'facil',q:'<code>log₂(8)</code> = ?',sol:'<div class="sstep">2³ = 8</div><p class="ans">3</p>'},
+ {level:'facil',q:'<code>log₁₀(100)</code> = ?',sol:'<div class="sstep">10² = 100</div><p class="ans">2</p>'},
+ {level:'facil',q:'<code>log₂(16)</code> = ?',sol:'<div class="sstep">2⁴ = 16</div><p class="ans">4</p>'},
+ {level:'facil',q:'<code>log₂(1)</code> = ?',sol:'<div class="sstep">2⁰ = 1</div><p class="ans">0</p>'},
+ {level:'facil',q:'<code>log₂(2)</code> = ?',sol:'<div class="sstep">2¹ = 2</div><p class="ans">1</p>'},
+ {level:'medio',q:'O log é a <strong>inversa</strong> de quê? (como a raiz é a inversa da potência, F4)',sol:'<div class="sstep"><span class="an">// 2³ = 8 ⇔ log₂8 = 3</span></div><p class="ans">Da exponencial — desfaz o expoente.</p>'},
+ {level:'medio',q:'Use <code>log(a·b) = log a + log b</code>: calcule <code>log₂(2·4)</code>.',hint:'log₂2 + log₂4.',sol:'<div class="sstep">log₂2 + log₂4 = 1 + 2 = 3<br><span class="an">// confere: 2·4 = 8, log₂8 = 3</span></div><p class="ans">3</p>'},
+ {level:'medio',q:'<code>log₂(8·2)</code> usando a soma?',sol:'<div class="sstep">log₂8 + log₂2 = 3 + 1 = 4<br><span class="an">// = log₂16</span></div><p class="ans">4</p>'},
+ {level:'medio',q:'<code>log₁₀(10·100)</code> usando a soma?',sol:'<div class="sstep">1 + 2 = 3<br><span class="an">// = log₁₀1000</span></div><p class="ans">3</p>'},
+ {level:'medio',q:'<code>2³ = 8</code>. Reescreva como logaritmo.',hint:'A inversa troca base/expoente de lugar.',sol:'<div class="sstep"><span class="an">// expoente vira resultado do log</span><br>log₂8 = 3</div><p class="ans">log₂8 = 3</p>'},
+ {level:'medio',q:'<code>log₂(32)</code> = ? (callback F4: 2⁵=32)',sol:'<div class="sstep">2⁵ = 32</div><p class="ans">5</p>'},
+ {level:'medio',q:'<code>log₂(1/2)</code> = ? (callback F4: 2^(−1)=1/2)',sol:'<div class="sstep">2^(−1) = 1/2</div><p class="ans">−1</p>'},
+ {level:'medio',q:'<code>log₂(1/4)</code> = ?',sol:'<div class="sstep">2^(−2) = 1/4</div><p class="ans">−2</p>'},
+ {level:'medio',q:'Uma oitava vale 1200 cents. Quanto vale um semitom?',hint:'12 semitons por oitava.',sol:'<div class="sstep">1200 ÷ 12 = 100</div><p class="ans">100 cents</p>'},
+ {level:'medio',q:'Por que 220→440 Hz e 440→880 Hz são “o mesmo passo” (uma oitava), apesar de +220 vs +440 Hz?',sol:'<div class="sstep"><span class="an">// a percepção compara RAZÕES (440/220 = 880/440 = 2), não diferenças</span></div><p class="ans">Porque a altura é logarítmica: mesma razão = mesmo passo.</p>'},
+ {level:'medio',q:'<code>log₃(27)</code> = ?',sol:'<div class="sstep">3³ = 27</div><p class="ans">3</p>'},
+ {level:'facil',q:'<code>log₁₀(1)</code> = ?',sol:'<div class="sstep">10⁰ = 1</div><p class="ans">0</p>'},
+ {level:'dificil',q:'<code>log₂(8) + log₂(4)</code> = ?',hint:'Some; equivale a log₂(8·4).',sol:'<div class="sstep">3 + 2 = 5<br><span class="an">// = log₂32</span></div><p class="ans">5</p>'},
+ {level:'dificil',q:'Se <code>log₂(x) = 5</code>, quanto vale x?',hint:'Aplique a exponencial (a inversa do log).',sol:'<div class="sstep">x = 2⁵ = 32</div><p class="ans">32</p>'},
+ {level:'desafio',q:'Quantas oitavas há entre 55 Hz e 880 Hz?',hint:'Razão 880/55, depois log₂.',sol:'<div class="sstep">880/55 = 16 = 2⁴<br>log₂16 = 4</div><p class="ans">4 oitavas</p>'}
+],
+mcq:[
+ {level:'facil',q:'<code>2^? = 8</code>:',options:['2','3','4','8'],answer:1,sol:'2³ = 8.'},
+ {level:'facil',q:'<code>log₁₀(100)</code>:',options:['1','2','3','10'],answer:1,sol:'10² = 100.'},
+ {level:'facil',q:'<code>log₂(16)</code>:',options:['2','3','4','8'],answer:2,sol:'2⁴ = 16.'},
+ {level:'facil',q:'<code>log₂(1)</code>:',options:['0','1','2','−1'],answer:0,sol:'2⁰ = 1.'},
+ {level:'facil',q:'<code>log₂(2)</code>:',options:['0','1','2','4'],answer:1,sol:'2¹ = 2.'},
+ {level:'facil',q:'O log é a inversa da:',options:['raiz','exponencial','soma','divisão'],answer:1,sol:'2³=8 ⇔ log₂8=3.'},
+ {level:'medio',q:'<code>log(a·b)</code> =',options:['log a · log b','log a + log b','log a − log b','log(a+b)'],answer:1,sol:'O log transforma × em +.'},
+ {level:'medio',q:'<code>log₂(32)</code>:',options:['4','5','6','8'],answer:1,sol:'2⁵ = 32.'},
+ {level:'medio',q:'<code>log₂(1/2)</code>:',options:['−1','1','0','2'],answer:0,sol:'2^(−1) = 1/2.'},
+ {level:'facil',q:'<code>log₁₀(1000)</code>:',options:['2','3','4','10'],answer:1,sol:'10³ = 1000.'},
+ {level:'medio',q:'<code>log₃(27)</code>:',options:['2','3','9','27'],answer:1,sol:'3³ = 27.'},
+ {level:'medio',q:'<code>log₂(8) + log₂(2)</code>:',options:['3','4','5','6'],answer:1,sol:'3+1 = 4 = log₂16.'},
+ {level:'medio',q:'Um semitom, em cents:',options:['10','100','1200','12'],answer:1,sol:'1200/12 = 100.'},
+ {level:'medio',q:'Uma oitava, em cents:',options:['100','1000','1200','120'],answer:2,sol:'Por definição, 1200.'},
+ {level:'medio',q:'Se <code>log₂(x) = 4</code>, x =',options:['8','16','32','4'],answer:1,sol:'2⁴ = 16.'},
+ {level:'medio',q:'<code>log₂(1/4)</code>:',options:['−2','2','−1','4'],answer:0,sol:'2^(−2) = 1/4.'},
+ {level:'dificil',q:'Por que 220→440 e 440→880 são o mesmo passo?',options:['mesma diferença em Hz','mesma razão','coincidência','não são iguais'],answer:1,sol:'A altura é logarítmica (razões).'},
+ {level:'dificil',q:'<code>log₂(8) + log₂(4)</code>:',options:['5','6','12','2'],answer:0,sol:'3+2 = 5 = log₂32.'},
+ {level:'dificil',q:'Oitavas entre 55 e 880 Hz:',options:['3','4','5','16'],answer:1,sol:'880/55 = 16 = 2⁴.'},
+ {level:'desafio',q:'<code>log₂(64)</code>:',options:['5','6','7','8'],answer:1,sol:'2⁶ = 64.'}
+]
+};
+// ── F7 EXPANDIDO: seno (movimento circular visto de lado) ──
+EX.f7 = {
+basico:[
+ {level:'facil',q:'Quanto é <code>sen(0°)</code>?',sol:'<div class="sstep"><span class="an">// começa no centro</span></div><p class="ans">0</p>'},
+ {level:'facil',q:'Quanto é <code>sen(90°)</code>?',sol:'<div class="sstep"><span class="an">// topo do círculo</span></div><p class="ans">1</p>'},
+ {level:'facil',q:'Quanto é <code>sen(180°)</code>?',sol:'<div class="sstep"><span class="an">// volta ao centro</span></div><p class="ans">0</p>'},
+ {level:'facil',q:'Quanto é <code>sen(270°)</code>?',sol:'<div class="sstep"><span class="an">// fundo do círculo</span></div><p class="ans">−1</p>'},
+ {level:'facil',q:'Quanto é <code>sen(360°)</code>?',sol:'<div class="sstep"><span class="an">// uma volta completa</span></div><p class="ans">0</p>'},
+ {level:'facil',q:'Qual o maior valor que o seno alcança?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'Qual o menor valor do seno?',sol:'<div class="sstep"></div><p class="ans">−1</p>'},
+ {level:'facil',q:'Quantos graus tem uma volta completa?',sol:'<div class="sstep"></div><p class="ans">360°</p>'},
+ {level:'facil',q:'Meia volta tem quantos graus?',sol:'<div class="sstep"></div><p class="ans">180°</p>'},
+ {level:'facil',q:'Um quarto de volta tem quantos graus?',sol:'<div class="sstep"></div><p class="ans">90°</p>'}
+],
+consolida:[
+ {level:'facil',q:'Quanto é <code>sen(30°)</code>?',sol:'<div class="sstep"><span class="an">// valor notável</span></div><p class="ans">0,5</p>'},
+ {level:'facil',q:'O seno oscila entre quais valores?',sol:'<div class="sstep"></div><p class="ans">−1 e 1</p>'},
+ {level:'facil',q:'Em <code>A·sen(...)</code> com A = 3, qual o valor máximo?',hint:'A é a amplitude.',sol:'<div class="sstep">máx de sen é 1 → 3 × 1 = 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'Quanto é <code>2·sen(90°)</code>?',sol:'<div class="sstep">2 × 1 = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'A cada quantos graus o seno completa um ciclo?',sol:'<div class="sstep"></div><p class="ans">360° (ou 2π)</p>'},
+ {level:'medio',q:'Em <code>y = A·sen(2πf t)</code>, o que é f? (callback F3)',sol:'<div class="sstep"><span class="an">// número de ciclos por segundo</span></div><p class="ans">A frequência.</p>'},
+ {level:'facil',q:'Quanto é <code>sen(180°)</code>?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'Quanto é <code>sen(270°)</code>?',sol:'<div class="sstep"></div><p class="ans">−1</p>'},
+ {level:'medio',q:'Se a amplitude dobra de 2 para 4, qual o novo valor máximo de <code>A·sen</code>?',sol:'<div class="sstep">4 × 1 = 4</div><p class="ans">4</p>'},
+ {level:'medio',q:'Qual o valor máximo de <code>5·sen(2πf t)</code>?',sol:'<div class="sstep">5 × 1 = 5</div><p class="ans">5</p>'},
+ {level:'medio',q:'2π radianos correspondem a quantos graus?',sol:'<div class="sstep"></div><p class="ans">360°</p>'},
+ {level:'medio',q:'Quantos zeros o seno tem entre 0° e 360° (incluindo extremos)?',hint:'Pense em 0°, 180°, 360°.',sol:'<div class="sstep"><span class="an">// sen = 0 em 0°, 180°, 360°</span></div><p class="ans">3</p>'},
+ {level:'medio',q:'O seno é o movimento circular visto como?',sol:'<div class="sstep"></div><p class="ans">Visto de lado (a sombra do ponto que gira).</p>'},
+ {level:'medio',q:'Uma onda de frequência maior tem período maior ou menor? (callback F3)',sol:'<div class="sstep">T = 1/f<br><span class="an">// f maior → T menor</span></div><p class="ans">Menor.</p>'},
+ {level:'facil',q:'Quanto é <code>sen(360°)</code>?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'medio',q:'Qual o período da onda <code>y = sen(2π·100·t)</code>? (callback F3)',hint:'T = 1/f, com f = 100.',sol:'<div class="sstep">T = 1/100 = 0,01</div><p class="ans">0,01 s</p>'},
+ {level:'dificil',q:'Qual o máximo de <code>3·sen(2πf t)</code>?',sol:'<div class="sstep">3 × 1 = 3</div><p class="ans">3</p>'},
+ {level:'dificil',q:'Quanto é <code>sen(90°) + sen(270°)</code>?',sol:'<div class="sstep">1 + (−1) = 0</div><p class="ans">0</p>'},
+ {level:'medio',q:'Qual a amplitude de <code>2·sen(2πf t)</code>?',sol:'<div class="sstep"><span class="an">// o fator na frente do seno</span></div><p class="ans">2</p>'},
+ {level:'desafio',q:'Na onda <code>y = 2·sen(2π·100·t)</code>, diga amplitude, frequência e período.',sol:'<div class="sstep">A = 2; f = 100 Hz; T = 1/100 = 0,01 s</div><p class="ans">A = 2, f = 100 Hz, T = 0,01 s</p>'}
+],
+mcq:[
+ {level:'facil',q:'<code>sen(0°)</code>:',options:['0','1','−1','0,5'],answer:0,sol:'Começa em zero.'},
+ {level:'facil',q:'<code>sen(90°)</code>:',options:['0','0,5','1','−1'],answer:2,sol:'Topo do círculo.'},
+ {level:'facil',q:'O seno oscila entre:',options:['0 e 1','−1 e 1','0 e 360','−∞ e ∞'],answer:1,sol:'Sempre entre −1 e 1.'},
+ {level:'facil',q:'Valor máximo do seno:',options:['0','1','90','infinito'],answer:1,sol:'1.'},
+ {level:'facil',q:'<code>sen(180°)</code>:',options:['0','1','−1','0,5'],answer:0,sol:'Volta ao centro.'},
+ {level:'facil',q:'<code>sen(270°)</code>:',options:['0','1','−1','0,5'],answer:2,sol:'Fundo do círculo.'},
+ {level:'medio',q:'Período do seno, em graus:',options:['90','180','360','720'],answer:2,sol:'Um ciclo a cada 360°.'},
+ {level:'medio',q:'<code>sen(30°)</code>:',options:['0','0,5','0,7','1'],answer:1,sol:'Valor notável: 0,5.'},
+ {level:'medio',q:'Máximo de <code>3·sen</code>:',options:['1','3','9','6'],answer:1,sol:'3 × 1.'},
+ {level:'facil',q:'O seno é o movimento circular visto:',options:['de cima','de lado','de frente','em espiral'],answer:1,sol:'A projeção lateral.'},
+ {level:'medio',q:'2π radianos =',options:['90°','180°','270°','360°'],answer:3,sol:'Uma volta.'},
+ {level:'medio',q:'Em <code>y=A·sen(2πf t)</code>, f é a:',options:['amplitude','frequência','fase','cor'],answer:1,sol:'Ciclos por segundo.'},
+ {level:'facil',q:'<code>sen(360°)</code>:',options:['0','1','−1','0,5'],answer:0,sol:'Voltou ao início.'},
+ {level:'medio',q:'Zeros do seno entre 0° e 360°:',options:['1','2','3','4'],answer:2,sol:'0°, 180°, 360°.'},
+ {level:'facil',q:'Valor mínimo do seno:',options:['0','−1','1','−∞'],answer:1,sol:'−1.'},
+ {level:'medio',q:'Maior frequência → período:',options:['maior','menor','igual','zero'],answer:1,sol:'T = 1/f.'},
+ {level:'medio',q:'Máximo de <code>5·sen(2πf t)</code>:',options:['1','5','10','2π'],answer:1,sol:'Amplitude 5.'},
+ {level:'dificil',q:'<code>sen(90°) + sen(270°)</code>:',options:['2','0','1','−1'],answer:1,sol:'1 + (−1) = 0.'},
+ {level:'medio',q:'Amplitude de <code>2·sen</code>:',options:['1','2','4','0'],answer:1,sol:'O fator do seno.'},
+ {level:'desafio',q:'Período de <code>sen(2π·100·t)</code>:',options:['0,1 s','0,01 s','100 s','0,001 s'],answer:1,sol:'T = 1/100 = 0,01 s.'}
+]
+};
 ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11'].forEach(id=>{
   renderExercises(id,'ex-'+id);
 });
