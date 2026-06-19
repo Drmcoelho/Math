@@ -1,10 +1,19 @@
-# Math — Why Machines Learn · Caderno Técnico
+# Math — Cadernos de matemática interativa
 
-Caderno técnico interativo, em português, sobre a matemática por trás de aprendizado de máquina moderno. O material reorganiza *Why Machines Learn: The Elegant Math Behind Modern AI* como uma cadeia causal única:
+Cadernos técnicos interativos, em português, sobre duas trilhas complementares:
+
+- a matemática por trás de aprendizado de máquina moderno;
+- a matemática da música, da corda vibrante à percepção multimodal.
+
+A trilha de IA reorganiza *Why Machines Learn: The Elegant Math Behind Modern AI* como uma cadeia causal única:
 
 `vetor → produto escalar → erro → gradiente → profundidade → generalização`
 
-O projeto é propositalmente simples: um `index.html` estático, sem build obrigatório, com KaTeX embarcado localmente (`vendor/katex/`, sem dependência de CDN) e três laboratórios interativos em `<canvas>`: perceptron, gradiente descendente e PCA.
+A trilha musical constrói a teoria da música por uma cadeia dedutiva e perceptiva:
+
+`corda → harmônicos → timbre → consonância → batimentos → cents → temperamento → tonalidade → modelo mental → Beethoven`
+
+O projeto é propositalmente simples: HTML estático, sem build obrigatório. A trilha de IA usa KaTeX embarcado localmente (`vendor/katex/`, sem dependência de CDN). A trilha musical é offline-first, sem dependências externas, com WebAudio API e Canvas 2D.
 
 ## Conteúdo
 
@@ -12,7 +21,7 @@ O projeto é propositalmente simples: um `index.html` estático, sem build obrig
 - `why-machines-learn.html` — caderno principal *Why Machines Learn* (perceptron → atenção), com laboratórios em canvas e 850 exercícios.
 - `matematica-introdutoria.html` — pré-caderno com a matemática introdutória do livro, do zero e na ordem da cadeia causal (vetor, produto escalar, matriz, variância/PCA, probabilidade, gradiente), com exercícios e solução passo a passo. KaTeX local, offline-first.
 - `matematica-fundamental.html` — pré-caderno de matemática do zero (variável, razão, fração, potências, função, logaritmo, seno, somatório, derivada, integral, equação de onda). Offline-first, sem dependências.
-- `musica-matematica.html` — caderno dedutivo *A Matemática da Música* (corda vibrante, timbre, consonância, batimentos, cents, escala, temperamento, tonalidade). Offline-first, sem dependências.
+- `musica-matematica.html` — caderno dedutivo *A Matemática da Música* em 10 níveis: corda vibrante, timbre/Fourier, consonância e roughness, batimentos, cents, escala, temperamento, estrutura tonal, modelo mental e Beethoven como caso pós-lingual específico. Inclui rótulos de estatuto epistêmico, descrições textuais para experiências sonoras, controles ARIA, WebAudio com limiter master, `stopAll()` e visualizações Canvas. Offline-first, sem dependências.
 - `favicon.svg` — ícone vetorial.
 - `og-image.svg` — imagem vetorial para preview social.
 - `.nojekyll` — impede o GitHub Pages de passar o site pelo Jekyll.
@@ -47,4 +56,4 @@ Abra `http://localhost:8000`.
 
 ## Nota de escopo
 
-Este material não reproduz o livro. Ele usa a sequência temática como trilho pedagógico e refaz as derivações e laboratórios de modo independente para fins didáticos.
+Este material não reproduz o livro. Ele usa a sequência temática como trilho pedagógico e refaz as derivações e laboratórios de modo independente para fins didáticos. A trilha musical segue o mesmo princípio: não substitui educação musical formal nem avaliação audiológica; organiza física, matemática, psicoacústica e pedagogia inclusiva em uma sequência dedutiva executável.
