@@ -13,8 +13,10 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = ROOT / "index.html"
-REQUIRED = ["index.html", "favicon.svg", "og-image.svg", ".nojekyll", "README.md"]
+# O caderno principal Why Machines Learn agora vive em why-machines-learn.html;
+# index.html é o portal ilustrado que reúne os quatro cadernos.
+INDEX = ROOT / "why-machines-learn.html"
+REQUIRED = ["index.html", "why-machines-learn.html", "favicon.svg", "og-image.svg", ".nojekyll", "README.md"]
 
 class Parser(HTMLParser):
     def __init__(self) -> None:
@@ -75,7 +77,7 @@ def main() -> None:
 
     # Cadernos irmãos (trilha de Matemática da Música): precisam existir e
     # seus links locais (inclusive o cruzamento entre eles) não podem quebrar.
-    extra_pages = ["matematica-introdutoria.html", "matematica-fundamental.html", "musica-matematica.html"]
+    extra_pages = ["index.html", "matematica-introdutoria.html", "matematica-fundamental.html", "musica-matematica.html"]
     for name in extra_pages:
         page_path = ROOT / name
         if not page_path.exists():
