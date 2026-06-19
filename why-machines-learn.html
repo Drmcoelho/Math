@@ -1,0 +1,1103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Math · Why Machines Learn</title>
+<meta name="description" content="Caderno técnico interativo sobre a matemática de aprendizado de máquina: vetores, erro, gradiente, PCA, SVM, backpropagation, CNNs, atenção e generalização.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://drmcoelho.github.io/Math/why-machines-learn.html">
+<meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:title" content="Math — Why Machines Learn"><meta property="og:description" content="Vetores → erro → gradiente → profundidade → generalização."><meta property="og:url" content="https://drmcoelho.github.io/Math/why-machines-learn.html"><meta property="og:image" content="https://drmcoelho.github.io/Math/og-image.svg"><meta property="og:image:type" content="image/svg+xml">
+<link rel="stylesheet" href="vendor/katex/katex.min.css"><script defer src="vendor/katex/katex.min.js"></script><script defer src="vendor/katex/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#0a0a0c;--p:#141418;--p2:#1b1b22;--ink:#ece7e1;--m:#9a938b;--line:rgba(236,231,225,.12);--a:#ff5a1f;--a2:#ff9b64;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:Georgia,serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(900px 500px at 70% -10%,rgba(255,90,31,.18),transparent),var(--bg);color:var(--ink);font:17px/1.7 var(--serif)}.app{display:grid;grid-template-columns:270px 1fr;max-width:1380px;margin:auto}.toc{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px;border-right:1px solid var(--line);background:#0d0d11;font-family:var(--sans)}.brand{font-weight:850;letter-spacing:-.03em}.brand span{color:var(--a)}.sub{font:11px var(--mono);color:var(--m);text-transform:uppercase;letter-spacing:.14em;margin:6px 0 20px}.toc h3{font:11px var(--mono);text-transform:uppercase;letter-spacing:.16em;color:var(--a);margin:18px 0 7px}.toc a{display:block;text-decoration:none;color:var(--m);padding:5px 9px;border-left:2px solid transparent;border-radius:7px}.toc a:hover,.toc a.active{color:var(--ink);background:var(--p2);border-left-color:var(--a)}main{max-width:930px;padding:0 clamp(22px,5vw,74px) 110px}.hero{min-height:76vh;display:grid;align-content:center}.hero h1{font-family:var(--sans);font-size:clamp(3rem,8vw,5.8rem);line-height:.9;letter-spacing:-.06em;margin:0}.hero h1 span{color:var(--a)}.lead{font-family:var(--sans);font-size:1.45rem;color:#d8d2cb;line-height:1.25}.thesis{border-left:3px solid var(--a);padding-left:18px;max-width:66ch}.chain{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}.chain b{font:12px var(--mono);border:1px solid var(--line);border-radius:999px;padding:8px 10px;color:var(--a2);background:var(--p)}section{padding-top:56px;scroll-margin-top:24px}.mv{font:11px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--a);margin:70px 0 4px;border-bottom:1px solid var(--line);padding-bottom:8px}h2{font-family:var(--sans);font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.04;letter-spacing:-.04em;margin:0 0 8px}.ch{display:block;font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--a);margin-bottom:8px}.box{border:1px solid var(--line);border-left:3px solid var(--a);border-radius:14px;background:var(--p);padding:16px 18px;margin:18px 0}.box h3{font:12px var(--mono);text-transform:uppercase;letter-spacing:.15em;color:var(--a);margin:0 0 8px}.box a{color:var(--a2);text-decoration:none;border-bottom:1px solid var(--line)}.box a:hover{color:var(--a);border-bottom-color:var(--a)}.lab{border:1px solid rgba(255,90,31,.25);background:linear-gradient(180deg,var(--p),#0f0f13);border-radius:18px;padding:18px;margin:24px 0}.lab-title{font:12px var(--mono);letter-spacing:.16em;color:var(--a);text-transform:uppercase}.lab canvas{width:100%;height:310px;background:#070709;border:1px solid var(--line);border-radius:12px;display:block;margin-top:12px}.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px;font:13px var(--mono);color:var(--m)}button{background:var(--a);border:0;color:#111;padding:8px 12px;border-radius:9px;font:700 13px var(--mono);cursor:pointer}.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}table{border-collapse:collapse;width:100%;margin:18px 0}th,td{border-bottom:1px solid var(--line);text-align:left;padding:8px 10px}th{font:11px var(--mono);color:var(--a);text-transform:uppercase;letter-spacing:.12em}.tag{font:10px var(--mono);text-transform:uppercase;border:1px solid var(--line);border-radius:5px;padding:2px 5px;color:var(--a2)}footer{border-top:1px solid var(--line);margin-top:80px;padding-top:24px;color:var(--m);font:13px/1.6 var(--mono)}@media(max-width:880px){.app{display:block}.toc{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
+
+.exercises{margin:32px 0 8px}
+.ex-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}.ex-head h3{margin:0;font:12px var(--mono);text-transform:uppercase;letter-spacing:.15em;color:var(--a)}
+.ex-progress{font:11px var(--mono);color:var(--m)}
+.ex-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.ex-filter button{font:10px var(--mono);text-transform:uppercase;letter-spacing:.08em;background:transparent;border:1px solid var(--line);color:var(--m);padding:4px 9px;border-radius:7px;cursor:pointer}.ex-filter button.on{border-color:var(--a);color:var(--a)}
+.ex{border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;background:var(--p)}
+.ex-q{padding:14px 16px;display:flex;gap:12px;align-items:flex-start}.ex-num{font:13px var(--mono);color:var(--m);flex-shrink:0;min-width:2rem}.ex-body{flex:1;min-width:0}
+.ex-qtext{margin:0 0 10px;line-height:1.6}
+.ex-level{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:8px;border:1px solid;margin-left:8px;vertical-align:middle;white-space:nowrap}.ex-level.facil{color:#5fc28a;border-color:#3a8a5b}.ex-level.medio{color:var(--a2);border-color:#b8642c}.ex-level.dificil{color:#e06a6a;border-color:#a04545}.ex-level.desafio{color:#b79be0;border-color:#6b5499}
+.ex-actions{display:flex;gap:8px;flex-wrap:wrap}.ex-actions button{font:10px var(--mono);text-transform:uppercase;letter-spacing:.08em;background:transparent;border:1px solid var(--line);color:var(--ink);padding:5px 10px;border-radius:7px;cursor:pointer}.ex-actions button.sec{border-color:var(--a);color:var(--a)}.ex-actions button:hover{border-color:var(--a);color:var(--a)}
+.ex-hint{font-size:.95rem;color:var(--a2);background:rgba(255,155,100,.07);border-left:2px solid var(--a2);padding:8px 12px;margin:10px 0 0;border-radius:0 6px 6px 0;display:none}.ex-hint.show{display:block}
+.ex-sol{border-top:1px solid var(--line);padding:14px 16px;background:var(--p2);display:none;line-height:1.75}.ex-sol.show{display:block}.ex-sol .sol-label,.mcq-fb .sol-label{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--a);display:block;margin-bottom:8px}
+.ex-sol .sstep{background:#0d0d11;border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:8px 0;line-height:1.9;overflow-x:auto}.ex-sol .sstep .an{color:var(--m);font:.85rem var(--mono)}.ex-sol p{margin:8px 0}.ex-sol .ans{color:var(--a);font-weight:700}.ex-sol strong{color:var(--ink)}
+.ex-group-label{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap;font:11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--a2);border-bottom:1px solid var(--line);padding-bottom:7px;margin:30px 0 14px}.ex-group-label .gl-sub{color:var(--m);letter-spacing:.04em;text-transform:none;font-size:11px}
+.ex-list{margin:0}
+.mcq-opts{display:flex;flex-direction:column;gap:8px;margin:2px 0 0}
+.mcq-opt{text-align:left;border:1px solid var(--line);background:#0d0d11;color:var(--ink);padding:10px 12px;border-radius:9px;cursor:pointer;font:1rem var(--serif);transition:border-color .15s,background .15s}
+.mcq-opt:hover{border-color:var(--a2)}.mcq-opt .mk{font-family:var(--mono);color:var(--m);margin-right:.6rem}
+.mcq-opt.correct{border-color:#4fb87a;background:rgba(79,184,122,.12)}.mcq-opt.correct .mk{color:#5fc28a}
+.mcq-opt.wrong{border-color:#d05a5a;background:rgba(208,90,90,.12)}.mcq-opt.wrong .mk{color:#e06a6a}
+.mcq-fb{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;line-height:1.7;display:none}.mcq-fb.show{display:block}
+</style>
+</head>
+<body><div class="app"><nav class="toc" id="toc"><div class="brand">Math · <span>Why Machines Learn</span></div><div class="sub">caderno técnico robusto</div></nav><main>
+<header class="hero"><canvas id="spiro" aria-hidden="true" style="display:none"></canvas><h1>Why <span>Machines</span> Learn</h1><p class="lead">A matemática elegante da IA moderna como cadeia causal.</p><p class="thesis"><strong>Aprender</strong> é ajustar números para reduzir erro: representar entradas como vetores, medir alinhamento, construir uma superfície de perda, descer pelo gradiente e induzir generalização.</p><div class="chain"><b>dados</b><b>vetores</b><b>w·x+b</b><b>erro</b><b>gradiente</b><b>profundidade</b><b>generalização</b></div></header>
+<div class="box"><h3>Legenda epistêmica</h3><p><span class="tag">evidência</span> fato ou teorema estabelecido. <span class="tag">inferência</span> leitura técnica fundamentada. <span class="tag">estimativa</span> intuição útil, não prova.</p></div>
+<div class="box"><h3>Cadernos relacionados</h3><p>Trilha de <strong>Matemática da Música</strong>: <a href="matematica-fundamental.html">A matemática por trás da matemática</a> — fundamentos do zero (razão, logaritmo, seno, derivada, integral) · <a href="musica-matematica.html">A matemática da música</a> — caderno dedutivo (cordas, consonância, temperamento, as 12 notas).</p></div>
+<div class="mv">Movimento 0 — A linguagem: número, vetor, gradiente, probabilidade</div>
+<div class="box"><h3>Antes de começar</h3><p>Estas quatro seções são um resumo. Se algum símbolo abaixo não for óbvio, comece pelo pré-caderno <a href="matematica-introdutoria.html">A matemática de Why Machines Learn</a> — a matemática introdutória do livro, construída do zero e na ordem da cadeia causal.</p></div>
+<section id="p1"><h2><span class="ch">Preliminares · Objetos e notação</span>Do número ao tensor</h2><p>Um <strong>escalar</strong> é um número; um <strong>vetor</strong> empilha números e vive em \(\mathbb R^n\); uma <strong>matriz</strong> arruma números numa grade e codifica uma transformação linear.</p>$$\mathbf x=\begin{bmatrix}x_1\\\vdots\\x_n\end{bmatrix}\in\mathbb R^n,\qquad W\in\mathbb R^{m\times n},\qquad \mathbf x^\top=[\,x_1\ \cdots\ x_n\,]$$<p>Aplicar \(W\) a \(\mathbf x\) é a operação básica de toda camada: \(\mathbf x\mapsto W\mathbf x\) rotaciona, escala e projeta o espaço. <span class="tag">evidência</span> Convenção do caderno: vetores são colunas e \(\mathbf w\cdot\mathbf x\) usa o produto escalar definido a seguir.</p><div class="exercises" id="ex-p1"></div></section>
+<section id="p2"><h2><span class="ch">Preliminares · Geometria linear</span>Produto escalar, norma e ângulo</h2><p>O <strong>produto escalar</strong> mede alinhamento entre dois vetores:</p>$$\mathbf x\cdot\mathbf w=\sum_{i=1}^n x_iw_i=\|\mathbf x\|\,\|\mathbf w\|\cos\theta$$<p>A <strong>norma</strong> é o comprimento, \(\|\mathbf x\|=\sqrt{\mathbf x\cdot\mathbf x}\); quando \(\mathbf x\cdot\mathbf w=0\) os vetores são ortogonais. Quase tudo gira em torno do <em>score</em> linear</p>$$s(\mathbf x)=\mathbf w\cdot\mathbf x+b,$$<p>cujo conjunto \(s(\mathbf x)=0\) é um <strong>hiperplano</strong> — a fronteira de decisão que perceptron, regressão logística e SVM ajustam. <span class="tag">inferência</span> Classificar é perguntar de que lado do hiperplano um ponto cai.</p><div class="exercises" id="ex-p2"></div></section>
+<section id="p3"><h2><span class="ch">Preliminares · Cálculo</span>Derivada, gradiente e regra da cadeia</h2><p>A <strong>derivada</strong> \(f'(x)\) é a inclinação local de \(f\). Em várias variáveis, o <strong>gradiente</strong> reúne as derivadas parciais e aponta para a subida mais íngreme:</p>$$\nabla f(\mathbf w)=\left(\frac{\partial f}{\partial w_1},\dots,\frac{\partial f}{\partial w_n}\right)$$<p>Aprender é descer essa superfície dando passos contra o gradiente, com taxa \(\eta\):</p>$$\mathbf w\leftarrow\mathbf w-\eta\,\nabla f(\mathbf w)$$<p>Funções compostas se derivam pela <strong>regra da cadeia</strong>, motor do backpropagation:</p>$$\frac{d}{dx}\,f\!\big(g(x)\big)=f'\!\big(g(x)\big)\,g'(x)$$<p><span class="tag">evidência</span> Gradiente descendente e regra da cadeia reaparecem, juntos, no Capítulo 3 e no Capítulo 10.</p><div class="exercises" id="ex-p3"></div></section>
+<section id="p4"><h2><span class="ch">Preliminares · Incerteza</span>Probabilidade essencial</h2><p>Uma <strong>distribuição</strong> atribui massa a resultados; a <strong>esperança</strong> é a média ponderada \(\mathbb E[X]=\sum_x xP(x)\). A <strong>regra de Bayes</strong> inverte condicionais:</p>$$P(C\mid\mathbf x)=\frac{P(\mathbf x\mid C)\,P(C)}{P(\mathbf x)}$$<p>Para virar probabilidade, um score escalar passa pela <strong>sigmoide</strong> e um vetor de scores pela <strong>softmax</strong>:</p>$$\sigma(z)=\frac1{1+e^{-z}},\qquad \operatorname{softmax}(\mathbf z)_i=\frac{e^{z_i}}{\sum_j e^{z_j}}$$<p><span class="tag">inferência</span> Treinar classificadores é minimizar a surpresa (entropia cruzada) entre essas probabilidades e os rótulos.</p><div class="exercises" id="ex-p4"></div></section>
+<div class="mv">Movimento I — A máquina é geometria</div>
+<section id="c1"><h2><span class="ch">Capítulo 1 · Desperately Seeking Patterns</span>O perceptron</h2><p>O perceptron decide pelo sinal de uma combinação linear:</p>$$\hat y=\operatorname{sign}(\mathbf w\cdot\mathbf x+b)$$<p>Quando erra, ajusta pesos e viés na direção do exemplo correto:</p>$$\mathbf w\leftarrow\mathbf w+\eta(y-\hat y)\mathbf x,\qquad b\leftarrow b+\eta(y-\hat y)$$<div class="lab"><div class="lab-title">Laboratório 01 · Perceptron</div><canvas id="perceptron"></canvas><div class="controls"><button onclick="PCT.train()">treinar</button><button class="ghost" onclick="PCT.step()">passo</button><button class="ghost" onclick="PCT.reset()">novo dataset</button><span id="pct-read">épocas: 0 · erros: —</span></div></div><div class="exercises" id="ex-c1"></div></section>
+<section id="c2"><h2><span class="ch">Capítulo 2 · We Are All Just Numbers Here</span>Tudo vira vetor</h2><table><tr><th>operação</th><th>fórmula</th><th>papel</th></tr><tr><td>norma</td><td>\(\|\mathbf x\|\)</td><td>magnitude</td></tr><tr><td>produto escalar</td><td>\(\mathbf x\cdot\mathbf w=\|x\|\|w\|\cos\theta\)</td><td>alinhamento</td></tr><tr><td>matriz</td><td>\(W\mathbf x\)</td><td>transformação linear</td></tr></table><p>Uma camada neural é \(\mathbf h=\sigma(W\mathbf x+\mathbf b)\): transforma, desloca e dobra o espaço.</p><div class="exercises" id="ex-c2"></div></section>
+<div class="mv">Movimento II — Aprender é descer uma superfície</div>
+<section id="c3"><h2><span class="ch">Capítulo 3 · The Bottom of the Bowl</span>Gradiente descendente</h2><p>O gradiente aponta para subida; o aprendizado anda no sentido oposto.</p>$$\mathbf w_{t+1}=\mathbf w_t-\eta\nabla_{\mathbf w}L(\mathbf w_t)$$<p>Para mínimos quadrados:</p>$$L(\mathbf w)=\tfrac12\|X\mathbf w-\mathbf y\|^2,\qquad \mathbf w^\star=(X^TX)^{-1}X^T\mathbf y$$<div class="lab"><div class="lab-title">Laboratório 02 · Gradiente</div><canvas id="gd"></canvas><div class="controls"><button onclick="GD.run()">rodar</button><button class="ghost" onclick="GD.reset()">reset</button><label>η <input id="gd-lr" type="range" min="0.03" max="2.05" step="0.01" value="0.32" oninput="GD.read()"></label><span id="gd-read"></span></div></div><div class="exercises" id="ex-c3"></div></section>
+<section id="c4"><h2><span class="ch">Capítulo 4 · In All Probability</span>Probabilidade</h2>$$P(C\mid\mathbf x)=\frac{P(\mathbf x\mid C)P(C)}{P(\mathbf x)}$$<p>A regressão logística comprime uma reta em probabilidade:</p>$$\hat y=\sigma(\mathbf w\cdot\mathbf x+b),\qquad \sigma(z)=\frac1{1+e^{-z}}$$<p>Com entropia cruzada, o gradiente volta a ser \((\hat y-y)\mathbf x\).</p><div class="exercises" id="ex-c4"></div></section>
+<div class="mv">Movimento III — Maldição e mágica das dimensões</div>
+<section id="c5"><h2><span class="ch">Capítulo 5 · Birds of a Feather</span>Dimensionalidade</h2><p>Em alta dimensão, distâncias perdem discriminação:</p>$$\frac{V_{casca}}{V_{bola}}=1-(1-\varepsilon)^d\to1$$<div class="exercises" id="ex-c5"></div></section>
+<section id="c6"><h2><span class="ch">Capítulo 6 · The Dimension of Reduction</span>PCA</h2><p>PCA usa autovetores da covariância:</p>$$C\mathbf v=\lambda\mathbf v$$<div class="lab"><div class="lab-title">Laboratório 03 · PCA</div><canvas id="pca"></canvas><div class="controls"><button onclick="PCA.reset()">novo dataset</button><span id="pca-read">PC1: —</span></div></div><div class="exercises" id="ex-c6"></div></section>
+<section id="c7"><h2><span class="ch">Capítulo 7 · The Kernel Trick</span>SVM e kernel</h2>$$K(\mathbf x,\mathbf z)=\phi(\mathbf x)\cdot\phi(\mathbf z)$$<p>Se a decisão depende de produtos escalares, basta substituí-los por um kernel válido.</p><div class="exercises" id="ex-c7"></div></section>
+<div class="mv">Movimento IV — Profundidade</div>
+<section id="c8"><h2><span class="ch">Capítulo 8 · Machines That Remember</span>Hopfield</h2>$$E=-\frac12\sum_{i,j}w_{ij}s_is_j+\sum_i\theta_is_i$$<div class="exercises" id="ex-c8"></div></section>
+<section id="c9"><h2><span class="ch">Capítulo 9 · A Problem of Representation</span>XOR</h2><p>XOR exige não linearidade: uma reta não resolve; camadas ocultas dobram o espaço.</p><div class="exercises" id="ex-c9"></div></section>
+<section id="c10"><h2><span class="ch">Capítulo 10 · The Shape of Things to Come</span>Backpropagation</h2>$$\delta^L=\nabla_a C\odot\sigma'(z^L),\qquad \delta^l=((W^{l+1})^T\delta^{l+1})\odot\sigma'(z^l)$$<div class="exercises" id="ex-c10"></div></section>
+<section id="c11"><h2><span class="ch">Capítulo 11 · The Eyes of a Machine</span>Convolução</h2>$$(I*K)(i,j)=\sum_{u,v}I(i+u,j+v)K(u,v)$$<div class="exercises" id="ex-c11"></div></section>
+<section id="c12"><h2><span class="ch">Capítulo 12 · Terra Incognita</span>Generalização</h2><p>Double descent, viés implícito do SGD, margem e estrutura dos dados são peças parciais. A explicação única ainda é fronteira aberta.</p><div class="exercises" id="ex-c12"></div></section>
+<section id="epi"><h2><span class="ch">Epílogo · Attention</span>Atenção</h2>$$\operatorname{Attention}(Q,K,V)=\operatorname{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$<p>O produto escalar reaparece como centro dos Transformers.</p><div class="exercises" id="ex-epi"></div></section>
+<footer><a href="index.html" style="color:var(--a2);text-decoration:none">↩ portal dos cadernos</a> · Math · Why Machines Learn. Ver README, docs/REFERENCES.md, docs/VALIDATION.md e docs/DEPLOY.md.</footer></main></div>
+<script>
+
+const EX={};const LEVEL_LABEL={facil:'fácil',medio:'médio',dificil:'difícil',desafio:'desafio'};
+function renderExercises(setId,containerId){
+  const data=EX[setId];const box=document.getElementById(containerId);if(!box||!data)return;
+  let solved=0,total=0;const prog=document.createElement('div');prog.className='ex-progress';
+  const bump=()=>{solved++;prog.textContent=solved+' / '+total+' resolvidos';};
+  function buildFree(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const actions=document.createElement('div');actions.className='ex-actions';let hint=null;
+    if(ex.hint){hint=document.createElement('div');hint.className='ex-hint';hint.innerHTML='<strong>Dica:</strong> '+ex.hint;const hb=document.createElement('button');hb.textContent='dica';hb.addEventListener('click',()=>hint.classList.toggle('show'));actions.appendChild(hb);}
+    const solBtn=document.createElement('button');solBtn.className='sec';solBtn.textContent='ver solução';actions.appendChild(solBtn);
+    const sol=document.createElement('div');sol.className='ex-sol';sol.innerHTML='<span class="sol-label">solução passo a passo</span>'+ex.sol;
+    solBtn.addEventListener('click',()=>{const was=sol.classList.contains('show');sol.classList.toggle('show');solBtn.textContent=sol.classList.contains('show')?'ocultar solução':'ver solução';if(!was&&!sol.dataset.counted){sol.dataset.counted='1';bump();}});
+    body.appendChild(qt);body.appendChild(actions);if(hint)body.appendChild(hint);q.appendChild(num);q.appendChild(body);card.appendChild(q);card.appendChild(sol);return card;
+  }
+  function buildMCQ(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const opts=document.createElement('div');opts.className='mcq-opts';
+    const fb=document.createElement('div');fb.className='mcq-fb';fb.innerHTML='<span class="sol-label">por quê</span>'+(ex.sol||'');
+    let answered=false;
+    ex.options.forEach((opt,oi)=>{const b=document.createElement('button');b.className='mcq-opt';b.type='button';b.innerHTML='<span class="mk">'+String.fromCharCode(65+oi)+'</span>'+opt;
+      b.addEventListener('click',()=>{if(answered)return;answered=true;const ok=oi===ex.answer;b.classList.add(ok?'correct':'wrong');if(!ok)opts.children[ex.answer].classList.add('correct');fb.classList.add('show');bump();});opts.appendChild(b);});
+    body.appendChild(qt);body.appendChild(opts);body.appendChild(fb);q.appendChild(num);q.appendChild(body);card.appendChild(q);return card;
+  }
+  let groups;
+  if(Array.isArray(data)){groups=[{label:'Exercícios',sub:'',type:'free',items:data}];}
+  else{groups=[
+    {label:'Aquecimento',sub:'pré-requisitos — ainda mais básico que o módulo',type:'free',items:data.basico||[]},
+    {label:'Consolidação',sub:'fixar e conectar com o que já vimos',type:'free',items:data.consolida||[]},
+    {label:'Múltipla escolha',sub:'dificuldade crescente',type:'mcq',items:data.mcq||[]},
+  ];}
+  total=groups.reduce((a,g)=>a+g.items.length,0);
+  const filter=document.createElement('div');filter.className='ex-filter';
+  ['todos','facil','medio','dificil','desafio'].forEach(lv=>{const b=document.createElement('button');b.textContent=lv==='todos'?'todos':LEVEL_LABEL[lv];if(lv==='todos')b.classList.add('on');b.addEventListener('click',()=>{filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');box.querySelectorAll('.ex').forEach(c=>{c.style.display=(lv==='todos'||c.dataset.level===lv)?'':'none';});});filter.appendChild(b);});
+  const head=document.createElement('div');head.className='ex-head';const h3=document.createElement('h3');h3.textContent='Exercícios';head.appendChild(h3);head.appendChild(prog);box.appendChild(head);box.appendChild(filter);
+  prog.textContent='0 / '+total+' resolvidos';
+  groups.forEach(g=>{if(!g.items.length)return;
+    if(groups.length>1){const gl=document.createElement('div');gl.className='ex-group-label';gl.innerHTML='<span>'+g.label+'</span><span class="gl-sub">'+g.sub+' · '+g.items.length+'</span>';box.appendChild(gl);}
+    const list=document.createElement('div');list.className='ex-list';g.items.forEach((ex,i)=>list.appendChild(g.type==='mcq'?buildMCQ(ex,i+1):buildFree(ex,i+1)));box.appendChild(list);});
+}
+EX.p1={
+basico:[
+ {level:'facil',q:'Quantas componentes tem \\((3,1,4)\\)?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'Um escalar é um único número?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'Qual a 2ª componente de \\((7,8,9)\\)?',sol:'<div class="sstep"></div><p class="ans">8</p>'},
+ {level:'facil',q:'\\((1,2)+(3,4)\\)?',sol:'<div class="sstep">(4, 6)</div><p class="ans">(4, 6)</p>'},
+ {level:'facil',q:'\\(3\\cdot(1,0,2)\\)?',sol:'<div class="sstep">(3, 0, 6)</div><p class="ans">(3, 0, 6)</p>'},
+ {level:'facil',q:'Quantas linhas tem uma matriz 2×3?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'E quantas colunas?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'A transposta de um vetor coluna é um...?',sol:'<div class="sstep"></div><p class="ans">Vetor linha.</p>'},
+ {level:'facil',q:'\\((0,0,0)\\) é qual vetor?',sol:'<div class="sstep"></div><p class="ans">O nulo.</p>'},
+ {level:'facil',q:'O número 5, sozinho, é escalar ou vetor?',sol:'<div class="sstep"></div><p class="ans">Escalar.</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(\\mathbf x\\in\\mathbb R^n\\) significa que x tem quantas componentes?',sol:'<div class="sstep"></div><p class="ans">n</p>'},
+ {level:'facil',q:'Uma imagem 28×28 vira um vetor de qual dimensão?',sol:'<div class="sstep">28×28 = 784</div><p class="ans">784</p>'},
+ {level:'facil',q:'\\(W\\in\\mathbb R^{3\\times4}\\): quantas linhas e colunas?',sol:'<div class="sstep"></div><p class="ans">3 linhas, 4 colunas.</p>'},
+ {level:'facil',q:'\\((1,2,3)+(1,1,1)\\)?',sol:'<div class="sstep">(2, 3, 4)</div><p class="ans">(2, 3, 4)</p>'},
+ {level:'facil',q:'\\(4\\cdot(2,-1)\\)?',sol:'<div class="sstep">(8, −4)</div><p class="ans">(8, −4)</p>'},
+ {level:'medio',q:'A operação básica de uma camada leva \\(\\mathbf x\\) em quê?',sol:'<div class="sstep"></div><p class="ans">\\(W\\mathbf x\\)</p>'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{2\\times3}\\) aplicada a \\(\\mathbf x\\in\\mathbb R^3\\) dá vetor em qual espaço?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbb R^2\\)</p>'},
+ {level:'facil',q:'Um vetor em \\(\\mathbb R^2\\) representa o quê geometricamente?',sol:'<div class="sstep"></div><p class="ans">Um ponto no plano.</p>'},
+ {level:'facil',q:'\\(0\\cdot(5,5)\\)?',sol:'<div class="sstep">(0, 0)</div><p class="ans">(0, 0)</p>'},
+ {level:'facil',q:'Dimensão de \\((1,2,2,4)\\)?',sol:'<div class="sstep"></div><p class="ans">4</p>'},
+ {level:'facil',q:'\\((3,4)-(1,1)\\)?',sol:'<div class="sstep">(2, 3)</div><p class="ans">(2, 3)</p>'},
+ {level:'medio',q:'O que a transposta de uma matriz faz?',sol:'<div class="sstep"></div><p class="ans">Troca linhas por colunas.</p>'},
+ {level:'medio',q:'A transposta \\(W^\\top\\) de \\(W\\in\\mathbb R^{2\\times3}\\) tem qual dimensão?',sol:'<div class="sstep"></div><p class="ans">3×2</p>'},
+ {level:'facil',q:'Por convenção do caderno, vetores são linhas ou colunas?',sol:'<div class="sstep"></div><p class="ans">Colunas.</p>'},
+ {level:'facil',q:'Quanto é \\(1\\cdot\\mathbf x\\)?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbf x\\) (o escalar 1 é a identidade).</p>'},
+ {level:'medio',q:'Para somar dois vetores, eles precisam ter a mesma...?',sol:'<div class="sstep"></div><p class="ans">Dimensão.</p>'},
+ {level:'dificil',q:'É possível somar \\((1,2)\\) e \\((1,2,3)\\)?',sol:'<div class="sstep"><span class="an">// dimensões diferentes</span></div><p class="ans">Não.</p>'},
+ {level:'dificil',q:'\\(W\\in\\mathbb R^{5\\times3}\\), \\(\\mathbf x\\in\\mathbb R^3\\). \\(W\\mathbf x\\) vive em...?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbb R^5\\)</p>'},
+ {level:'medio',q:'\\(5\\cdot(0,1,-2)\\)?',sol:'<div class="sstep">(0, 5, −10)</div><p class="ans">(0, 5, −10)</p>'},
+ {level:'desafio',q:'Quantos números há numa matriz 3×4?',sol:'<div class="sstep">3 × 4 = 12</div><p class="ans">12</p>'}
+],
+mcq:[
+ {level:'facil',q:'Componentes de \\((3,1,4)\\):',options:['2','3','4','1'],answer:1,sol:'3.'},
+ {level:'facil',q:'2ª componente de \\((7,8,9)\\):',options:['7','8','9','2'],answer:1,sol:'8.'},
+ {level:'facil',q:'\\((1,2)+(3,4)\\):',options:['(4,6)','(3,8)','(4,8)','(2,6)'],answer:0,sol:'Componente a componente.'},
+ {level:'facil',q:'\\(3\\cdot(1,0,2)\\):',options:['(3,0,6)','(3,0,2)','(4,3,5)','(1,0,6)'],answer:0,sol:'Escalar em cada.'},
+ {level:'facil',q:'Imagem 28×28 → dimensão:',options:['56','256','784','28'],answer:2,sol:'28².'},
+ {level:'facil',q:'\\(W\\in\\mathbb R^{3\\times4}\\): linhas:',options:['3','4','7','12'],answer:0,sol:'m=3.'},
+ {level:'facil',q:'\\(\\mathbf x\\in\\mathbb R^n\\) tem ___ componentes:',options:['1','n','n²','2'],answer:1,sol:'n.'},
+ {level:'medio',q:'Uma camada aplica \\(\\mathbf x\\mapsto\\):',options:['x+W','Wx','x²','W'],answer:1,sol:'Wx.'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{2\\times3}\\) a \\(\\mathbf x\\in\\mathbb R^3\\):',options:['ℝ²','ℝ³','ℝ⁶','ℝ¹'],answer:0,sol:'m=2 saídas.'},
+ {level:'facil',q:'\\((0,0,0)\\) é o vetor:',options:['unitário','nulo','base','linha'],answer:1,sol:'Nulo.'},
+ {level:'facil',q:'A transposta troca:',options:['sinais','linhas por colunas','escalas','nada'],answer:1,sol:'Linhas↔colunas.'},
+ {level:'medio',q:'\\(W^\\top\\) de uma 2×3 tem dimensão:',options:['2×3','3×2','2×2','3×3'],answer:1,sol:'3×2.'},
+ {level:'facil',q:'Dimensão de \\((1,2,2,4)\\):',options:['3','4','5','2'],answer:1,sol:'4.'},
+ {level:'facil',q:'\\(4\\cdot(2,-1)\\):',options:['(8,−4)','(6,3)','(8,−1)','(2,−4)'],answer:0,sol:'(8,−4).'},
+ {level:'facil',q:'Um escalar é:',options:['um número','uma lista','uma grade','um ponto'],answer:0,sol:'Um número só.'},
+ {level:'medio',q:'Somar \\((1,2)\\) e \\((1,2,3)\\):',options:['dá (2,4,3)','é impossível (dim≠)','dá (1,2)','dá 0'],answer:1,sol:'Dimensões diferentes.'},
+ {level:'facil',q:'No caderno, vetores são:',options:['linhas','colunas','escalares','matrizes'],answer:1,sol:'Colunas.'},
+ {level:'medio',q:'Números numa matriz 3×4:',options:['7','12','34','9'],answer:1,sol:'3·4.'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{5\\times3}\\) a \\(\\mathbf x\\in\\mathbb R^3\\):',options:['ℝ³','ℝ⁵','ℝ¹⁵','ℝ²'],answer:1,sol:'m=5.'},
+ {level:'desafio',q:'\\(W\\mathbf x\\) é a operação básica de:',options:['uma camada','uma soma','um escalar','uma norma'],answer:0,sol:'Transformação linear.'}
+]
+};
+EX.p2={
+basico:[
+ {level:'facil',q:'Quanto é \\(1\\cdot3+2\\cdot4\\)?',sol:'<div class="sstep">3 + 8 = 11</div><p class="ans">11</p>'},
+ {level:'facil',q:'Quanto é \\(2\\cdot2+0\\cdot5\\)?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'\\((1,1)\\cdot(1,1)\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'\\(\\cos(0°)\\)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(\\cos(90°)\\)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'Norma de \\((3,4)\\)?',sol:'<div class="sstep">\\(\\sqrt{25}=5\\)</div><p class="ans">5</p>'},
+ {level:'facil',q:'O sinal de \\(5\\)?',sol:'<div class="sstep"></div><p class="ans">Positivo.</p>'},
+ {level:'facil',q:'O sinal de \\(-3\\)?',sol:'<div class="sstep"></div><p class="ans">Negativo.</p>'},
+ {level:'facil',q:'\\((2,0)\\cdot(3,0)\\)?',sol:'<div class="sstep">6</div><p class="ans">6</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\((1,2)\\cdot(3,4)\\)?',sol:'<div class="sstep">3 + 8 = 11</div><p class="ans">11</p>'},
+ {level:'medio',q:'\\((2,1)\\) e \\((-1,2)\\) são ortogonais?',sol:'<div class="sstep">2·(−1)+1·2 = 0</div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'Ângulo entre \\((1,0)\\) e \\((1,1)\\)?',sol:'<div class="sstep">\\(\\cos\\theta=1/\\sqrt2\\)</div><p class="ans">45°</p>'},
+ {level:'medio',q:'\\(s=\\mathbf w\\cdot\\mathbf x+b\\) com \\(\\mathbf w=(2,-1),b=1,\\mathbf x=(2,0)\\)?',sol:'<div class="sstep">4 + 0 + 1 = 5</div><p class="ans">5</p>'},
+ {level:'medio',q:'Mesmo \\(\\mathbf w,b\\), classifique \\(\\mathbf x=(1,3)\\).',sol:'<div class="sstep">2 − 3 + 1 = 0</div><p class="ans">s = 0 — na fronteira.</p>'},
+ {level:'facil',q:'Norma de \\((3,4)\\)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'medio',q:'\\((1,1)\\cdot(1,-1)\\)?',sol:'<div class="sstep">0</div><p class="ans">0 (ortogonais)</p>'},
+ {level:'facil',q:'\\((1,1)\\cdot(2,3)\\)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'medio',q:'O conjunto \\(\\mathbf w\\cdot\\mathbf x+b=0\\) é o quê?',sol:'<div class="sstep"></div><p class="ans">O hiperplano (fronteira de decisão).</p>'},
+ {level:'facil',q:'Se o score \\(s=-4\\), qual o sinal/classe?',sol:'<div class="sstep"></div><p class="ans">Negativa.</p>'},
+ {level:'facil',q:'\\((3,0)\\cdot(0,5)\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'medio',q:'Norma de \\((5,12)\\)?',sol:'<div class="sstep">\\(\\sqrt{169}=13\\)</div><p class="ans">13</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(1,0)\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'medio',q:'Um produto escalar grande e positivo indica vetores...?',sol:'<div class="sstep"></div><p class="ans">Alinhados.</p>'},
+ {level:'facil',q:'\\((2,2)\\cdot(2,2)\\)?',sol:'<div class="sstep">8</div><p class="ans">8</p>'},
+ {level:'medio',q:'\\(\\mathbf w=(0,1),b=-2,\\mathbf x=(5,3)\\): classe pelo sinal de \\(s\\)?',sol:'<div class="sstep">3 − 2 = 1 &gt; 0</div><p class="ans">Positiva.</p>'},
+ {level:'medio',q:'\\((1,2,2)\\cdot(2,0,1)\\)?',sol:'<div class="sstep">2 + 0 + 2 = 4</div><p class="ans">4</p>'},
+ {level:'dificil',q:'Ache \\(b\\) para \\(\\mathbf x=(1,1)\\) na fronteira com \\(\\mathbf w=(2,3)\\).',sol:'<div class="sstep">5 + b = 0</div><p class="ans">b = −5</p>'},
+ {level:'dificil',q:'Vetores de norma 1 com \\(\\mathbf a\\cdot\\mathbf b=1\\): qual o ângulo?',sol:'<div class="sstep">cosθ = 1</div><p class="ans">0°</p>'},
+ {level:'desafio',q:'\\(\\mathbf w=(1,2),b=0\\), \\(\\mathbf x=(2,-2)\\): classe?',sol:'<div class="sstep">2 − 4 = −2 &lt; 0</div><p class="ans">Negativa.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(1\\cdot3+2\\cdot4\\):',options:['10','11','14','7'],answer:1,sol:'11.'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\):',options:['0','1','2','−1'],answer:0,sol:'Ortogonais.'},
+ {level:'facil',q:'\\(\\cos(90°)\\):',options:['0','1','−1','0,5'],answer:0,sol:'0.'},
+ {level:'facil',q:'\\((1,1)\\cdot(1,1)\\):',options:['1','2','4','0'],answer:1,sol:'2.'},
+ {level:'facil',q:'Sinal de \\(-3\\):',options:['positivo','negativo','zero','nenhum'],answer:1,sol:'Negativo.'},
+ {level:'facil',q:'\\((1,2)\\cdot(3,4)\\):',options:['10','11','14','7'],answer:1,sol:'11.'},
+ {level:'medio',q:'\\((2,1)\\cdot(-1,2)\\):',options:['0','2','−2','4'],answer:0,sol:'Ortogonais.'},
+ {level:'medio',q:'Ângulo entre \\((1,0)\\) e \\((1,1)\\):',options:['30°','45°','60°','90°'],answer:1,sol:'cosθ=1/√2.'},
+ {level:'medio',q:'\\(s\\), w=(2,−1),b=1,x=(2,0):',options:['3','5','4','0'],answer:1,sol:'5.'},
+ {level:'medio',q:'O hiperplano é:',options:['\\(\\mathbf w\\cdot\\mathbf x+b=0\\)','\\(\\|\\mathbf x\\|=1\\)','\\(\\mathbf x=0\\)','\\(\\mathbf w=\\mathbf x\\)'],answer:0,sol:'Score zero.'},
+ {level:'medio',q:'\\((1,1)\\cdot(1,-1)\\):',options:['0','2','−2','1'],answer:0,sol:'Ortogonais.'},
+ {level:'medio',q:'Norma de \\((5,12)\\):',options:['13','17','60','169'],answer:0,sol:'√169.'},
+ {level:'medio',q:'Score \\(s=-4\\) → classe:',options:['positiva','negativa','fronteira','indefinida'],answer:1,sol:'Negativo.'},
+ {level:'medio',q:'Dot grande e positivo → vetores:',options:['opostos','ortogonais','alinhados','nulos'],answer:2,sol:'Mesma direção.'},
+ {level:'facil',q:'\\((2,2)\\cdot(2,2)\\):',options:['4','8','16','2'],answer:1,sol:'8.'},
+ {level:'medio',q:'w=(0,1),b=−2,x=(5,3) → classe:',options:['positiva','negativa','fronteira','indefinida'],answer:0,sol:'s=1>0.'},
+ {level:'medio',q:'\\((1,2,2)\\cdot(2,0,1)\\):',options:['2','4','6','0'],answer:1,sol:'4.'},
+ {level:'dificil',q:'\\(b\\) p/ (1,1) na fronteira, w=(2,3):',options:['−5','5','1','0'],answer:0,sol:'5+b=0.'},
+ {level:'dificil',q:'Unitários com dot 1 → ângulo:',options:['0°','45°','90°','180°'],answer:0,sol:'cosθ=1.'},
+ {level:'desafio',q:'w=(1,2),b=0,x=(2,−2) → classe:',options:['positiva','negativa','fronteira','indefinida'],answer:1,sol:'s=−2<0.'}
+]
+};
+EX.p3={
+basico:[
+ {level:'facil',q:'Inclinação com subida 6 e avanço 2?',sol:'<div class="sstep">6/2 = 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dx}x^2\\)?',sol:'<div class="sstep">2x</div><p class="ans">2x</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dx}x\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dx}5\\)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dx}3x\\)?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'facil',q:'A derivada mede o quê?',sol:'<div class="sstep"></div><p class="ans">A taxa de variação (inclinação).</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dx}x^2\\) em \\(x=1\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'O \\(-\\)gradiente aponta para?',sol:'<div class="sstep"></div><p class="ans">A descida.</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dx}x^3\\)?',sol:'<div class="sstep">3x²</div><p class="ans">3x²</p>'},
+ {level:'facil',q:'A taxa de aprendizado \\(\\eta\\) controla o quê?',sol:'<div class="sstep"></div><p class="ans">O tamanho do passo.</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(f(w)=w^2\\). Passo de GD de \\(w=1\\), \\(\\eta=0{,}1\\).',sol:'<div class="sstep">w ← 1 − 0,1·2 = 0,8</div><p class="ans">0,8</p>'},
+ {level:'medio',q:'\\(\\nabla L=2(w-3)\\). Passo de \\(w=0,\\ \\eta=0{,}25\\).',sol:'<div class="sstep">∇=−6; w ← 0 − 0,25·(−6) = 1,5</div><p class="ans">1,5</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dw}w^2\\) em \\(w=5\\)?',sol:'<div class="sstep">10</div><p class="ans">10</p>'},
+ {level:'medio',q:'Gradiente de \\(w_1^2+w_2^2\\)?',sol:'<div class="sstep">(2w₁, 2w₂)</div><p class="ans">(2w₁, 2w₂)</p>'},
+ {level:'medio',q:'Gradiente de \\(w_1^2+3w_2^2\\)?',sol:'<div class="sstep">(2w₁, 6w₂)</div><p class="ans">(2w₁, 6w₂)</p>'},
+ {level:'medio',q:'Onde \\(w_1^2+3w_2^2\\) é mínimo?',sol:'<div class="sstep"></div><p class="ans">(0, 0)</p>'},
+ {level:'dificil',q:'\\(L=a^2,\\ a=3w\\). \\(\\frac{dL}{dw}\\) em \\(w=2\\)?',sol:'<div class="sstep">6a = 18w → 36</div><p class="ans">36</p>'},
+ {level:'medio',q:'A regra \\(\\frac{dL}{dw}=\\frac{dL}{da}\\frac{da}{dz}\\frac{dz}{dw}\\) é a base de quê?',sol:'<div class="sstep"></div><p class="ans">Do backpropagation.</p>'},
+ {level:'medio',q:'\\(\\frac{d}{dw}(w-4)^2\\)?',sol:'<div class="sstep">2(w−4)</div><p class="ans">2(w − 4)</p>'},
+ {level:'dificil',q:'\\(L=(w-4)^2,\\ w=0,\\ \\eta=0{,}5\\). Um passo de GD.',sol:'<div class="sstep">∇=2(0−4)=−8; w ← 4</div><p class="ans">w = 4 (mínimo num passo)</p>'},
+ {level:'medio',q:'\\(\\eta\\) grande demais pode causar o quê?',sol:'<div class="sstep"></div><p class="ans">Passar do mínimo / divergir.</p>'},
+ {level:'medio',q:'\\(\\eta\\) pequeno demais?',sol:'<div class="sstep"></div><p class="ans">Converge muito devagar.</p>'},
+ {level:'medio',q:'Gradiente igual a zero indica...?',sol:'<div class="sstep"></div><p class="ans">Um ponto crítico (mínimo/plano).</p>'},
+ {level:'medio',q:'\\(\\frac{d}{dx}e^x\\)?',sol:'<div class="sstep"></div><p class="ans">\\(e^x\\).</p>'},
+ {level:'medio',q:'\\(\\frac{d}{dw}3w^2\\)?',sol:'<div class="sstep">6w</div><p class="ans">6w</p>'},
+ {level:'medio',q:'Por que o sinal negativo em \\(w\\leftarrow w-\\eta\\nabla L\\)?',sol:'<div class="sstep"></div><p class="ans">O gradiente aponta para a subida; descemos no oposto.</p>'},
+ {level:'dificil',q:'\\(L=(2w+1)^2\\). \\(\\frac{dL}{dw}\\) em \\(w=0\\).',sol:'<div class="sstep">4(2w+1) → 4</div><p class="ans">4</p>'},
+ {level:'dificil',q:'Norma do gradiente de \\(w_1^2+w_2^2\\) em \\((3,4)\\)?',sol:'<div class="sstep">‖(6,8)‖ = 10</div><p class="ans">10</p>'},
+ {level:'dificil',q:'\\(L=(w-2)^2,\\ w=0,\\ \\eta=0{,}5\\): quantos passos até o mínimo?',sol:'<div class="sstep">∇=−4; w ← 2</div><p class="ans">1 passo.</p>'},
+ {level:'desafio',q:'O backpropagation aplica a regra da cadeia em qual sentido?',sol:'<div class="sstep"></div><p class="ans">Da saída para a entrada.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Inclinação subida 6 / avanço 2:',options:['2','3','4','12'],answer:1,sol:'3.'},
+ {level:'facil',q:'\\(\\frac{d}{dx}x^2\\):',options:['x','2x','x²','2'],answer:1,sol:'2x.'},
+ {level:'facil',q:'\\(\\frac{d}{dx}5\\):',options:['5','1','0','x'],answer:2,sol:'Constante.'},
+ {level:'facil',q:'\\(\\frac{d}{dx}x^3\\):',options:['3x','3x²','x²','3'],answer:1,sol:'3x².'},
+ {level:'facil',q:'A derivada mede:',options:['área','taxa de variação','soma','média'],answer:1,sol:'Inclinação.'},
+ {level:'facil',q:'\\(\\eta\\) controla:',options:['o erro','o tamanho do passo','os dados','a dimensão'],answer:1,sol:'Passo.'},
+ {level:'medio',q:'\\(f(w)=w^2,w=1,\\eta=0,1\\) → w:',options:['0,8','1,2','0,2','2'],answer:0,sol:'1−0,2.'},
+ {level:'medio',q:'Gradiente de \\(w_1^2+w_2^2\\):',options:['(2w₁,2w₂)','(w₁,w₂)','(2,2)','(w₁²,w₂²)'],answer:0,sol:'Parciais.'},
+ {level:'medio',q:'Gradiente de \\(w_1^2+3w_2^2\\):',options:['(2w₁,3w₂)','(2w₁,6w₂)','(w₁,6w₂)','(2,6)'],answer:1,sol:'(2w₁,6w₂).'},
+ {level:'medio',q:'\\(\\frac{d}{dw}(w-4)^2\\):',options:['w−4','2(w−4)','2w','(w−4)²'],answer:1,sol:'Cadeia.'},
+ {level:'medio',q:'∇L = 0 indica:',options:['erro máximo','ponto crítico','divergência','overfitting'],answer:1,sol:'Mínimo/plano.'},
+ {level:'medio',q:'η grande demais:',options:['converge sempre','pode divergir','não muda','reduz dados'],answer:1,sol:'Passa do mínimo.'},
+ {level:'medio',q:'O backprop é a regra da:',options:['potência','cadeia','soma','média'],answer:1,sol:'Cadeia.'},
+ {level:'medio',q:'\\(\\frac{d}{dx}e^x\\):',options:['1','x·eˣ','eˣ','0'],answer:2,sol:'Ele mesmo.'},
+ {level:'medio',q:'\\(\\frac{d}{dw}3w^2\\):',options:['3w','6w','6','w³'],answer:1,sol:'6w.'},
+ {level:'medio',q:'Sinal − em \\(w-\\eta\\nabla L\\): gradiente aponta p/:',options:['descida','subida','lado','zero'],answer:1,sol:'Descemos no oposto.'},
+ {level:'dificil',q:'\\(L=a^2,a=3w\\): \\(dL/dw\\) em w=2:',options:['12','18','36','6'],answer:2,sol:'18w.'},
+ {level:'dificil',q:'\\(L=(2w+1)^2\\): \\(dL/dw\\) em w=0:',options:['2','4','1','8'],answer:1,sol:'4(2w+1).'},
+ {level:'dificil',q:'Norma de ∇ de \\(w_1^2+w_2^2\\) em (3,4):',options:['5','7','10','25'],answer:2,sol:'‖(6,8)‖.'},
+ {level:'desafio',q:'\\(L=(w-4)^2,w=0,\\eta=0,5\\) → w:',options:['2','4','−4','8'],answer:1,sol:'Mínimo: 4.'}
+]
+};
+EX.p4={
+basico:[
+ {level:'facil',q:'P(cara) numa moeda justa?',sol:'<div class="sstep"></div><p class="ans">0,5</p>'},
+ {level:'facil',q:'P(tirar 1) num dado de 6 faces?',sol:'<div class="sstep"></div><p class="ans">1/6</p>'},
+ {level:'facil',q:'Quanto somam as probabilidades de todos os resultados?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'P de um evento certo?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'P de um evento impossível?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'Quanto é \\(e^0\\)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'Quanto é \\(\\frac{1}{1+1}\\)?',sol:'<div class="sstep"></div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Esperança de ganhar 0 ou 10, 50% cada?',sol:'<div class="sstep">0,5·0+0,5·10 = 5</div><p class="ans">5</p>'},
+ {level:'facil',q:'\\(P(\\text{não }A)\\) se \\(P(A)=0{,}3\\)?',sol:'<div class="sstep">1 − 0,3</div><p class="ans">0,7</p>'},
+ {level:'facil',q:'Dois independentes 0,5 cada, ambos?',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(\\sigma(0)=\\frac{1}{1+e^0}\\)?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'},
+ {level:'medio',q:'\\(\\sigma(z)\\) para z muito positivo tende a?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'medio',q:'\\(\\sigma(z)\\) para z muito negativo tende a?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(1,1)\\)?',sol:'<div class="sstep">(0,5, 0,5)</div><p class="ans">(0,5, 0,5)</p>'},
+ {level:'facil',q:'Os valores da softmax somam quanto?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'dificil',q:'Bayes: \\(P(C)=0{,}1,P(+|C)=0{,}8,P(+|\\lnot C)=0{,}2\\). \\(P(C|+)\\)?',sol:'<div class="sstep">P(+)=0,26; 0,08/0,26</div><p class="ans">≈ 0,31</p>'},
+ {level:'facil',q:'Esperança de X: 0 (0,5) e 10 (0,5)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'medio',q:'Entropia cruzada de \\(y=1,\\hat y=0{,}8\\) (\\(-\\ln\\hat y\\))?',sol:'<div class="sstep">−ln0,8 ≈ 0,22</div><p class="ans">≈ 0,22</p>'},
+ {level:'medio',q:'Entropia cruzada de \\(y=1,\\hat y=1\\)?',sol:'<div class="sstep">−ln1 = 0</div><p class="ans">0</p>'},
+ {level:'medio',q:'Entropia cruzada quando \\(\\hat y\\) é bem pequeno (y=1)?',sol:'<div class="sstep"></div><p class="ans">Grande (muita surpresa).</p>'},
+ {level:'medio',q:'\\(P(A\\text{ e }B)\\) indep., 0,2 e 0,5?',sol:'<div class="sstep">0,1</div><p class="ans">0,1</p>'},
+ {level:'medio',q:'\\(P(A\\text{ ou }B)\\) exclusivos, 0,2 e 0,3?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'},
+ {level:'medio',q:'A regra de Bayes inverte o quê?',sol:'<div class="sstep"></div><p class="ans">As condicionais.</p>'},
+ {level:'dificil',q:'\\(\\operatorname{softmax}(2,0)\\) (\\(e^2\\approx7{,}39\\))?',sol:'<div class="sstep">7,39/8,39 ≈ 0,88</div><p class="ans">≈ (0,88, 0,12)</p>'},
+ {level:'medio',q:'A sigmoide transforma um score em?',sol:'<div class="sstep"></div><p class="ans">Probabilidade (0–1).</p>'},
+ {level:'medio',q:'\\(P(C|x)\\) com numerador 0,4 e denominador 0,5?',sol:'<div class="sstep">0,8</div><p class="ans">0,8</p>'},
+ {level:'facil',q:'A esperança é um tipo de?',sol:'<div class="sstep"></div><p class="ans">Média ponderada.</p>'},
+ {level:'dificil',q:'Bayes: \\(P(C)=0{,}5,P(+|C)=0{,}9,P(+|\\lnot C)=0{,}1\\). \\(P(C|+)\\)?',sol:'<div class="sstep">0,45/0,5</div><p class="ans">0,9</p>'},
+ {level:'dificil',q:'Entropia cruzada total com previsões corretas de prob 1?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'desafio',q:'Somar a mesma constante a todos os scores muda a softmax?',sol:'<div class="sstep"><span class="an">// e^c cancela</span></div><p class="ans">Não.</p>'}
+],
+mcq:[
+ {level:'facil',q:'P(cara) numa moeda justa:',options:['0','0,5','1','2'],answer:1,sol:'1 de 2.'},
+ {level:'facil',q:'Soma de todas as probabilidades:',options:['0','0,5','1','100'],answer:2,sol:'1.'},
+ {level:'facil',q:'P(evento impossível):',options:['0','0,5','1','−1'],answer:0,sol:'0.'},
+ {level:'facil',q:'\\(e^0\\):',options:['0','1','e','∞'],answer:1,sol:'1.'},
+ {level:'facil',q:'\\(\\sigma(0)\\):',options:['0','0,5','1','2'],answer:1,sol:'1/(1+1).'},
+ {level:'medio',q:'\\(\\sigma(z)\\), z muito negativo →',options:['0','0,5','1','∞'],answer:0,sol:'Tende a 0.'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(1,1)\\):',options:['(1,1)','(0,5;0,5)','(0,1)','(2,2)'],answer:1,sol:'Iguais.'},
+ {level:'medio',q:'Softmax soma:',options:['0','1','2','depende'],answer:1,sol:'1.'},
+ {level:'medio',q:'P(A e B) indep., 0,2 e 0,5:',options:['0,1','0,7','0,25','0,3'],answer:0,sol:'Multiplica.'},
+ {level:'medio',q:'P(não A) se P(A)=0,3:',options:['0,3','0,7','1','0'],answer:1,sol:'1−0,3.'},
+ {level:'medio',q:'Bayes (0,1/0,8/0,2) → P(C|+):',options:['0,08','0,26','≈0,31','0,8'],answer:2,sol:'0,08/0,26.'},
+ {level:'medio',q:'Entropia cruzada de \\(\\hat y=1,y=1\\):',options:['0','1','∞','0,5'],answer:0,sol:'−ln1.'},
+ {level:'medio',q:'A sigmoide produz:',options:['um vetor','uma probabilidade','uma matriz','um ângulo'],answer:1,sol:'0–1.'},
+ {level:'medio',q:'Bayes inverte:',options:['as somas','as condicionais','as médias','os sinais'],answer:1,sol:'P(x|C)↔P(C|x).'},
+ {level:'medio',q:'A esperança é uma:',options:['soma simples','média ponderada','variância','moda'],answer:1,sol:'Ponderada.'},
+ {level:'medio',q:'\\(P(C|x)\\)= 0,4/0,5:',options:['0,8','0,4','0,5','0,9'],answer:0,sol:'0,8.'},
+ {level:'dificil',q:'\\(\\operatorname{softmax}(2,0)\\) ≈',options:['(0,5;0,5)','(0,88;0,12)','(1;0)','(0,73;0,27)'],answer:1,sol:'e²/(e²+1).'},
+ {level:'dificil',q:'Bayes (0,5/0,9/0,1) → P(C|+):',options:['0,5','0,9','0,45','0,1'],answer:1,sol:'0,45/0,5.'},
+ {level:'dificil',q:'Treinar classificador = minimizar:',options:['a variância','a entropia cruzada','a norma','o gradiente'],answer:1,sol:'Surpresa.'},
+ {level:'desafio',q:'Somar constante aos scores, a softmax:',options:['muda','não muda','zera','inverte'],answer:1,sol:'e^c cancela.'}
+]
+};
+EX.c1={
+basico:[
+ {level:'facil',q:'\\(\\operatorname{sign}(5)\\)?',sol:'<div class="sstep"></div><p class="ans">+1</p>'},
+ {level:'facil',q:'\\(\\operatorname{sign}(-3)\\)?',sol:'<div class="sstep"></div><p class="ans">−1</p>'},
+ {level:'facil',q:'Pela convenção \\(\\ge 0\\Rightarrow +1\\), quanto é \\(\\operatorname{sign}(0)\\)?',sol:'<div class="sstep"></div><p class="ans">+1</p>'},
+ {level:'facil',q:'\\((1,2)\\cdot(1,1)\\)?',sol:'<div class="sstep">1+2 = 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'\\(2\\cdot(1,-1)\\)?',sol:'<div class="sstep">(2, −2)</div><p class="ans">(2, −2)</p>'},
+ {level:'facil',q:'\\(\\mathbf w\\cdot\\mathbf x+b\\) com \\(\\mathbf w=(1,1),\\mathbf x=(1,1),b=-1\\)?',sol:'<div class="sstep">1+1−1 = 1</div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(y-\\hat y\\) quando \\(y=1,\\hat y=1\\)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'\\(y-\\hat y\\) quando \\(y=1,\\hat y=-1\\)?',sol:'<div class="sstep">1 − (−1) = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'A saída de um perceptron é +1 ou...?',sol:'<div class="sstep"></div><p class="ans">−1</p>'},
+ {level:'facil',q:'Se a previsão está correta, os pesos mudam?',sol:'<div class="sstep"><span class="an">// y−ŷ = 0</span></div><p class="ans">Não.</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(\\hat y=\\operatorname{sign}(\\mathbf w\\cdot\\mathbf x+b)\\), \\(\\mathbf w=(1,-1),b=0,\\mathbf x=(2,1)\\). \\(\\hat y\\)?',sol:'<div class="sstep">2−1 = 1 &gt; 0</div><p class="ans">+1</p>'},
+ {level:'medio',q:'Mesmo \\(\\mathbf w,b\\), \\(\\mathbf x=(1,2)\\). \\(\\hat y\\)?',sol:'<div class="sstep">1−2 = −1 &lt; 0</div><p class="ans">−1</p>'},
+ {level:'medio',q:'A regra de atualização \\(\\mathbf w\\leftarrow\\mathbf w+\\eta(y-\\hat y)\\mathbf x\\). Se acerta, \\(\\Delta\\mathbf w\\)?',sol:'<div class="sstep">y−ŷ = 0 → Δw = 0</div><p class="ans">0 (nada muda).</p>'},
+ {level:'medio',q:'Errou: \\(y=1,\\hat y=-1,\\eta=1,\\mathbf x=(2,0)\\). \\(\\Delta\\mathbf w\\)?',sol:'<div class="sstep">1·(1−(−1))·(2,0) = 2·(2,0) = (4,0)</div><p class="ans">(4, 0)</p>'},
+ {level:'medio',q:'O perceptron converge se os dados forem...?',sol:'<div class="sstep"></div><p class="ans">Linearmente separáveis.</p>'},
+ {level:'medio',q:'A fronteira de decisão do perceptron é um...?',sol:'<div class="sstep">\\(\\mathbf w\\cdot\\mathbf x+b=0\\)</div><p class="ans">Hiperplano.</p>'},
+ {level:'facil',q:'\\(y-\\hat y\\) com \\(y=-1,\\hat y=1\\)?',sol:'<div class="sstep">−2</div><p class="ans">−2</p>'},
+ {level:'medio',q:'\\(\\Delta b=\\eta(y-\\hat y)\\) com \\(y=1,\\hat y=-1,\\eta=0{,}5\\)?',sol:'<div class="sstep">0,5·2 = 1</div><p class="ans">1</p>'},
+ {level:'medio',q:'\\(\\operatorname{sign}(\\mathbf w\\cdot\\mathbf x+b)\\), \\(\\mathbf w=(0,1),b=-2,\\mathbf x=(3,5)\\)?',sol:'<div class="sstep">5−2 = 3 &gt; 0</div><p class="ans">+1</p>'},
+ {level:'medio',q:'Se \\(\\eta\\) dobra, o tamanho do passo de atualização...?',sol:'<div class="sstep"></div><p class="ans">Dobra.</p>'},
+ {level:'medio',q:'Para \\(\\mathbf x\\in\\mathbb R^2\\), os pesos \\(\\mathbf w\\) têm dimensão?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'medio',q:'Quantos parâmetros (com o viés) para \\(\\mathbb R^2\\)?',sol:'<div class="sstep">w₁, w₂, b</div><p class="ans">3</p>'},
+ {level:'medio',q:'A atualização só ocorre em quê?',sol:'<div class="sstep"></div><p class="ans">Nos erros.</p>'},
+ {level:'medio',q:'\\(\\mathbf w=(1,1),\\mathbf x=(-1,-1),b=0\\). \\(\\hat y\\)?',sol:'<div class="sstep">−2 &lt; 0</div><p class="ans">−1</p>'},
+ {level:'medio',q:'O XOR é linearmente separável?',sol:'<div class="sstep"><span class="an">// veremos no Cap. 9</span></div><p class="ans">Não.</p>'},
+ {level:'facil',q:'Após convergir em dados separáveis, quantos erros por época?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'dificil',q:'\\(\\mathbf w=(2,-1),b=-1,\\mathbf x=(1,1)\\). \\(\\hat y\\)? (use ≥0 → +1)',sol:'<div class="sstep">2−1−1 = 0 → sign(0) = +1</div><p class="ans">+1</p>'},
+ {level:'dificil',q:'Errou: \\(y=-1,\\hat y=1,\\eta=1,\\mathbf x=(1,2)\\). \\(\\Delta\\mathbf w\\)?',sol:'<div class="sstep">1·(−1−1)·(1,2) = −2·(1,2) = (−2,−4)</div><p class="ans">(−2, −4)</p>'},
+ {level:'dificil',q:'Início \\(\\mathbf w=(0,0),b=0\\); 1º ponto \\(\\mathbf x=(1,1),y=1,\\eta=1\\). Há atualização?',sol:'<div class="sstep">ŷ=sign(0)=+1=y → sem erro</div><p class="ans">Não — w permanece (0,0).</p>'},
+ {level:'desafio',q:'O teorema de Novikoff garante convergência (dados separáveis) num número finito de quê?',sol:'<div class="sstep"></div><p class="ans">Erros (atualizações).</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(\\operatorname{sign}(5)\\):',options:['+1','−1','0','5'],answer:0,sol:'Positivo.'},
+ {level:'facil',q:'\\(\\operatorname{sign}(-3)\\):',options:['+1','−1','0','3'],answer:1,sol:'Negativo.'},
+ {level:'facil',q:'\\((1,2)\\cdot(1,1)\\):',options:['2','3','4','1'],answer:1,sol:'1+2.'},
+ {level:'facil',q:'\\(y-\\hat y\\) com y=1, ŷ=−1:',options:['0','1','2','−2'],answer:2,sol:'1−(−1).'},
+ {level:'facil',q:'Saída do perceptron:',options:['qualquer real','+1 ou −1','0 a 1','um vetor'],answer:1,sol:'Binária.'},
+ {level:'medio',q:'w=(1,−1),b=0,x=(2,1) → ŷ:',options:['+1','−1','0','2'],answer:0,sol:'2−1>0.'},
+ {level:'medio',q:'Se acerta, Δw:',options:['(0,0)','grande','aleatório','x'],answer:0,sol:'y−ŷ=0.'},
+ {level:'medio',q:'Errou y=1,ŷ=−1,η=1,x=(2,0): Δw:',options:['(4,0)','(2,0)','(0,0)','(−4,0)'],answer:0,sol:'2·(2,0).'},
+ {level:'medio',q:'O perceptron converge se os dados são:',options:['lineares só','linearmente separáveis','aleatórios','normalizados'],answer:1,sol:'Separabilidade.'},
+ {level:'medio',q:'A fronteira do perceptron é um:',options:['círculo','hiperplano','ponto','parábola'],answer:1,sol:'w·x+b=0.'},
+ {level:'medio',q:'A atualização ocorre:',options:['sempre','só nos erros','nunca','aleatoriamente'],answer:1,sol:'Nos erros.'},
+ {level:'medio',q:'Parâmetros (com viés) em ℝ²:',options:['2','3','4','1'],answer:1,sol:'w₁,w₂,b.'},
+ {level:'medio',q:'w=(0,1),b=−2,x=(3,5) → ŷ:',options:['+1','−1','0','3'],answer:0,sol:'5−2>0.'},
+ {level:'medio',q:'O XOR é linearmente separável?',options:['sim','não'],answer:1,sol:'Cap. 9.'},
+ {level:'medio',q:'Convergiu (separável): erros/época:',options:['0','1','muitos','varia'],answer:0,sol:'Zero.'},
+ {level:'medio',q:'w=(1,1),x=(−1,−1),b=0 → ŷ:',options:['+1','−1','0','2'],answer:1,sol:'−2<0.'},
+ {level:'dificil',q:'w=(2,−1),b=−1,x=(1,1) → ŷ (≥0→+1):',options:['+1','−1','0','indef.'],answer:0,sol:'sign(0)=+1.'},
+ {level:'dificil',q:'Errou y=−1,ŷ=1,η=1,x=(1,2): Δw:',options:['(−2,−4)','(2,4)','(0,0)','(−1,−2)'],answer:0,sol:'−2·(1,2).'},
+ {level:'dificil',q:'w=(0,0),b=0; x=(1,1),y=1,η=1: atualiza?',options:['sim','não'],answer:1,sol:'ŷ=+1=y.'},
+ {level:'desafio',q:'Novikoff garante convergência num nº finito de:',options:['épocas infinitas','erros','dados','camadas'],answer:1,sol:'Atualizações.'}
+]
+};
+EX.c2={
+basico:[
+ {level:'facil',q:'Quantas componentes tem \\((2,5,9)\\)?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'\\((1,2)+(2,2)\\)?',sol:'<div class="sstep">(3, 4)</div><p class="ans">(3, 4)</p>'},
+ {level:'facil',q:'\\(3\\cdot(2,1)\\)?',sol:'<div class="sstep">(6, 3)</div><p class="ans">(6, 3)</p>'},
+ {level:'facil',q:'Norma de \\((3,4)\\)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(2,3)\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'\\(\\cos(90°)\\)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'Linhas de uma matriz 2×2?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'A identidade aplicada a \\((4,5)\\)?',sol:'<div class="sstep"></div><p class="ans">(4, 5)</p>'},
+ {level:'facil',q:'\\(0\\cdot(7,7)\\)?',sol:'<div class="sstep">(0, 0)</div><p class="ans">(0, 0)</p>'},
+ {level:'facil',q:'A dimensão de \\((1,2,3,4,5)\\)?',sol:'<div class="sstep"></div><p class="ans">5</p>'}
+],
+consolida:[
+ {level:'facil',q:'Norma de \\((6,8)\\)?',sol:'<div class="sstep">\\(\\sqrt{100}=10\\)</div><p class="ans">10</p>'},
+ {level:'medio',q:'\\(\\mathbf x\\cdot\\mathbf w=\\|\\mathbf x\\|\\,\\|\\mathbf w\\|\\cos\\theta\\). Se ortogonais, o produto é?',sol:'<div class="sstep">cos 90° = 0</div><p class="ans">0</p>'},
+ {level:'medio',q:'Uma camada é \\(\\mathbf h=\\sigma(W\\mathbf x+\\mathbf b)\\). Quais as três operações?',sol:'<div class="sstep"></div><p class="ans">Transformar (Wx), deslocar (b), não linearidade (σ).</p>'},
+ {level:'facil',q:'\\(\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}(1,1)\\)?',sol:'<div class="sstep">(2, 3)</div><p class="ans">(2, 3)</p>'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{2\\times3}\\) leva \\(\\mathbb R^3\\) em?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbb R^2\\)</p>'},
+ {level:'medio',q:'\\((1,2)\\cdot(3,4)\\)?',sol:'<div class="sstep">11</div><p class="ans">11</p>'},
+ {level:'medio',q:'Norma de \\((5,12)\\)?',sol:'<div class="sstep">13</div><p class="ans">13</p>'},
+ {level:'medio',q:'O produto escalar mede o quê entre dois vetores?',sol:'<div class="sstep"></div><p class="ans">O alinhamento.</p>'},
+ {level:'medio',q:'\\(\\sigma(W\\mathbf x+\\mathbf b)\\) sem \\(\\sigma\\) (linear puro) compõe em?',sol:'<div class="sstep"></div><p class="ans">Outra transformação linear.</p>'},
+ {level:'medio',q:'\\(2\\cdot(1,-2,3)\\)?',sol:'<div class="sstep">(2, −4, 6)</div><p class="ans">(2, −4, 6)</p>'},
+ {level:'medio',q:'Uma imagem 100×100 vira vetor de dimensão?',sol:'<div class="sstep">10000</div><p class="ans">10 000</p>'},
+ {level:'medio',q:'\\(\\|\\mathbf x\\|=\\sqrt{\\mathbf x\\cdot\\mathbf x}\\). Para \\(\\mathbf x=(1,2,2)\\)?',sol:'<div class="sstep">\\(\\sqrt{9}=3\\)</div><p class="ans">3</p>'},
+ {level:'medio',q:'Duas camadas lineares seguidas equivalem a quantas?',sol:'<div class="sstep">(W₂W₁)x</div><p class="ans">Uma (sem não linearidade).</p>'},
+ {level:'medio',q:'\\((1,1,1)\\cdot(1,1,1)\\)?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'medio',q:'A não linearidade \\(\\sigma\\) permite que a rede faça o quê com o espaço?',sol:'<div class="sstep"></div><p class="ans">Dobrá-lo (separar o não-linear).</p>'},
+ {level:'facil',q:'\\((4,0)\\cdot(0,9)\\)?',sol:'<div class="sstep">0</div><p class="ans">0 (ortogonais)</p>'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{4\\times4}\\): quantos números?',sol:'<div class="sstep">16</div><p class="ans">16</p>'},
+ {level:'dificil',q:'\\((2,3)\\cdot(\\mathbf w)\\) é máximo (fixadas as normas) quando \\(\\mathbf w\\) é...?',sol:'<div class="sstep">cosθ = 1</div><p class="ans">Paralelo a (2,3).</p>'},
+ {level:'dificil',q:'A camada \\(\\sigma(W\\mathbf x+\\mathbf b)\\) com \\(W\\in\\mathbb R^{3\\times2}\\): \\(\\mathbf h\\) tem dimensão?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'desafio',q:'Por que “tudo vira vetor” é a hipótese de partida do aprendizado?',sol:'<div class="sstep"></div><p class="ans">Porque só assim dados viram geometria (distâncias, ângulos, projeções) que a máquina pode otimizar.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Norma de \\((3,4)\\):',options:['5','7','12','25'],answer:0,sol:'√25.'},
+ {level:'facil',q:'\\((1,0)\\cdot(2,3)\\):',options:['2','3','5','0'],answer:0,sol:'2.'},
+ {level:'facil',q:'\\(3\\cdot(2,1)\\):',options:['(6,3)','(5,4)','(6,1)','(2,3)'],answer:0,sol:'Escalar.'},
+ {level:'facil',q:'\\((1,2)+(2,2)\\):',options:['(3,4)','(2,4)','(3,2)','(1,4)'],answer:0,sol:'(3,4).'},
+ {level:'medio',q:'Uma camada é:',options:['Wx só','σ(Wx+b)','x+b','σ(x)'],answer:1,sol:'Linear+desloc+não lin.'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{2\\times3}\\) leva ℝ³ em:',options:['ℝ²','ℝ³','ℝ⁶','ℝ¹'],answer:0,sol:'2 saídas.'},
+ {level:'medio',q:'\\((1,2)\\cdot(3,4)\\):',options:['10','11','14','7'],answer:1,sol:'11.'},
+ {level:'medio',q:'Produto escalar mede:',options:['o tamanho','o alinhamento','o número','a cor'],answer:1,sol:'Alinhamento.'},
+ {level:'medio',q:'Norma de \\((5,12)\\):',options:['13','17','60','25'],answer:0,sol:'√169.'},
+ {level:'medio',q:'Imagem 100×100 → dimensão:',options:['200','1000','10000','100'],answer:2,sol:'100².'},
+ {level:'medio',q:'Duas lineares seguidas =',options:['uma não linear','uma linear','identidade','zero'],answer:1,sol:'(W₂W₁)x.'},
+ {level:'medio',q:'\\(\\|(1,2,2)\\|\\):',options:['3','5','9','√5'],answer:0,sol:'√9.'},
+ {level:'medio',q:'\\((4,0)\\cdot(0,9)\\):',options:['0','36','13','9'],answer:0,sol:'Ortogonais.'},
+ {level:'medio',q:'\\(2\\cdot(1,-2,3)\\):',options:['(2,−4,6)','(2,−2,3)','(3,0,5)','(1,−4,6)'],answer:0,sol:'Escalar.'},
+ {level:'medio',q:'A não linearidade permite:',options:['acelerar','dobrar o espaço','reduzir dados','normalizar'],answer:1,sol:'Separar não-linear.'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{4\\times4}\\): números:',options:['8','16','4','12'],answer:1,sol:'4·4.'},
+ {level:'medio',q:'\\((1,1,1)\\cdot(1,1,1)\\):',options:['1','2','3','0'],answer:2,sol:'3.'},
+ {level:'dificil',q:'\\((2,3)\\cdot\\mathbf w\\) máximo quando w é:',options:['ortogonal','paralelo a (2,3)','nulo','oposto'],answer:1,sol:'cosθ=1.'},
+ {level:'dificil',q:'\\(\\sigma(W\\mathbf x+\\mathbf b)\\), \\(W\\in\\mathbb R^{3\\times2}\\): dim de h:',options:['2','3','5','6'],answer:1,sol:'m=3.'},
+ {level:'desafio',q:'“Tudo vira vetor” serve para:',options:['economizar memória','transformar dados em geometria','colorir','ordenar'],answer:1,sol:'Geometria otimizável.'}
+]
+};
+EX.c3={
+basico:[
+ {level:'facil',q:'\\(\\frac{d}{dw}w^2\\)?',sol:'<div class="sstep">2w</div><p class="ans">2w</p>'},
+ {level:'facil',q:'Menor valor de \\(w^2\\)?',sol:'<div class="sstep"></div><p class="ans">0 (em w=0)</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dw}(w-3)^2\\)?',sol:'<div class="sstep">2(w−3)</div><p class="ans">2(w − 3)</p>'},
+ {level:'facil',q:'Inclinação de \\(y=2w\\)?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dw}5w\\)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'facil',q:'O gradiente aponta para a subida ou a descida?',sol:'<div class="sstep"></div><p class="ans">A subida (descemos no oposto).</p>'},
+ {level:'facil',q:'\\(2(w-3)\\) em \\(w=3\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'A taxa de aprendizado costuma ser representada por qual letra?',sol:'<div class="sstep"></div><p class="ans">η (eta)</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dw}w^2\\) em \\(w=2\\)?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'No mínimo de uma função suave, a derivada vale?',sol:'<div class="sstep"></div><p class="ans">0</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(\\mathbf w_{t+1}=\\mathbf w_t-\\eta\\nabla L\\). Com \\(\\nabla L=4,\\ \\eta=0{,}5,\\ w_t=10\\): \\(w_{t+1}\\)?',sol:'<div class="sstep">10 − 0,5·4 = 8</div><p class="ans">8</p>'},
+ {level:'medio',q:'\\(L(w)=(w-3)^2\\). Passo de \\(w=0,\\ \\eta=0{,}5\\).',sol:'<div class="sstep">∇=2(0−3)=−6; w ← 0 − 0,5·(−6) = 3</div><p class="ans">w = 3 (mínimo num passo)</p>'},
+ {level:'medio',q:'\\(L(w)=w^2\\). Dois passos de \\(w=1,\\ \\eta=0{,}1\\).',sol:'<div class="sstep">w₁ = 1 − 0,1·2 = 0,8<br>w₂ = 0,8 − 0,1·1,6 = 0,64</div><p class="ans">0,64</p>'},
+ {level:'medio',q:'Para mínimos quadrados, \\(L(\\mathbf w)=\\tfrac12\\|X\\mathbf w-\\mathbf y\\|^2\\). O mínimo tem solução fechada?',sol:'<div class="sstep">\\(\\mathbf w^\\star=(X^\\top X)^{-1}X^\\top\\mathbf y\\)</div><p class="ans">Sim — a equação normal.</p>'},
+ {level:'medio',q:'O gradiente de \\(w_1^2+w_2^2\\)?',sol:'<div class="sstep">(2w₁, 2w₂)</div><p class="ans">(2w₁, 2w₂)</p>'},
+ {level:'medio',q:'Onde \\(w_1^2+w_2^2\\) é mínimo?',sol:'<div class="sstep"></div><p class="ans">(0, 0)</p>'},
+ {level:'medio',q:'\\(\\eta\\) grande demais pode fazer o GD...?',sol:'<div class="sstep"></div><p class="ans">Divergir / oscilar.</p>'},
+ {level:'medio',q:'\\(\\eta\\) pequeno demais?',sol:'<div class="sstep"></div><p class="ans">Convergir devagar.</p>'},
+ {level:'medio',q:'\\(\\nabla L=2(w-5)\\). Passo de \\(w=1,\\ \\eta=0{,}25\\).',sol:'<div class="sstep">∇=2(1−5)=−8; w ← 1 + 2 = 3</div><p class="ans">3</p>'},
+ {level:'medio',q:'O GD precisa que \\(L\\) seja...?',sol:'<div class="sstep"></div><p class="ans">Diferenciável (ter gradiente).</p>'},
+ {level:'medio',q:'Num passo, \\(w\\) muda na direção de \\(-\\nabla L\\). Por quê o sinal negativo?',sol:'<div class="sstep"></div><p class="ans">Para descer (o gradiente sobe).</p>'},
+ {level:'medio',q:'\\(L(w)=(w-2)^2\\) tem mínimo em qual w?',sol:'<div class="sstep">∇=2(w−2)=0</div><p class="ans">w = 2</p>'},
+ {level:'medio',q:'O termo “descida” em gradiente descendente refere-se a descer o quê?',sol:'<div class="sstep"></div><p class="ans">A superfície de perda (o erro).</p>'},
+ {level:'medio',q:'A solução normal exige inverter qual matriz?',sol:'<div class="sstep"></div><p class="ans">\\(X^\\top X\\)</p>'},
+ {level:'medio',q:'\\(L(w)=3w^2\\). \\(\\nabla L\\)?',sol:'<div class="sstep">6w</div><p class="ans">6w</p>'},
+ {level:'facil',q:'Gradiente igual a zero indica um...?',sol:'<div class="sstep"></div><p class="ans">Ponto crítico (mínimo/plano).</p>'},
+ {level:'dificil',q:'\\(L=(w-4)^2\\). Quantos passos de GD com \\(\\eta=0{,}5\\) a partir de \\(w=0\\) até o mínimo?',sol:'<div class="sstep">∇=−8; w ← 4</div><p class="ans">1 passo.</p>'},
+ {level:'dificil',q:'\\(L=w^2,\\ \\eta=1,\\ w=1\\): um passo dá?',sol:'<div class="sstep">w ← 1 − 1·2 = −1</div><p class="ans">−1 (oscilou — η alto demais)</p>'},
+ {level:'dificil',q:'Norma do gradiente de \\(w_1^2+w_2^2\\) em \\((3,4)\\)?',sol:'<div class="sstep">‖(6,8)‖ = 10</div><p class="ans">10</p>'},
+ {level:'desafio',q:'Por que usar GD se há solução fechada para mínimos quadrados?',sol:'<div class="sstep"></div><p class="ans">A solução fechada só existe em casos simples; em redes grandes, inverter matrizes é inviável e a função não é convexa — o GD escala.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(\\frac{d}{dw}w^2\\):',options:['w','2w','w²','2'],answer:1,sol:'2w.'},
+ {level:'facil',q:'\\(\\frac{d}{dw}(w-3)^2\\):',options:['w−3','2(w−3)','2w','3'],answer:1,sol:'Cadeia.'},
+ {level:'facil',q:'O gradiente aponta para:',options:['a descida','a subida','o lado','zero'],answer:1,sol:'Descemos no oposto.'},
+ {level:'facil',q:'No mínimo suave, a derivada é:',options:['máxima','zero','negativa','1'],answer:1,sol:'0.'},
+ {level:'medio',q:'\\(\\nabla L=4,\\eta=0,5,w=10\\) → w:',options:['8','12','6','2'],answer:0,sol:'10−2.'},
+ {level:'medio',q:'\\(L=(w-3)^2,w=0,\\eta=0,5\\) → w:',options:['3','−3','1,5','6'],answer:0,sol:'Mínimo num passo.'},
+ {level:'medio',q:'Mínimos quadrados, solução fechada:',options:['não existe','\\((X^\\top X)^{-1}X^\\top\\mathbf y\\)','\\(X\\mathbf y\\)','\\(\\mathbf y/X\\)'],answer:1,sol:'Equação normal.'},
+ {level:'medio',q:'Gradiente de \\(w_1^2+w_2^2\\):',options:['(2w₁,2w₂)','(w₁,w₂)','(2,2)','0'],answer:0,sol:'Parciais.'},
+ {level:'medio',q:'η grande demais:',options:['converge sempre','pode divergir','não muda','acelera sem risco'],answer:1,sol:'Oscila.'},
+ {level:'medio',q:'\\(L=(w-2)^2\\) tem mínimo em:',options:['0','2','−2','4'],answer:1,sol:'w=2.'},
+ {level:'medio',q:'GD desce qual superfície?',options:['de dados','de perda (erro)','de pesos só','de tempo'],answer:1,sol:'A perda.'},
+ {level:'medio',q:'A solução normal inverte:',options:['X','\\(X^\\top X\\)','y','XY'],answer:1,sol:'XᵀX.'},
+ {level:'medio',q:'\\(L=3w^2\\): ∇L:',options:['3w','6w','6','w³'],answer:1,sol:'6w.'},
+ {level:'medio',q:'∇L=0 indica:',options:['erro máximo','ponto crítico','divergência','dado novo'],answer:1,sol:'Mínimo/plano.'},
+ {level:'medio',q:'O GD exige que L seja:',options:['linear','diferenciável','constante','discreta'],answer:1,sol:'Ter gradiente.'},
+ {level:'medio',q:'\\(\\nabla L=2(w-5),w=1,\\eta=0,25\\) → w:',options:['3','−1','5','2'],answer:0,sol:'1+2.'},
+ {level:'dificil',q:'\\(L=w^2,\\eta=1,w=1\\) → w:',options:['0','−1','1','2'],answer:1,sol:'Oscila p/ −1.'},
+ {level:'dificil',q:'\\(L=(w-4)^2,\\eta=0,5,w=0\\): passos até o mínimo:',options:['1','2','4','∞'],answer:0,sol:'Chega em 4.'},
+ {level:'dificil',q:'Norma de ∇ de \\(w_1^2+w_2^2\\) em (3,4):',options:['5','7','10','25'],answer:2,sol:'‖(6,8)‖.'},
+ {level:'desafio',q:'Por que GD em vez da solução fechada?',options:['é mais bonito','escala p/ redes grandes e não convexas','é exato sempre','usa menos dados'],answer:1,sol:'Inverter matriz não escala.'}
+]
+};
+EX.c4={
+basico:[
+ {level:'facil',q:'P(cara) numa moeda justa?',sol:'<div class="sstep"></div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Soma de todas as probabilidades?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(e^0\\)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(\\frac{1}{1+1}\\)?',sol:'<div class="sstep"></div><p class="ans">0,5</p>'},
+ {level:'facil',q:'P(não A) se P(A)=0,2?',sol:'<div class="sstep">0,8</div><p class="ans">0,8</p>'},
+ {level:'facil',q:'P de evento impossível?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'A sigmoide \\(\\sigma(z)=\\frac{1}{1+e^{-z}}\\) dá valores entre?',sol:'<div class="sstep"></div><p class="ans">0 e 1</p>'},
+ {level:'facil',q:'\\(\\sigma(0)\\)?',sol:'<div class="sstep"></div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Esperança de 0 e 10 (50% cada)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'facil',q:'Dois eventos independentes, 0,5 cada, ambos?',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'}
+],
+consolida:[
+ {level:'facil',q:'Bayes: \\(P(C\\mid\\mathbf x)=\\frac{P(\\mathbf x\\mid C)P(C)}{P(\\mathbf x)}\\). O que ela inverte?',sol:'<div class="sstep"></div><p class="ans">As condicionais (P(x|C) ↔ P(C|x)).</p>'},
+ {level:'medio',q:'A regressão logística usa \\(\\hat y=\\sigma(\\mathbf w\\cdot\\mathbf x+b)\\). \\(\\sigma\\) faz o quê ao score?',sol:'<div class="sstep"></div><p class="ans">Comprime para uma probabilidade (0–1).</p>'},
+ {level:'medio',q:'\\(\\sigma(z)\\) para z muito grande tende a?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'medio',q:'\\(\\sigma(z)\\) para z muito negativo tende a?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'medio',q:'Com entropia cruzada, o gradiente da logística volta a ser...?',sol:'<div class="sstep"><span class="an">// como no perceptron/linear</span></div><p class="ans">\\((\\hat y-y)\\mathbf x\\)</p>'},
+ {level:'medio',q:'Resíduo \\(\\hat y-y\\) com \\(\\hat y=0{,}9,\\ y=1\\)?',sol:'<div class="sstep">−0,1</div><p class="ans">−0,1</p>'},
+ {level:'medio',q:'O gradiente \\((\\hat y-y)\\mathbf x\\) com \\(\\hat y=0{,}9,y=1,\\mathbf x=(2,0)\\)?',sol:'<div class="sstep">(−0,1)·(2,0) = (−0,2, 0)</div><p class="ans">(−0,2, 0)</p>'},
+ {level:'medio',q:'Bayes: \\(P(C)=0{,}1,P(+|C)=0{,}8,P(+|\\lnot C)=0{,}2\\). \\(P(C|+)\\)?',sol:'<div class="sstep">P(+)=0,26; 0,08/0,26</div><p class="ans">≈ 0,31</p>'},
+ {level:'medio',q:'Entropia cruzada de \\(y=1,\\hat y=0{,}8\\)?',sol:'<div class="sstep">−ln0,8 ≈ 0,22</div><p class="ans">≈ 0,22</p>'},
+ {level:'medio',q:'Entropia cruzada de \\(y=1,\\hat y=1\\)?',sol:'<div class="sstep">−ln1 = 0</div><p class="ans">0</p>'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(1,1)\\)?',sol:'<div class="sstep">(0,5, 0,5)</div><p class="ans">(0,5, 0,5)</p>'},
+ {level:'medio',q:'A softmax generaliza a sigmoide para quantas classes?',sol:'<div class="sstep"></div><p class="ans">Muitas (≥ 2).</p>'},
+ {level:'medio',q:'A esperança \\(\\mathbb E[X]=\\sum x P(x)\\) é um tipo de?',sol:'<div class="sstep"></div><p class="ans">Média ponderada.</p>'},
+ {level:'medio',q:'\\(P(A\\text{ e }B)\\) independentes, 0,3 e 0,5?',sol:'<div class="sstep">0,15</div><p class="ans">0,15</p>'},
+ {level:'medio',q:'Treinar a logística é minimizar qual perda?',sol:'<div class="sstep"></div><p class="ans">A entropia cruzada.</p>'},
+ {level:'facil',q:'\\(\\sigma(z)\\) é crescente ou decrescente?',sol:'<div class="sstep"></div><p class="ans">Crescente.</p>'},
+ {level:'dificil',q:'\\(\\operatorname{softmax}(2,0)\\) (\\(e^2\\approx7{,}39\\))?',sol:'<div class="sstep">7,39/8,39 ≈ 0,88</div><p class="ans">≈ (0,88, 0,12)</p>'},
+ {level:'dificil',q:'Bayes: \\(P(C)=0{,}5,P(+|C)=0{,}9,P(+|\\lnot C)=0{,}1\\). \\(P(C|+)\\)?',sol:'<div class="sstep">0,45/0,5</div><p class="ans">0,9</p>'},
+ {level:'dificil',q:'Por que a entropia cruzada (e não o erro quadrático) na classificação?',sol:'<div class="sstep"></div><p class="ans">Casa com a saída probabilística e dá gradiente limpo \\((\\hat y-y)\\mathbf x\\), sem saturar.</p>'},
+ {level:'desafio',q:'Somar a mesma constante a todos os logits muda a softmax?',sol:'<div class="sstep"><span class="an">// e^c cancela</span></div><p class="ans">Não.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(\\sigma(0)\\):',options:['0','0,5','1','2'],answer:1,sol:'1/(1+1).'},
+ {level:'facil',q:'A sigmoide dá valores entre:',options:['−1 e 1','0 e 1','0 e ∞','−∞ e ∞'],answer:1,sol:'Probabilidade.'},
+ {level:'facil',q:'Soma das probabilidades:',options:['0','0,5','1','100'],answer:2,sol:'1.'},
+ {level:'facil',q:'P(não A) se P(A)=0,2:',options:['0,2','0,8','1','0'],answer:1,sol:'1−0,2.'},
+ {level:'medio',q:'Bayes inverte:',options:['somas','as condicionais','médias','sinais'],answer:1,sol:'P(x|C)↔P(C|x).'},
+ {level:'medio',q:'\\(\\sigma\\) na logística comprime o score em:',options:['um inteiro','probabilidade (0–1)','um vetor','um ângulo'],answer:1,sol:'0–1.'},
+ {level:'medio',q:'Gradiente da logística (entropia cruzada):',options:['\\((\\hat y-y)\\mathbf x\\)','\\(2\\mathbf x\\)','\\(\\mathbf w\\)','0'],answer:0,sol:'Limpo.'},
+ {level:'medio',q:'\\(\\sigma(z)\\), z muito negativo →',options:['0','0,5','1','∞'],answer:0,sol:'Tende a 0.'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(1,1)\\):',options:['(1,1)','(0,5;0,5)','(0,1)','(2,2)'],answer:1,sol:'Iguais.'},
+ {level:'medio',q:'Bayes (0,1/0,8/0,2) → P(C|+):',options:['0,08','0,26','≈0,31','0,8'],answer:2,sol:'0,08/0,26.'},
+ {level:'medio',q:'Entropia cruzada de \\(\\hat y=1,y=1\\):',options:['0','1','∞','0,5'],answer:0,sol:'−ln1.'},
+ {level:'medio',q:'A softmax generaliza a sigmoide para:',options:['1 classe','muitas classes','0 classes','vetores só'],answer:1,sol:'≥2.'},
+ {level:'medio',q:'Resíduo \\(\\hat y-y\\), 0,9 e 1:',options:['0,1','−0,1','1,9','0'],answer:1,sol:'−0,1.'},
+ {level:'medio',q:'P(A e B) indep., 0,3 e 0,5:',options:['0,8','0,15','0,2','0,35'],answer:1,sol:'Multiplica.'},
+ {level:'medio',q:'Treinar a logística minimiza:',options:['a variância','a entropia cruzada','a norma','o gradiente'],answer:1,sol:'Cross-entropy.'},
+ {level:'medio',q:'A esperança é uma:',options:['soma simples','média ponderada','moda','variância'],answer:1,sol:'Ponderada.'},
+ {level:'dificil',q:'\\((\\hat y-y)\\mathbf x\\) com 0,9; 1; (2,0):',options:['(−0,2;0)','(0,2;0)','(−0,1;0)','(2;0)'],answer:0,sol:'−0,1·(2,0).'},
+ {level:'dificil',q:'\\(\\operatorname{softmax}(2,0)\\) ≈',options:['(0,5;0,5)','(0,88;0,12)','(1;0)','(0,73;0,27)'],answer:1,sol:'e²/(e²+1).'},
+ {level:'dificil',q:'Bayes (0,5/0,9/0,1) → P(C|+):',options:['0,5','0,9','0,45','0,1'],answer:1,sol:'0,45/0,5.'},
+ {level:'desafio',q:'Somar constante aos logits, a softmax:',options:['muda','não muda','zera','inverte'],answer:1,sol:'e^c cancela.'}
+]
+};
+EX.c5={
+basico:[
+ {level:'facil',q:'\\((0{,}9)^1\\)?',sol:'<div class="sstep">0,9</div><p class="ans">0,9</p>'},
+ {level:'facil',q:'\\((0{,}9)^2\\)?',sol:'<div class="sstep">0,81</div><p class="ans">0,81</p>'},
+ {level:'facil',q:'\\(1-0{,}9\\)?',sol:'<div class="sstep">0,1</div><p class="ans">0,1</p>'},
+ {level:'facil',q:'\\((0{,}5)^2\\)?',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'},
+ {level:'facil',q:'\\((0{,}5)^3\\)?',sol:'<div class="sstep">0,125</div><p class="ans">0,125</p>'},
+ {level:'facil',q:'Quanto maior d, \\((0{,}9)^d\\) fica...?',sol:'<div class="sstep"></div><p class="ans">Menor (tende a 0).</p>'},
+ {level:'facil',q:'\\(1-0{,}81\\)?',sol:'<div class="sstep">0,19</div><p class="ans">0,19</p>'},
+ {level:'facil',q:'\\(2^{10}\\)?',sol:'<div class="sstep">1024</div><p class="ans">1024</p>'},
+ {level:'facil',q:'\\(1^d\\)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(0^d\\) (d&gt;0)?',sol:'<div class="sstep"></div><p class="ans">0</p>'}
+],
+consolida:[
+ {level:'facil',q:'Fração de volume na casca: \\(1-(1-\\varepsilon)^d\\). Com \\(\\varepsilon=0{,}1,d=1\\)?',sol:'<div class="sstep">1 − 0,9 = 0,1</div><p class="ans">0,1</p>'},
+ {level:'medio',q:'Mesmo \\(\\varepsilon=0{,}1,\\ d=2\\)?',sol:'<div class="sstep">1 − 0,81 = 0,19</div><p class="ans">0,19</p>'},
+ {level:'medio',q:'\\(\\varepsilon=0{,}1,\\ d=10\\) (use \\(0{,}9^{10}\\approx0{,}349\\))?',sol:'<div class="sstep">1 − 0,349 = 0,651</div><p class="ans">≈ 0,65</p>'},
+ {level:'medio',q:'Quando \\(d\\to\\infty\\), a fração de volume na casca tende a?',sol:'<div class="sstep"></div><p class="ans">1 (quase todo o volume fica perto da superfície).</p>'},
+ {level:'medio',q:'Em alta dimensão, as distâncias entre pontos ficam...?',sol:'<div class="sstep"></div><p class="ans">Parecidas (perdem poder de discriminação).</p>'},
+ {level:'medio',q:'Volume de um cubo de lado 2 em \\(d\\) dimensões? E em \\(d=10\\)?',sol:'<div class="sstep">2^d; 2^10 = 1024</div><p class="ans">2^d; 1024.</p>'},
+ {level:'medio',q:'\\(0{,}9^{20}\\approx0{,}12\\). Fração da casca?',sol:'<div class="sstep">1 − 0,12 = 0,88</div><p class="ans">≈ 0,88</p>'},
+ {level:'medio',q:'O número de amostras necessárias cresce como, com a dimensão?',sol:'<div class="sstep"></div><p class="ans">Exponencialmente.</p>'},
+ {level:'medio',q:'A “maldição da dimensionalidade” quer dizer que muitas dimensões...?',sol:'<div class="sstep"></div><p class="ans">Tornam os dados esparsos e a vizinhança pouco informativa.</p>'},
+ {level:'medio',q:'A “mágica” (callback PCA) é que dados reais costumam viver em estrutura de baixa...?',sol:'<div class="sstep"></div><p class="ans">Dimensão (poucas direções importam).</p>'},
+ {level:'medio',q:'\\(0{,}99^{100}\\approx0{,}366\\). Fração da casca?',sol:'<div class="sstep">1 − 0,366 = 0,634</div><p class="ans">≈ 0,63</p>'},
+ {level:'medio',q:'Num cubo em \\(d=100\\), quase todo o volume está onde?',sol:'<div class="sstep"></div><p class="ans">Perto da borda (casca fina).</p>'},
+ {level:'medio',q:'A distância típica entre pontos aleatórios cresce aproximadamente como?',sol:'<div class="sstep"></div><p class="ans">\\(\\sqrt{d}\\)</p>'},
+ {level:'medio',q:'\\(2^{20}\\) é da ordem de?',sol:'<div class="sstep">≈ 1,05 milhão</div><p class="ans">≈ 10⁶ (1.048.576)</p>'},
+ {level:'medio',q:'Dois vetores aleatórios em alta dimensão tendem a ser quase...?',sol:'<div class="sstep"></div><p class="ans">Ortogonais.</p>'},
+ {level:'facil',q:'\\((0{,}9)^3\\) (aprox.)?',sol:'<div class="sstep">0,729</div><p class="ans">≈ 0,729</p>'},
+ {level:'dificil',q:'\\(\\varepsilon=0{,}5\\): fração da casca em d=1, 2, 3?',sol:'<div class="sstep">1−0,5 = 0,5<br>1−0,25 = 0,75<br>1−0,125 = 0,875</div><p class="ans">0,5; 0,75; 0,875</p>'},
+ {level:'dificil',q:'Para a casca ser 99% com \\(\\varepsilon=0{,}1\\), precisa \\(0{,}9^d\\le0{,}01\\). d ≈?',hint:'\\(d\\approx \\ln0{,}01/\\ln0{,}9\\).',sol:'<div class="sstep">≈ −4,605 / −0,105 ≈ 44</div><p class="ans">≈ 44</p>'},
+ {level:'dificil',q:'Em alta dimensão, o volume de uma bola concentra-se em quê?',sol:'<div class="sstep"></div><p class="ans">Numa casca fina perto da superfície.</p>'},
+ {level:'desafio',q:'Por que isso é uma “maldição” para o aprendizado?',sol:'<div class="sstep"></div><p class="ans">Os dados ficam esparsos, vizinhanças perdem sentido e seriam necessários dados exponenciais — daí a importância de reduzir dimensão (PCA).</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\((0{,}9)^2\\):',options:['0,18','0,81','1,8','0,9'],answer:1,sol:'0,81.'},
+ {level:'facil',q:'\\(1-0{,}9\\):',options:['0,1','0,9','0,01','1'],answer:0,sol:'0,1.'},
+ {level:'facil',q:'\\(2^{10}\\):',options:['100','512','1024','2048'],answer:2,sol:'1024.'},
+ {level:'facil',q:'Quanto maior d, \\((0{,}9)^d\\):',options:['cresce','tende a 0','fica 1','oscila'],answer:1,sol:'Decai.'},
+ {level:'medio',q:'Casca com \\(\\varepsilon=0{,}1,d=2\\):',options:['0,1','0,19','0,81','0,9'],answer:1,sol:'1−0,81.'},
+ {level:'medio',q:'Quando \\(d\\to\\infty\\), fração na casca →',options:['0','0,5','1','∞'],answer:2,sol:'Tudo na borda.'},
+ {level:'medio',q:'Em alta dimensão, distâncias ficam:',options:['muito diferentes','parecidas','zero','negativas'],answer:1,sol:'Perdem discriminação.'},
+ {level:'medio',q:'Amostras necessárias crescem:',options:['linearmente','exponencialmente','logaritmicamente','constante'],answer:1,sol:'Com d.'},
+ {level:'medio',q:'Casca com \\(\\varepsilon=0{,}1,d=10\\) (0,9¹⁰≈0,35):',options:['0,1','0,35','0,65','0,9'],answer:2,sol:'1−0,35.'},
+ {level:'medio',q:'A “mágica” é que dados vivem em baixa:',options:['dimensão','frequência','amplitude','energia'],answer:0,sol:'PCA.'},
+ {level:'medio',q:'Num cubo d=100, o volume está:',options:['no centro','perto da borda','na origem','uniforme'],answer:1,sol:'Casca fina.'},
+ {level:'medio',q:'Distância típica cresce como:',options:['d','√d','1/d','log d'],answer:1,sol:'√d.'},
+ {level:'medio',q:'Vetores aleatórios em alta dim são quase:',options:['paralelos','ortogonais','opostos','iguais'],answer:1,sol:'Ortogonais.'},
+ {level:'medio',q:'Cubo lado 2 em d=10 tem volume:',options:['20','1024','100','2'],answer:1,sol:'2¹⁰.'},
+ {level:'medio',q:'A densidade de N pontos cai como:',options:['1/d','1/2^d','d','constante'],answer:1,sol:'Exponencial.'},
+ {level:'medio',q:'Casca com \\(\\varepsilon=0{,}5,d=3\\):',options:['0,5','0,75','0,875','0,125'],answer:2,sol:'1−0,125.'},
+ {level:'dificil',q:'\\(0{,}99^{100}\\approx0{,}37\\). Casca ≈',options:['0,37','0,63','0,99','0,5'],answer:1,sol:'1−0,37.'},
+ {level:'dificil',q:'Casca 99% com \\(\\varepsilon=0{,}1\\): d ≈',options:['10','22','44','100'],answer:2,sol:'ln0,01/ln0,9.'},
+ {level:'dificil',q:'\\(2^{20}\\) ≈',options:['mil','dez mil','um milhão','um bilhão'],answer:2,sol:'1,05·10⁶.'},
+ {level:'desafio',q:'A maldição da dimensionalidade exige:',options:['menos dados','dados exponenciais / reduzir dim','mais cores','menos pesos'],answer:1,sol:'Esparsidade.'}
+]
+};
+EX.c6={
+basico:[
+ {level:'facil',q:'Média de 2, 4, 6?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'\\((5-3)^2\\)?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'Conjunto que varia mais: \\(\\{2,2,2\\}\\) ou \\(\\{0,4\\}\\)?',sol:'<div class="sstep"></div><p class="ans">{0, 4}</p>'},
+ {level:'facil',q:'Valores todos iguais → variância?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'A variância mede o quê?',sol:'<div class="sstep"></div><p class="ans">O espalhamento.</p>'},
+ {level:'facil',q:'\\(\\sqrt{9}\\)?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'facil',q:'Média de 10 e 20?',sol:'<div class="sstep">15</div><p class="ans">15</p>'},
+ {level:'facil',q:'Desvio de 7 em relação à média 4?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'facil',q:'\\((1,0)\\) e \\((0,1)\\) são ortogonais?',sol:'<div class="sstep">produto escalar 0</div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'Numa matriz diagonal, os autovalores estão onde?',sol:'<div class="sstep"></div><p class="ans">Na diagonal.</p>'}
+],
+consolida:[
+ {level:'medio',q:'PCA usa autovetores de qual matriz?',sol:'<div class="sstep"></div><p class="ans">A matriz de covariância \\(\\Sigma\\).</p>'},
+ {level:'medio',q:'A equação central é \\(\\Sigma\\mathbf v=\\lambda\\mathbf v\\). Se \\(\\Sigma\\mathbf v=5\\mathbf v\\), qual \\(\\lambda\\)?',sol:'<div class="sstep"></div><p class="ans">5</p>'},
+ {level:'medio',q:'Autovalores de \\(\\Sigma=\\begin{bmatrix}4&0\\\\0&1\\end{bmatrix}\\)?',sol:'<div class="sstep"></div><p class="ans">4 e 1</p>'},
+ {level:'medio',q:'A direção principal de \\(\\mathrm{diag}(4,1)\\)?',sol:'<div class="sstep">maior λ = 4</div><p class="ans">O eixo x.</p>'},
+ {level:'medio',q:'Quanta variância na direção principal acima?',sol:'<div class="sstep"></div><p class="ans">4.</p>'},
+ {level:'medio',q:'O autovalor \\(\\lambda\\) representa o quê naquela direção?',sol:'<div class="sstep"></div><p class="ans">A variância capturada.</p>'},
+ {level:'medio',q:'PCA mantém as direções de maior...?',sol:'<div class="sstep"></div><p class="ans">Variância (maiores autovalores).</p>'},
+ {level:'medio',q:'Reduzir 2D→1D mantém quantas direções?',sol:'<div class="sstep"></div><p class="ans">1 (a de maior λ).</p>'},
+ {level:'medio',q:'Soma dos autovalores de \\(\\mathrm{diag}(4,1)\\) (variância total)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'dificil',q:'\\(\\lambda\\) de \\((1,1)\\) em \\(\\begin{bmatrix}3&1\\\\1&3\\end{bmatrix}\\)?',sol:'<div class="sstep">Σ(1,1)=(4,4)=4·(1,1)</div><p class="ans">4</p>'},
+ {level:'dificil',q:'\\(\\lambda\\) de \\((1,-1)\\) em \\(\\begin{bmatrix}3&1\\\\1&3\\end{bmatrix}\\)?',sol:'<div class="sstep">Σ(1,−1)=(2,−2)=2·(1,−1)</div><p class="ans">2</p>'},
+ {level:'medio',q:'A covariância \\(\\Sigma\\) é simétrica?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'Os autovetores da covariância são, entre si, ...?',sol:'<div class="sstep"></div><p class="ans">Ortogonais.</p>'},
+ {level:'medio',q:'Variância de \\(\\{0,0,4,4\\}\\) (média 2)?',sol:'<div class="sstep">16/4 = 4</div><p class="ans">4</p>'},
+ {level:'medio',q:'Fração de variância na PC1 com \\(\\lambda=(9,1)\\)?',sol:'<div class="sstep">9/10</div><p class="ans">0,9</p>'},
+ {level:'medio',q:'PCA é uma redução de dimensão com ou sem rótulos?',sol:'<div class="sstep"></div><p class="ans">Sem rótulos (não supervisionada).</p>'},
+ {level:'medio',q:'A PC1 de \\(\\begin{bmatrix}2&0\\\\0&5\\end{bmatrix}\\)?',sol:'<div class="sstep">maior λ = 5</div><p class="ans">O eixo y.</p>'},
+ {level:'dificil',q:'Variância de \\(\\{1,2,3,4\\}\\) (média 2,5)?',sol:'<div class="sstep">5/4 = 1,25</div><p class="ans">1,25</p>'},
+ {level:'dificil',q:'Dados quase sobre a reta \\(y=x\\): a covariância é?',sol:'<div class="sstep"></div><p class="ans">Positiva (forte).</p>'},
+ {level:'desafio',q:'Por que PCA combate a maldição da dimensionalidade (callback c5)?',sol:'<div class="sstep"></div><p class="ans">Resume os dados em poucas direções de maior variância, descartando as irrelevantes.</p>'}
+],
+mcq:[
+ {level:'facil',q:'A variância mede:',options:['a média','o espalhamento','o máximo','a soma'],answer:1,sol:'Dispersão.'},
+ {level:'facil',q:'Valores iguais → variância:',options:['0','1','∞','média'],answer:0,sol:'0.'},
+ {level:'medio',q:'PCA usa autovetores de:',options:['X','a covariância Σ','y','I'],answer:1,sol:'Σ.'},
+ {level:'medio',q:'\\(\\Sigma\\mathbf v=5\\mathbf v\\) → λ:',options:['1','5','v','0'],answer:1,sol:'5.'},
+ {level:'medio',q:'Autovalores de \\(\\mathrm{diag}(4,1)\\):',options:['4 e 1','5','4 e 4','0 e 1'],answer:0,sol:'Diagonal.'},
+ {level:'medio',q:'Direção principal de \\(\\mathrm{diag}(4,1)\\):',options:['eixo x','eixo y','diagonal','nenhuma'],answer:0,sol:'λ=4.'},
+ {level:'medio',q:'O autovalor representa:',options:['a média','a variância na direção','o erro','a norma'],answer:1,sol:'Variância capturada.'},
+ {level:'medio',q:'PCA mantém direções de maior:',options:['média','variância','norma','erro'],answer:1,sol:'Maiores λ.'},
+ {level:'medio',q:'Reduzir 2D→1D mantém:',options:['0','1','2','3'],answer:1,sol:'A de maior λ.'},
+ {level:'medio',q:'Soma dos autovalores de \\(\\mathrm{diag}(4,1)\\):',options:['4','5','3','1'],answer:1,sol:'Variância total.'},
+ {level:'dificil',q:'λ de \\((1,1)\\) em \\(\\begin{bmatrix}3&1\\\\1&3\\end{bmatrix}\\):',options:['2','3','4','1'],answer:2,sol:'(4,4).'},
+ {level:'dificil',q:'λ de \\((1,-1)\\) em \\(\\begin{bmatrix}3&1\\\\1&3\\end{bmatrix}\\):',options:['2','3','4','−2'],answer:0,sol:'(2,−2).'},
+ {level:'medio',q:'A covariância Σ é:',options:['assimétrica','simétrica','diagonal só','nula'],answer:1,sol:'Simétrica.'},
+ {level:'medio',q:'Os autovetores de Σ são entre si:',options:['paralelos','ortogonais','iguais','nulos'],answer:1,sol:'Ortogonais.'},
+ {level:'medio',q:'λ=(9,1): fração na PC1:',options:['0,5','0,9','0,1','1'],answer:1,sol:'9/10.'},
+ {level:'medio',q:'PCA é:',options:['supervisionada','não supervisionada','reforço','aleatória'],answer:1,sol:'Sem rótulos.'},
+ {level:'medio',q:'PC1 de \\(\\begin{bmatrix}2&0\\\\0&5\\end{bmatrix}\\):',options:['eixo x','eixo y','diagonal','nenhuma'],answer:1,sol:'λ=5.'},
+ {level:'medio',q:'Variância de \\(\\{0,0,4,4\\}\\):',options:['2','4','8','16'],answer:1,sol:'16/4.'},
+ {level:'dificil',q:'Variância de \\(\\{1,2,3,4\\}\\):',options:['1','1,25','2,5','5'],answer:1,sol:'5/4.'},
+ {level:'desafio',q:'PCA combate a maldição da dim. porque:',options:['adiciona dimensões','resume em poucas direções','aumenta dados','normaliza'],answer:1,sol:'Reduz dimensão.'}
+]
+};
+EX.c7={
+basico:[
+ {level:'facil',q:'\\((1,2)\\cdot(3,4)\\)?',sol:'<div class="sstep">11</div><p class="ans">11</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'Norma de \\((3,4)\\)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'facil',q:'\\((2,2)\\cdot(2,2)\\)?',sol:'<div class="sstep">8</div><p class="ans">8</p>'},
+ {level:'facil',q:'Maior entre 2 e 5?',sol:'<div class="sstep"></div><p class="ans">5</p>'},
+ {level:'facil',q:'\\(2/4\\) simplificado?',sol:'<div class="sstep">1/2</div><p class="ans">1/2</p>'},
+ {level:'facil',q:'\\((x\\cdot z)\\) é um número ou um vetor?',sol:'<div class="sstep"></div><p class="ans">Um número (escalar).</p>'},
+ {level:'facil',q:'\\((1,1)\\cdot(1,-1)\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'\\(3^2\\)?',sol:'<div class="sstep">9</div><p class="ans">9</p>'},
+ {level:'facil',q:'\\(2/\\sqrt{?}\\)... quanto é \\(\\sqrt{4}\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'}
+],
+consolida:[
+ {level:'medio',q:'A SVM procura a fronteira que maximiza a...?',sol:'<div class="sstep"></div><p class="ans">Margem (distância às amostras mais próximas).</p>'},
+ {level:'medio',q:'A largura da margem é \\(2/\\|\\mathbf w\\|\\). Maximizá-la equivale a...?',sol:'<div class="sstep"></div><p class="ans">Minimizar \\(\\|\\mathbf w\\|\\).</p>'},
+ {level:'medio',q:'As amostras que tocam a margem são os...?',sol:'<div class="sstep"></div><p class="ans">Vetores de suporte.</p>'},
+ {level:'medio',q:'Um kernel é \\(K(\\mathbf x,\\mathbf z)=\\phi(\\mathbf x)\\cdot\\phi(\\mathbf z)\\): um produto escalar em qual espaço?',sol:'<div class="sstep"></div><p class="ans">No espaço de características (φ).</p>'},
+ {level:'medio',q:'O kernel linear é \\(K(\\mathbf x,\\mathbf z)=\\)?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbf x\\cdot\\mathbf z\\)</p>'},
+ {level:'medio',q:'Kernel linear de \\((1,2)\\) e \\((3,4)\\)?',sol:'<div class="sstep">1·3+2·4 = 11</div><p class="ans">11</p>'},
+ {level:'medio',q:'Por que o “truque do kernel” é útil?',sol:'<div class="sstep"></div><p class="ans">Calcula o produto no espaço de características sem computar \\(\\phi\\) explicitamente.</p>'},
+ {level:'medio',q:'Se a decisão só depende de produtos escalares, podemos trocá-los por...?',sol:'<div class="sstep"></div><p class="ans">Um kernel válido.</p>'},
+ {level:'medio',q:'Margem com \\(\\|\\mathbf w\\|=2\\): \\(2/\\|\\mathbf w\\|\\)?',sol:'<div class="sstep">2/2 = 1</div><p class="ans">1</p>'},
+ {level:'medio',q:'Margem com \\(\\|\\mathbf w\\|=4\\)?',sol:'<div class="sstep">2/4 = 0,5</div><p class="ans">0,5</p>'},
+ {level:'medio',q:'Quanto menor \\(\\|\\mathbf w\\|\\), a margem fica...?',sol:'<div class="sstep"></div><p class="ans">Maior.</p>'},
+ {level:'medio',q:'Kernel polinomial \\((\\mathbf x\\cdot\\mathbf z+1)^2\\) com \\(\\mathbf x\\cdot\\mathbf z=2\\)?',sol:'<div class="sstep">(2+1)² = 9</div><p class="ans">9</p>'},
+ {level:'medio',q:'Um kernel permite separar dados não lineares mapeando-os para dimensão...?',sol:'<div class="sstep"></div><p class="ans">Maior (onde ficam linearmente separáveis).</p>'},
+ {level:'medio',q:'A SVM é margem máxima: prioriza a fronteira mais...?',sol:'<div class="sstep"></div><p class="ans">Distante das classes (robusta).</p>'},
+ {level:'medio',q:'\\(K(\\mathbf x,\\mathbf x)\\) com kernel linear e \\(\\mathbf x=(3,4)\\)?',sol:'<div class="sstep">x·x = 9+16 = 25</div><p class="ans">25</p>'},
+ {level:'facil',q:'O produto escalar mede o quê (relevante para o kernel)?',sol:'<div class="sstep"></div><p class="ans">Similaridade/alinhamento.</p>'},
+ {level:'dificil',q:'Kernel polinomial \\((\\mathbf x\\cdot\\mathbf z+1)^2\\) com \\(\\mathbf x=(1,1),\\mathbf z=(1,0)\\)?',sol:'<div class="sstep">x·z = 1; (1+1)² = 4</div><p class="ans">4</p>'},
+ {level:'dificil',q:'Maximizar margem \\(2/\\|\\mathbf w\\|\\) costuma ser escrito como minimizar?',sol:'<div class="sstep"></div><p class="ans">\\(\\tfrac12\\|\\mathbf w\\|^2\\)</p>'},
+ {level:'dificil',q:'Só os vetores de suporte determinam a fronteira?',sol:'<div class="sstep"></div><p class="ans">Sim — os demais pontos não a alteram.</p>'},
+ {level:'desafio',q:'Qual a ideia central do truque do kernel em uma frase?',sol:'<div class="sstep"></div><p class="ans">Computar similaridades em um espaço de alta dimensão sem nunca visitar esse espaço explicitamente.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\((1,2)\\cdot(3,4)\\):',options:['10','11','14','7'],answer:1,sol:'11.'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\):',options:['0','1','2','−1'],answer:0,sol:'Ortogonais.'},
+ {level:'facil',q:'\\(\\mathbf x\\cdot\\mathbf z\\) é:',options:['um vetor','um escalar','uma matriz','um ângulo'],answer:1,sol:'Número.'},
+ {level:'facil',q:'Norma de \\((3,4)\\):',options:['5','7','12','25'],answer:0,sol:'5.'},
+ {level:'medio',q:'A SVM maximiza a:',options:['norma','margem','média','variância'],answer:1,sol:'Distância às classes.'},
+ {level:'medio',q:'Margem \\(2/\\|\\mathbf w\\|\\); maximizá-la =',options:['maximizar ‖w‖','minimizar ‖w‖','‖w‖=1','nada'],answer:1,sol:'Menor ‖w‖.'},
+ {level:'medio',q:'Pontos que tocam a margem são:',options:['outliers','vetores de suporte','ruído','centros'],answer:1,sol:'Support vectors.'},
+ {level:'medio',q:'Kernel \\(K(\\mathbf x,\\mathbf z)=\\):',options:['\\(\\phi(\\mathbf x)\\cdot\\phi(\\mathbf z)\\)','x+z','‖x‖','x²'],answer:0,sol:'Produto no espaço φ.'},
+ {level:'medio',q:'Kernel linear é:',options:['\\(\\mathbf x\\cdot\\mathbf z\\)','‖x−z‖','x+z','1'],answer:0,sol:'x·z.'},
+ {level:'medio',q:'Kernel linear de (1,2),(3,4):',options:['10','11','14','7'],answer:1,sol:'11.'},
+ {level:'medio',q:'O truque do kernel evita:',options:['calcular φ explicitamente','usar dados','treinar','medir margem'],answer:0,sol:'Sem visitar o espaço.'},
+ {level:'medio',q:'Margem com ‖w‖=4:',options:['4','2','0,5','8'],answer:2,sol:'2/4.'},
+ {level:'medio',q:'Menor ‖w‖ → margem:',options:['menor','maior','igual','zero'],answer:1,sol:'2/‖w‖.'},
+ {level:'medio',q:'\\((\\mathbf x\\cdot\\mathbf z+1)^2\\) com x·z=2:',options:['4','9','5','3'],answer:1,sol:'(3)².'},
+ {level:'medio',q:'\\(K(\\mathbf x,\\mathbf x)\\) linear, x=(3,4):',options:['5','25','7','12'],answer:1,sol:'x·x.'},
+ {level:'medio',q:'Kernel permite separar não-linear mapeando para dim:',options:['menor','maior','igual','zero'],answer:1,sol:'Onde fica linear.'},
+ {level:'dificil',q:'\\((\\mathbf x\\cdot\\mathbf z+1)^2\\), x=(1,1),z=(1,0):',options:['1','4','9','2'],answer:1,sol:'(1+1)².'},
+ {level:'dificil',q:'Maximizar margem ↔ minimizar:',options:['‖w‖²/2','‖x‖','b','η'],answer:0,sol:'½‖w‖².'},
+ {level:'dificil',q:'A fronteira é determinada por:',options:['todos os pontos','só os vetores de suporte','a média','o kernel só'],answer:1,sol:'Support vectors.'},
+ {level:'desafio',q:'Truque do kernel, em uma frase:',options:['copiar dados','similaridade em alta dim sem visitar o espaço','reduzir dim','somar vetores'],answer:1,sol:'Implícito.'}
+]
+};
+EX.c8={
+basico:[
+ {level:'facil',q:'Os estados de Hopfield valem \\(+1\\) ou...?',sol:'<div class="sstep"></div><p class="ans">−1</p>'},
+ {level:'facil',q:'\\((+1)\\times(+1)\\)?',sol:'<div class="sstep">1</div><p class="ans">+1</p>'},
+ {level:'facil',q:'\\((+1)\\times(-1)\\)?',sol:'<div class="sstep">−1</div><p class="ans">−1</p>'},
+ {level:'facil',q:'\\((-1)\\times(-1)\\)?',sol:'<div class="sstep">1</div><p class="ans">+1</p>'},
+ {level:'facil',q:'\\(\\operatorname{sign}(3)\\)?',sol:'<div class="sstep"></div><p class="ans">+1</p>'},
+ {level:'facil',q:'\\(\\operatorname{sign}(-2)\\)?',sol:'<div class="sstep"></div><p class="ans">−1</p>'},
+ {level:'facil',q:'\\(1+(-1)+1\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'Metade de \\(-8\\)?',sol:'<div class="sstep">−4</div><p class="ans">−4</p>'},
+ {level:'facil',q:'Energia “menor” é mais alta ou mais baixa que a atual numa descida?',sol:'<div class="sstep"></div><p class="ans">Mais baixa.</p>'},
+ {level:'facil',q:'\\(2\\times(+1)\\times(-1)\\)?',sol:'<div class="sstep">−2</div><p class="ans">−2</p>'}
+],
+consolida:[
+ {level:'medio',q:'A energia de Hopfield é \\(E=-\\tfrac12\\sum_{i,j}w_{ij}s_is_j+\\sum_i\\theta_i s_i\\). A rede evolui para energia...?',sol:'<div class="sstep"></div><p class="ans">Menor (mínimos de energia).</p>'},
+ {level:'medio',q:'Os mínimos de energia funcionam como o quê?',sol:'<div class="sstep"></div><p class="ans">Memórias (atratores) armazenadas.</p>'},
+ {level:'medio',q:'Os pesos de Hopfield são simétricos: \\(w_{ij}=\\)?',sol:'<div class="sstep"></div><p class="ans">\\(w_{ji}\\)</p>'},
+ {level:'medio',q:'A atualização de um neurônio: \\(s_i\\leftarrow\\operatorname{sign}(\\sum_j w_{ij}s_j)\\). Se a soma é 3?',sol:'<div class="sstep">sign(3) = +1</div><p class="ans">+1</p>'},
+ {level:'medio',q:'E se a soma é \\(-5\\)?',sol:'<div class="sstep">sign(−5) = −1</div><p class="ans">−1</p>'},
+ {level:'medio',q:'Termo \\(w_{ij}s_is_j\\) com \\(w=2,\\ s_i=+1,\\ s_j=-1\\)?',sol:'<div class="sstep">2·(+1)·(−1) = −2</div><p class="ans">−2</p>'},
+ {level:'medio',q:'O mesmo termo com \\(s_i=s_j=+1\\)?',sol:'<div class="sstep">2·1·1 = 2</div><p class="ans">2</p>'},
+ {level:'medio',q:'A rede de Hopfield é um modelo de memória...?',sol:'<div class="sstep"></div><p class="ans">Associativa.</p>'},
+ {level:'medio',q:'Dado um padrão parcial/ruidoso, a rede converge para a memória mais...?',sol:'<div class="sstep"></div><p class="ans">Próxima (o atrator).</p>'},
+ {level:'medio',q:'Cada passo de atualização nunca aumenta a...?',sol:'<div class="sstep"></div><p class="ans">Energia.</p>'},
+ {level:'medio',q:'\\(s_i s_j\\) é \\(+1\\) quando os dois estados são...?',sol:'<div class="sstep"></div><p class="ans">Iguais.</p>'},
+ {level:'medio',q:'\\(s_i s_j\\) é \\(-1\\) quando são...?',sol:'<div class="sstep"></div><p class="ans">Diferentes.</p>'},
+ {level:'medio',q:'Pesos positivos \\(w_{ij}\\) favorecem que \\(s_i\\) e \\(s_j\\) fiquem...?',sol:'<div class="sstep"><span class="an">// reduz energia quando iguais</span></div><p class="ans">Iguais (alinhados).</p>'},
+ {level:'medio',q:'O fator \\(-\\tfrac12\\) na energia evita contar cada par...?',sol:'<div class="sstep"></div><p class="ans">Duas vezes (i,j e j,i).</p>'},
+ {level:'medio',q:'\\(\\operatorname{sign}(0)\\) (convenção ≥0)?',sol:'<div class="sstep"></div><p class="ans">+1</p>'},
+ {level:'facil',q:'Quantos valores possíveis tem cada estado \\(s_i\\)?',sol:'<div class="sstep">+1 ou −1</div><p class="ans">2</p>'},
+ {level:'dificil',q:'Soma local \\(\\sum_j w_{ij}s_j\\) com \\(w=(2,-1,3)\\) e \\(s=(+1,+1,-1)\\)?',sol:'<div class="sstep">2·1 + (−1)·1 + 3·(−1) = 2 −1 −3 = −2</div><p class="ans">−2 → s_i ← −1</p>'},
+ {level:'dificil',q:'Uma rede com N neurônios de ±1 tem quantos estados possíveis?',sol:'<div class="sstep">2^N</div><p class="ans">\\(2^N\\)</p>'},
+ {level:'dificil',q:'Por que a dinâmica sempre para (converge)?',sol:'<div class="sstep"></div><p class="ans">A energia é limitada inferiormente e nunca cresce — então estabiliza num mínimo.</p>'},
+ {level:'desafio',q:'Em uma frase, o que uma rede de Hopfield faz?',sol:'<div class="sstep"></div><p class="ans">Armazena padrões como mínimos de energia e recupera o mais próximo a partir de uma entrada ruidosa.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Estados de Hopfield:',options:['0 ou 1','+1 ou −1','reais','0 a 1'],answer:1,sol:'±1.'},
+ {level:'facil',q:'\\((+1)\\times(-1)\\):',options:['+1','−1','0','2'],answer:1,sol:'−1.'},
+ {level:'facil',q:'\\((-1)\\times(-1)\\):',options:['+1','−1','0','2'],answer:0,sol:'+1.'},
+ {level:'facil',q:'\\(\\operatorname{sign}(-2)\\):',options:['+1','−1','0','2'],answer:1,sol:'Negativo.'},
+ {level:'medio',q:'A rede evolui para energia:',options:['maior','menor','constante','aleatória'],answer:1,sol:'Mínimos.'},
+ {level:'medio',q:'Os mínimos de energia são:',options:['ruído','memórias (atratores)','pesos','entradas'],answer:1,sol:'Padrões armazenados.'},
+ {level:'medio',q:'Pesos de Hopfield são:',options:['assimétricos','simétricos (w_ij=w_ji)','nulos','aleatórios'],answer:1,sol:'Simétricos.'},
+ {level:'medio',q:'\\(s_i\\leftarrow\\operatorname{sign}(\\sum_j w_{ij}s_j)\\), soma=3:',options:['+1','−1','0','3'],answer:0,sol:'sign(3).'},
+ {level:'medio',q:'\\(w s_i s_j\\) com w=2,s_i=+1,s_j=−1:',options:['2','−2','0','4'],answer:1,sol:'−2.'},
+ {level:'medio',q:'Hopfield é memória:',options:['associativa','RAM','de pilha','cache'],answer:0,sol:'Por conteúdo.'},
+ {level:'medio',q:'Cada atualização nunca aumenta a:',options:['energia','dimensão','entrada','simetria'],answer:0,sol:'Descida de energia.'},
+ {level:'medio',q:'\\(s_i s_j=+1\\) quando os estados são:',options:['iguais','diferentes','nulos','grandes'],answer:0,sol:'Iguais.'},
+ {level:'medio',q:'Peso positivo favorece \\(s_i,s_j\\):',options:['iguais','diferentes','nulos','aleatórios'],answer:0,sol:'Alinhados.'},
+ {level:'medio',q:'O \\(-\\tfrac12\\) evita contar o par:',options:['uma vez','duas vezes','três vezes','nunca'],answer:1,sol:'(i,j) e (j,i).'},
+ {level:'medio',q:'Dado padrão ruidoso, converge para a memória mais:',options:['distante','próxima','clara','nova'],answer:1,sol:'Atrator.'},
+ {level:'medio',q:'\\(\\operatorname{sign}(0)\\) (≥0):',options:['+1','−1','0','indef.'],answer:0,sol:'+1.'},
+ {level:'dificil',q:'\\(\\sum_j w_{ij}s_j\\), w=(2,−1,3), s=(+1,+1,−1):',options:['−2','2','6','−6'],answer:0,sol:'2−1−3.'},
+ {level:'dificil',q:'N neurônios ±1 → estados possíveis:',options:['N','2N','2^N','N²'],answer:2,sol:'2^N.'},
+ {level:'dificil',q:'A dinâmica converge porque a energia é:',options:['ilimitada','limitada e não cresce','crescente','aleatória'],answer:1,sol:'Estabiliza.'},
+ {level:'desafio',q:'Uma rede de Hopfield:',options:['ordena números','recupera padrões por energia','soma vetores','gera ruído'],answer:1,sol:'Memória associativa.'}
+]
+};
+EX.c9={
+basico:[
+ {level:'facil',q:'XOR(0,0)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'XOR(1,1)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'XOR(0,1)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'XOR(1,0)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'AND(1,1)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'OR(0,0)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'Uma reta divide o plano em quantas regiões?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'O XOR vale 1 quando as entradas são...?',sol:'<div class="sstep"></div><p class="ans">Diferentes.</p>'},
+ {level:'facil',q:'NOT(0)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'Quantas entradas o XOR (clássico) recebe?',sol:'<div class="sstep"></div><p class="ans">2</p>'}
+],
+consolida:[
+ {level:'facil',q:'O XOR é linearmente separável?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'medio',q:'Por quê? Os dois “1” do XOR ficam em cantos...?',sol:'<div class="sstep"></div><p class="ans">Opostos (diagonal) — nenhuma reta os separa dos “0”.</p>'},
+ {level:'medio',q:'Uma camada oculta acrescenta o quê, que resolve o XOR?',sol:'<div class="sstep"></div><p class="ans">Não linearidade (dobra o espaço).</p>'},
+ {level:'medio',q:'Quantos neurônios ocultos bastam para resolver o XOR?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'O AND é linearmente separável?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'O OR é linearmente separável?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'XOR = (A OR B) E NÃO(A E B). Para A=1, B=1?',sol:'<div class="sstep">(1) E NÃO(1) = 1 E 0 = 0</div><p class="ans">0</p>'},
+ {level:'medio',q:'Um perceptron sem camada oculta aprende o XOR?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'medio',q:'Com uma camada oculta e não linearidade, o XOR fica...?',sol:'<div class="sstep"></div><p class="ans">Resolvível.</p>'},
+ {level:'facil',q:'Quantas entradas distintas há para 2 variáveis binárias?',sol:'<div class="sstep">2² = 4</div><p class="ans">4</p>'},
+ {level:'medio',q:'XOR(1,1) e XOR(0,0) caem na mesma classe (0) apesar de...?',sol:'<div class="sstep"></div><p class="ans">Estarem em cantos distantes.</p>'},
+ {level:'medio',q:'Empilhar camadas lineares sem \\(\\sigma\\) continua sendo...?',sol:'<div class="sstep"></div><p class="ans">Linear (não resolve XOR).</p>'},
+ {level:'medio',q:'O XOR é o exemplo canônico que motivou o quê?',sol:'<div class="sstep"></div><p class="ans">As camadas ocultas / MLPs.</p>'},
+ {level:'medio',q:'Uma fronteira curva/quebrada consegue separar o XOR?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'Na tabela do XOR, quantas saídas valem 1?',sol:'<div class="sstep">(0,1)→1, (1,0)→1</div><p class="ans">2</p>'},
+ {level:'facil',q:'A não linearidade entre camadas serve para...?',sol:'<div class="sstep"></div><p class="ans">Dobrar/curvar a fronteira.</p>'},
+ {level:'dificil',q:'XOR = (A E NÃO B) OU (NÃO A E B). Para A=1, B=0?',sol:'<div class="sstep">(1 E 1) OU (0 E 0) = 1 OU 0 = 1</div><p class="ans">1</p>'},
+ {level:'dificil',q:'Com 2 unidades ocultas, o XOR torna-se separável em qual espaço?',sol:'<div class="sstep"></div><p class="ans">No espaço oculto (transformado).</p>'},
+ {level:'dificil',q:'Quantas regiões 2 retas podem criar no plano?',sol:'<div class="sstep"></div><p class="ans">Até 4.</p>'},
+ {level:'desafio',q:'Qual a lição do XOR para o aprendizado profundo?',sol:'<div class="sstep"></div><p class="ans">Profundidade + não linearidade dão poder expressivo que uma única unidade linear não tem.</p>'}
+],
+mcq:[
+ {level:'facil',q:'XOR(1,1):',options:['0','1','2','−1'],answer:0,sol:'Iguais → 0.'},
+ {level:'facil',q:'XOR(0,1):',options:['0','1','2','−1'],answer:1,sol:'Diferentes → 1.'},
+ {level:'facil',q:'O XOR vale 1 quando as entradas são:',options:['iguais','diferentes','ambas 1','ambas 0'],answer:1,sol:'Diferentes.'},
+ {level:'facil',q:'Uma reta divide o plano em:',options:['1','2','3','4'],answer:1,sol:'2 regiões.'},
+ {level:'medio',q:'O XOR é linearmente separável?',options:['sim','não'],answer:1,sol:'Diagonal.'},
+ {level:'medio',q:'O que resolve o XOR:',options:['mais dados','camada oculta + não linearidade','normalizar','menos pesos'],answer:1,sol:'Profundidade.'},
+ {level:'medio',q:'Neurônios ocultos mínimos p/ XOR:',options:['0','1','2','10'],answer:2,sol:'2.'},
+ {level:'facil',q:'O AND é linearmente separável?',options:['sim','não'],answer:0,sol:'Sim.'},
+ {level:'facil',q:'Entradas distintas p/ 2 bits:',options:['2','3','4','8'],answer:2,sol:'2².'},
+ {level:'medio',q:'Perceptron simples aprende XOR?',options:['sim','não'],answer:1,sol:'Precisa de camada oculta.'},
+ {level:'medio',q:'Lineares empilhadas sem σ são:',options:['não lineares','lineares','XOR','curvas'],answer:1,sol:'Colapsam em linear.'},
+ {level:'medio',q:'O XOR motivou:',options:['o perceptron','as camadas ocultas (MLP)','o PCA','o kernel'],answer:1,sol:'MLPs.'},
+ {level:'medio',q:'Saídas =1 na tabela do XOR:',options:['1','2','3','4'],answer:1,sol:'(0,1) e (1,0).'},
+ {level:'medio',q:'XOR(0,0):',options:['0','1','2','−1'],answer:0,sol:'Iguais.'},
+ {level:'medio',q:'(A OR B) E NÃO(A E B) p/ A=B=1:',options:['0','1','2','−1'],answer:0,sol:'1 E 0.'},
+ {level:'medio',q:'Fronteira curva separa XOR?',options:['sim','não'],answer:0,sol:'Sim.'},
+ {level:'dificil',q:'(A E NÃO B) OU (NÃO A E B), A=1,B=0:',options:['0','1','2','−1'],answer:1,sol:'1 OU 0.'},
+ {level:'dificil',q:'2 retas criam até quantas regiões:',options:['2','3','4','6'],answer:2,sol:'4.'},
+ {level:'dificil',q:'Com 2 unidades ocultas, XOR fica separável:',options:['na entrada','no espaço oculto','nunca','só com 100 dados'],answer:1,sol:'Transformado.'},
+ {level:'desafio',q:'A lição do XOR:',options:['dados bastam','profundidade+não linearidade dão expressividade','linear basta','use só AND'],answer:1,sol:'Poder expressivo.'}
+]
+};
+EX.c10={
+basico:[
+ {level:'facil',q:'\\(\\frac{d}{dx}x^2\\)?',sol:'<div class="sstep">2x</div><p class="ans">2x</p>'},
+ {level:'facil',q:'A regra da cadeia: \\(\\frac{dL}{dw}=\\frac{dL}{da}\\cdot\\)?',sol:'<div class="sstep"></div><p class="ans">\\(\\frac{da}{dw}\\)</p>'},
+ {level:'facil',q:'\\(\\odot\\) (Hadamard) é o produto...?',sol:'<div class="sstep"></div><p class="ans">Elemento a elemento.</p>'},
+ {level:'facil',q:'\\((2,3)\\odot(4,5)\\)?',sol:'<div class="sstep">(8, 15)</div><p class="ans">(8, 15)</p>'},
+ {level:'facil',q:'\\(\\frac{d}{dz}e^z\\)?',sol:'<div class="sstep"></div><p class="ans">\\(e^z\\)</p>'},
+ {level:'facil',q:'Derivada de uma constante?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'\\(2\\cdot3\\cdot4\\)?',sol:'<div class="sstep">24</div><p class="ans">24</p>'},
+ {level:'facil',q:'A transposta \\(W^\\top\\) troca o quê?',sol:'<div class="sstep"></div><p class="ans">Linhas por colunas.</p>'},
+ {level:'facil',q:'\\(\\frac{dL}{da}\\) para \\(L=\\tfrac12(a-y)^2\\)?',sol:'<div class="sstep"></div><p class="ans">a − y</p>'},
+ {level:'facil',q:'\\(a-y\\) com \\(a=0{,}8,\\ y=1\\)?',sol:'<div class="sstep">−0,2</div><p class="ans">−0,2</p>'}
+],
+consolida:[
+ {level:'facil',q:'O backpropagation é a regra da cadeia aplicada em qual sentido?',sol:'<div class="sstep"></div><p class="ans">Da saída para a entrada.</p>'},
+ {level:'medio',q:'\\(\\delta^L=\\nabla_a C\\odot\\sigma\'(z^L)\\). Para \\(C=\\tfrac12(a-y)^2\\), \\(\\nabla_a C\\)?',sol:'<div class="sstep"></div><p class="ans">a − y</p>'},
+ {level:'medio',q:'A derivada da sigmoide é \\(\\sigma\'=\\sigma(1-\\sigma)\\). Em \\(\\sigma=0{,}5\\)?',sol:'<div class="sstep">0,5·0,5 = 0,25</div><p class="ans">0,25</p>'},
+ {level:'medio',q:'\\(\\delta^L\\) com \\(a-y=-0{,}2\\) e \\(\\sigma\'=0{,}25\\)?',sol:'<div class="sstep">−0,2 · 0,25 = −0,05</div><p class="ans">−0,05</p>'},
+ {level:'medio',q:'O erro propaga para trás via qual operação?',sol:'<div class="sstep"></div><p class="ans">\\((W^{l+1})^\\top\\delta^{l+1}\\)</p>'},
+ {level:'medio',q:'\\((1,2,3)\\odot(1,0,2)\\)?',sol:'<div class="sstep">(1, 0, 6)</div><p class="ans">(1, 0, 6)</p>'},
+ {level:'medio',q:'Quantas passagens para trás por passo de treino (após o forward)?',sol:'<div class="sstep"></div><p class="ans">1.</p>'},
+ {level:'medio',q:'O gradiente de um peso usa o \\(\\delta\\) da camada vezes a ___ da camada anterior.',sol:'<div class="sstep"></div><p class="ans">Ativação.</p>'},
+ {level:'medio',q:'Regra da cadeia: \\(L=a^2,\\ a=3w\\). \\(\\frac{dL}{dw}\\) em \\(w=2\\)?',sol:'<div class="sstep">6a = 18w → 36</div><p class="ans">36</p>'},
+ {level:'medio',q:'\\(\\sigma\'(z)\\) é máxima em \\(z=0\\) (=0,25) e longe de 0 ela...?',sol:'<div class="sstep"></div><p class="ans">Some (tende a 0).</p>'},
+ {level:'medio',q:'Gradientes que “somem” acontecem quando \\(\\sigma\'\\approx\\)?',sol:'<div class="sstep"></div><p class="ans">0 (saturação).</p>'},
+ {level:'medio',q:'\\(\\frac{dL}{da}\\) para \\(L=\\tfrac12(a-y)^2\\), \\(a=1,y=1\\)?',sol:'<div class="sstep">1−1 = 0</div><p class="ans">0</p>'},
+ {level:'medio',q:'A transposta \\(W^\\top\\) de uma 2×3 tem dimensão?',sol:'<div class="sstep"></div><p class="ans">3×2</p>'},
+ {level:'medio',q:'A derivada da ReLU é 1 para \\(z>0\\) e ___ para \\(z<0\\).',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'medio',q:'\\((2,3)\\odot(4,5)\\)?',sol:'<div class="sstep">(8, 15)</div><p class="ans">(8, 15)</p>'},
+ {level:'facil',q:'Backprop reutiliza cálculos para ser...?',sol:'<div class="sstep"></div><p class="ans">Eficiente (uma passagem para trás).</p>'},
+ {level:'dificil',q:'Se \\(\\sigma\'\\) tem uma componente 0 em \\(\\delta^l=((W^{l+1})^\\top\\delta^{l+1})\\odot\\sigma\'\\), essa componente fica?',sol:'<div class="sstep"></div><p class="ans">0 — o gradiente é bloqueado ali.</p>'},
+ {level:'dificil',q:'Cadeia em \\(L=(2w+1)^2\\): \\(\\frac{dL}{dw}\\) em \\(w=0\\)?',sol:'<div class="sstep">4(2w+1) → 4</div><p class="ans">4</p>'},
+ {level:'dificil',q:'Com \\(\\sigma\'=0{,}25\\) em 3 camadas, o gradiente é escalado por?',sol:'<div class="sstep">0,25³ = 0,015625</div><p class="ans">≈ 0,016 (vanishing)</p>'},
+ {level:'desafio',q:'Por que “backprop não é mágica”?',sol:'<div class="sstep"></div><p class="ans">É a regra da cadeia aplicada com cuidado, reaproveitando resultados intermediários.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(\\frac{d}{dx}x^2\\):',options:['x','2x','x²','2'],answer:1,sol:'2x.'},
+ {level:'facil',q:'\\(\\odot\\) é o produto:',options:['escalar','elemento a elemento','matricial','vetorial'],answer:1,sol:'Hadamard.'},
+ {level:'facil',q:'\\((2,3)\\odot(4,5)\\):',options:['(8,15)','(6,8)','(20)','(8,8)'],answer:0,sol:'Elementwise.'},
+ {level:'facil',q:'\\(\\frac{dL}{da}\\) p/ \\(\\tfrac12(a-y)^2\\):',options:['a−y','2a','y','0'],answer:0,sol:'a−y.'},
+ {level:'facil',q:'Derivada da ReLU p/ z<0:',options:['1','0','z','−1'],answer:1,sol:'0.'},
+ {level:'medio',q:'Backprop é a cadeia aplicada:',options:['entrada→saída','saída→entrada','aleatória','sem ordem'],answer:1,sol:'Para trás.'},
+ {level:'medio',q:'\\(\\sigma\'\\) em \\(\\sigma=0,5\\):',options:['0,5','0,25','1','0'],answer:1,sol:'σ(1−σ).'},
+ {level:'medio',q:'\\(\\delta^L\\), a−y=−0,2, σ\'=0,25:',options:['−0,05','−0,2','0,25','−0,45'],answer:0,sol:'Produto.'},
+ {level:'medio',q:'Erro propaga via:',options:['Wδ','\\((W^{l+1})^\\top\\delta^{l+1}\\)','δ²','∇x'],answer:1,sol:'Transposta.'},
+ {level:'medio',q:'\\((1,2,3)\\odot(1,0,2)\\):',options:['(1,0,6)','(6)','(2,2,5)','(1,2,3)'],answer:0,sol:'Elementwise.'},
+ {level:'medio',q:'Passagens para trás por passo:',options:['0','1','2','N'],answer:1,sol:'Uma.'},
+ {level:'medio',q:'σ\' longe de 0:',options:['cresce','some (≈0)','fica 1','oscila'],answer:1,sol:'Satura.'},
+ {level:'medio',q:'Gradientes somem quando σ\'≈:',options:['0','1','0,5','∞'],answer:0,sol:'Saturação.'},
+ {level:'medio',q:'\\(W^\\top\\) de 2×3:',options:['2×3','3×2','2×2','3×3'],answer:1,sol:'3×2.'},
+ {level:'medio',q:'\\(L=a^2,a=3w\\): dL/dw em w=2:',options:['12','18','36','6'],answer:2,sol:'18w.'},
+ {level:'medio',q:'O grad. de um peso usa δ × ___ anterior:',options:['o peso','a ativação','o erro','a norma'],answer:1,sol:'Ativação.'},
+ {level:'dificil',q:'Componente com σ\'=0 no δ:',options:['dobra','fica 0 (bloqueada)','cresce','inverte'],answer:1,sol:'Gradiente bloqueado.'},
+ {level:'dificil',q:'\\(L=(2w+1)^2\\): dL/dw em w=0:',options:['2','4','1','8'],answer:1,sol:'4(2w+1).'},
+ {level:'dificil',q:'σ\'=0,25 em 3 camadas → escala:',options:['0,75','0,016','0,25','1'],answer:1,sol:'0,25³.'},
+ {level:'desafio',q:'Backprop é:',options:['mágica','a regra da cadeia com reaproveitamento','aleatório','força bruta'],answer:1,sol:'Cadeia cuidadosa.'}
+]
+};
+EX.c11={
+basico:[
+ {level:'facil',q:'\\(1\\cdot1+2\\cdot0\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'Soma dos produtos de \\([1,2]\\) e \\([1,1]\\)?',sol:'<div class="sstep">1+2 = 3</div><p class="ans">3</p>'},
+ {level:'facil',q:'\\(2\\cdot3\\)?',sol:'<div class="sstep">6</div><p class="ans">6</p>'},
+ {level:'facil',q:'\\(0\\cdot5\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'Quantos pesos tem um kernel 3×3?',sol:'<div class="sstep">9</div><p class="ans">9</p>'},
+ {level:'facil',q:'\\(1\\cdot1+1\\cdot1+1\\cdot1\\)?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'facil',q:'Soma elemento a elemento depois somar: \\([1,0,1]\\) com \\([1,1,1]\\)?',sol:'<div class="sstep">1+0+1 = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'Pesos de um kernel 2×2?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'Média de \\([2,4]\\)?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'facil',q:'\\(1\\cdot2+2\\cdot2\\)?',sol:'<div class="sstep">6</div><p class="ans">6</p>'}
+],
+consolida:[
+ {level:'medio',q:'Convolução é deslizar um kernel e calcular o quê localmente?',sol:'<div class="sstep"></div><p class="ans">Produtos escalares (multiplica-e-soma).</p>'},
+ {level:'facil',q:'Um kernel 3×3 tem quantos pesos?',sol:'<div class="sstep">9</div><p class="ans">9</p>'},
+ {level:'medio',q:'Compartilhamento de pesos: o mesmo kernel é usado onde?',sol:'<div class="sstep"></div><p class="ans">Em toda a imagem.</p>'},
+ {level:'medio',q:'Conv 1D de \\([1,2,3]\\) com kernel \\([1,0]\\) (válida)?',sol:'<div class="sstep">[1·1+2·0, 2·1+3·0]</div><p class="ans">[1, 2]</p>'},
+ {level:'medio',q:'Um kernel detector de bordas responde a quê?',sol:'<div class="sstep"></div><p class="ans">Mudanças/contraste.</p>'},
+ {level:'medio',q:'Campo receptivo local: cada saída depende de um ___ da entrada.',sol:'<div class="sstep"></div><p class="ans">Pequeno trecho (patch).</p>'},
+ {level:'medio',q:'Conv usa menos parâmetros que totalmente conectada por causa de...?',sol:'<div class="sstep"></div><p class="ans">Compartilhamento de pesos.</p>'},
+ {level:'medio',q:'Pesos de um kernel 5×5?',sol:'<div class="sstep">25</div><p class="ans">25</p>'},
+ {level:'medio',q:'Patch \\([[1,2],[3,4]]\\) com kernel \\([[1,0],[0,1]]\\) (soma dos produtos)?',sol:'<div class="sstep">1·1+2·0+3·0+4·1 = 5</div><p class="ans">5</p>'},
+ {level:'medio',q:'O pooling (ex.: máximo) reduz qual dimensão?',sol:'<div class="sstep"></div><p class="ans">A espacial (tamanho).</p>'},
+ {level:'medio',q:'Inspiração biológica (Hubel & Wiesel): detectores...?',sol:'<div class="sstep"></div><p class="ans">Hierárquicos (do simples ao complexo).</p>'},
+ {level:'medio',q:'Empilhar convoluções constrói features do simples ao...?',sol:'<div class="sstep"></div><p class="ans">Complexo (bordas → formas → objetos).</p>'},
+ {level:'medio',q:'\\([1,1,1,1]\\) com kernel \\([1,1,1,1]\\) (soma dos produtos)?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'medio',q:'Um kernel só de zeros produz?',sol:'<div class="sstep"></div><p class="ans">Zero em toda parte.</p>'},
+ {level:'medio',q:'Um kernel “identidade” (um único 1) faz o quê?',sol:'<div class="sstep"></div><p class="ans">Copia o pixel.</p>'},
+ {level:'medio',q:'Conv é equivariante à translação: deslocar a entrada...?',sol:'<div class="sstep"></div><p class="ans">Desloca a saída igualmente.</p>'},
+ {level:'dificil',q:'Conv válida de \\([1,2,3,4]\\) com \\([1,-1]\\)?',sol:'<div class="sstep">[1−2, 2−3, 3−4]</div><p class="ans">[−1, −1, −1] (detector de diferença/borda)</p>'},
+ {level:'dificil',q:'Kernel 3×3 numa imagem 5×5 (válida, passo 1): tamanho da saída?',sol:'<div class="sstep">5 − 3 + 1 = 3</div><p class="ans">3×3</p>'},
+ {level:'dificil',q:'Parâmetros de um kernel 3×3×3 (RGB), sem viés?',sol:'<div class="sstep">3·3·3 = 27</div><p class="ans">27</p>'},
+ {level:'desafio',q:'Por que convolução para imagens?',sol:'<div class="sstep"></div><p class="ans">Localidade + compartilhamento de pesos exploram a estrutura espacial e cortam drasticamente o nº de parâmetros.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(1\\cdot1+2\\cdot0\\):',options:['0','1','2','3'],answer:1,sol:'1.'},
+ {level:'facil',q:'Pesos de um kernel 3×3:',options:['3','6','9','12'],answer:2,sol:'3².'},
+ {level:'facil',q:'Pesos de um kernel 2×2:',options:['2','4','6','8'],answer:1,sol:'2².'},
+ {level:'facil',q:'\\([1,2]\\)·\\([1,1]\\) (soma dos produtos):',options:['2','3','4','1'],answer:1,sol:'1+2.'},
+ {level:'medio',q:'Convolução calcula localmente:',options:['somas só','produtos escalares','médias','máximos'],answer:1,sol:'Multiplica-e-soma.'},
+ {level:'medio',q:'Compartilhamento de pesos: o kernel é usado:',options:['num pixel','em toda a imagem','só nas bordas','no centro'],answer:1,sol:'Em todo lugar.'},
+ {level:'medio',q:'Patch [[1,2],[3,4]]·[[1,0],[0,1]]:',options:['4','5','10','7'],answer:1,sol:'1+4.'},
+ {level:'medio',q:'Conv reduz parâmetros por:',options:['pooling','compartilhamento de pesos','ReLU','dropout'],answer:1,sol:'Weight sharing.'},
+ {level:'medio',q:'Pooling reduz a dimensão:',options:['de cor','espacial','de canais','temporal'],answer:1,sol:'Tamanho.'},
+ {level:'medio',q:'Campo receptivo é:',options:['a imagem toda','um pequeno patch','um pixel só','o kernel'],answer:1,sol:'Local.'},
+ {level:'medio',q:'Empilhar convs constrói features:',options:['do complexo ao simples','do simples ao complexo','aleatórias','constantes'],answer:1,sol:'Hierárquicas.'},
+ {level:'medio',q:'Kernel só de zeros produz:',options:['a imagem','zero','ruído','bordas'],answer:1,sol:'0.'},
+ {level:'medio',q:'\\([1,1,1,1]\\)·\\([1,1,1,1]\\):',options:['2','4','1','16'],answer:1,sol:'4.'},
+ {level:'medio',q:'Conv é equivariante à:',options:['cor','translação','rotação','escala'],answer:1,sol:'Desloca junto.'},
+ {level:'medio',q:'Pesos de um kernel 5×5:',options:['10','20','25','50'],answer:2,sol:'5².'},
+ {level:'medio',q:'Inspiração Hubel & Wiesel:',options:['memória','detectores hierárquicos','energia','kernels'],answer:1,sol:'Córtex visual.'},
+ {level:'dificil',q:'Conv válida [1,2,3,4] com [1,−1]:',options:['[−1,−1,−1]','[3,5,7]','[1,2,3]','[0,0,0]'],answer:0,sol:'Diferenças.'},
+ {level:'dificil',q:'Kernel 3×3 em imagem 5×5 (válida):',options:['5×5','4×4','3×3','7×7'],answer:2,sol:'5−3+1.'},
+ {level:'dificil',q:'Parâmetros de um kernel 3×3×3:',options:['9','18','27','81'],answer:2,sol:'3·3·3.'},
+ {level:'desafio',q:'Por que convolução em imagens:',options:['é mais lenta','localidade + pesos compartilhados','usa mais parâmetros','ignora estrutura'],answer:1,sol:'Explora a estrutura espacial.'}
+]
+};
+EX.c12={
+basico:[
+ {level:'facil',q:'O que mede a generalização: o desempenho no treino ou no teste?',sol:'<div class="sstep"></div><p class="ans">No teste (dados não vistos).</p>'},
+ {level:'facil',q:'Acurácia 0,9 corresponde a que erro?',sol:'<div class="sstep">1 − 0,9</div><p class="ans">0,1</p>'},
+ {level:'facil',q:'Um modelo que decora o treino e falha no teste está...?',sol:'<div class="sstep"></div><p class="ans">Sobreajustado (overfitting).</p>'},
+ {level:'facil',q:'Mais dados costumam ajudar a generalizar?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'Underfitting é um modelo simples demais?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'\\(8/10\\) em decimal?',sol:'<div class="sstep">0,8</div><p class="ans">0,8</p>'},
+ {level:'facil',q:'Acurácia 0,95 → erro?',sol:'<div class="sstep">0,05</div><p class="ans">0,05</p>'},
+ {level:'facil',q:'Generalização é o desempenho em dados...?',sol:'<div class="sstep"></div><p class="ans">Não vistos.</p>'},
+ {level:'facil',q:'Modelo mais simples tende a sobreajustar mais ou menos?',sol:'<div class="sstep"></div><p class="ans">Menos.</p>'},
+ {level:'facil',q:'O conjunto de teste deve ser visto durante o treino?',sol:'<div class="sstep"></div><p class="ans">Não (fica separado).</p>'}
+],
+consolida:[
+ {level:'medio',q:'O “gap de generalização” é a diferença entre o erro de treino e o de...?',sol:'<div class="sstep"></div><p class="ans">Teste.</p>'},
+ {level:'medio',q:'Overfitting: erro de treino baixo e erro de teste...?',sol:'<div class="sstep"></div><p class="ans">Alto.</p>'},
+ {level:'medio',q:'Underfitting: os dois erros ficam...?',sol:'<div class="sstep"></div><p class="ans">Altos.</p>'},
+ {level:'medio',q:'Mais dados de treino tendem a ___ o gap.',sol:'<div class="sstep"></div><p class="ans">Reduzir.</p>'},
+ {level:'medio',q:'Double descent: ao aumentar a capacidade, o erro de teste pode cair, subir (na interpolação) e então...?',sol:'<div class="sstep"></div><p class="ans">Cair de novo.</p>'},
+ {level:'medio',q:'Viés × variância clássico: mais capacidade → menos viés e mais...?',sol:'<div class="sstep"></div><p class="ans">Variância.</p>'},
+ {level:'medio',q:'O SGD tem um viés implícito para soluções...?',sol:'<div class="sstep"></div><p class="ans">Mais simples / de margem grande.</p>'},
+ {level:'medio',q:'Regularizar (ex.: penalizar \\(\\|\\mathbf w\\|\\)) reduz o quê?',sol:'<div class="sstep"></div><p class="ans">O overfitting.</p>'},
+ {level:'medio',q:'Uma margem maior tende a generalizar...?',sol:'<div class="sstep"></div><p class="ans">Melhor.</p>'},
+ {level:'medio',q:'Acurácia de treino 1,0 e de teste 0,7: qual o gap?',sol:'<div class="sstep">1,0 − 0,7</div><p class="ans">0,3</p>'},
+ {level:'medio',q:'O objetivo do aprendizado é erro baixo em dados...?',sol:'<div class="sstep"></div><p class="ans">Não vistos (não só no treino).</p>'},
+ {level:'medio',q:'Decorar ruído é sintoma de...?',sol:'<div class="sstep"></div><p class="ans">Overfitting.</p>'},
+ {level:'medio',q:'Parar cedo (early stopping) ajuda a evitar...?',sol:'<div class="sstep"></div><p class="ans">Overfitting.</p>'},
+ {level:'medio',q:'Por que adicionar dados ajuda (callback do contrato)?',sol:'<div class="sstep"></div><p class="ans">Estima melhor o erro verdadeiro (esperado).</p>'},
+ {level:'medio',q:'O conjunto de teste precisa ser...?',sol:'<div class="sstep"></div><p class="ans">Mantido à parte (não visto no treino).</p>'},
+ {level:'facil',q:'Erro de treino 0 e de teste 0 significa boa generalização?',sol:'<div class="sstep"></div><p class="ans">Sim (se o teste é representativo).</p>'},
+ {level:'dificil',q:'Treino err = 0 e teste err = 0,2: provável diagnóstico?',sol:'<div class="sstep"></div><p class="ans">Overfitting (ou tarefa difícil).</p>'},
+ {level:'dificil',q:'Aumentar o modelo além do limiar de interpolação pode...?',sol:'<div class="sstep"></div><p class="ans">Baixar o erro de teste de novo (double descent).</p>'},
+ {level:'dificil',q:'Existe hoje uma teoria única e completa da generalização?',sol:'<div class="sstep"></div><p class="ans">Não — é fronteira aberta.</p>'},
+ {level:'desafio',q:'Cite três peças parciais do quebra-cabeça da generalização.',sol:'<div class="sstep"></div><p class="ans">Double descent, viés implícito do SGD e margem/estrutura dos dados.</p>'}
+],
+mcq:[
+ {level:'facil',q:'A generalização é medida no:',options:['treino','teste','validação só','código'],answer:1,sol:'Dados não vistos.'},
+ {level:'facil',q:'Acurácia 0,9 → erro:',options:['0,9','0,1','0,01','1'],answer:1,sol:'1−0,9.'},
+ {level:'facil',q:'Decorar o treino e falhar no teste é:',options:['underfitting','overfitting','regularização','convergência'],answer:1,sol:'Sobreajuste.'},
+ {level:'facil',q:'Mais dados geralmente:',options:['pioram','ajudam a generalizar','não mudam','aumentam o gap'],answer:1,sol:'Reduzem o gap.'},
+ {level:'medio',q:'Overfitting: treino baixo, teste:',options:['baixo','alto','zero','igual'],answer:1,sol:'Gap grande.'},
+ {level:'medio',q:'Underfitting: os dois erros:',options:['baixos','altos','zero','opostos'],answer:1,sol:'Modelo simples demais.'},
+ {level:'medio',q:'O gap de generalização é treino vs:',options:['teste','pesos','época','dados'],answer:0,sol:'Diferença de erro.'},
+ {level:'medio',q:'Double descent: após a interpolação, o teste pode:',options:['só subir','cair de novo','ficar 1','zerar'],answer:1,sol:'2ª descida.'},
+ {level:'medio',q:'O SGD tende a soluções:',options:['complexas','simples/margem grande','aleatórias','memorizadas'],answer:1,sol:'Viés implícito.'},
+ {level:'medio',q:'Regularizar reduz:',options:['os dados','o overfitting','a margem','a acurácia'],answer:1,sol:'Penaliza ‖w‖.'},
+ {level:'medio',q:'Margem maior → generaliza:',options:['pior','melhor','igual','não afeta'],answer:1,sol:'Mais robusto.'},
+ {level:'medio',q:'Treino 1,0 e teste 0,7: gap:',options:['0,1','0,3','0,7','1,0'],answer:1,sol:'1−0,7.'},
+ {level:'medio',q:'Decorar ruído é sintoma de:',options:['underfit','overfit','boa generalização','convergência'],answer:1,sol:'Overfitting.'},
+ {level:'medio',q:'Early stopping evita:',options:['underfitting','overfitting','dados','gradiente'],answer:1,sol:'Para antes de decorar.'},
+ {level:'medio',q:'Mais dados ajudam porque estimam melhor:',options:['o erro de treino','o erro verdadeiro','a velocidade','os pesos'],answer:1,sol:'Erro esperado.'},
+ {level:'medio',q:'O conjunto de teste deve ser:',options:['usado no treino','mantido à parte','o mesmo do treino','descartado'],answer:1,sol:'Não visto.'},
+ {level:'medio',q:'Viés × variância: mais capacidade → mais:',options:['viés','variância','dados','erro de treino'],answer:1,sol:'Trade-off.'},
+ {level:'dificil',q:'Treino err=0, teste err=0,2:',options:['underfit','provável overfit','perfeito','impossível'],answer:1,sol:'Gap.'},
+ {level:'dificil',q:'Teoria única e completa da generalização:',options:['existe','é fronteira aberta','é trivial','é o PCA'],answer:1,sol:'Em aberto.'},
+ {level:'desafio',q:'NÃO é peça do quebra-cabeça da generalização:',options:['double descent','viés do SGD','margem/estrutura','a cor do gráfico'],answer:3,sol:'As três primeiras são.'}
+]
+};
+EX.epi={
+basico:[
+ {level:'facil',q:'\\((1,0)\\cdot(1,0)\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'\\(\\sqrt{4}\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'\\(\\operatorname{softmax}(0,0)\\)?',sol:'<div class="sstep">(0,5, 0,5)</div><p class="ans">(0,5, 0,5)</p>'},
+ {level:'facil',q:'\\(\\sqrt{16}\\)?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'\\(e^0\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'\\((1,1)\\cdot(1,1)\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'\\(1/\\sqrt{4}\\)?',sol:'<div class="sstep">1/2</div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Um produto escalar maior indica vetores mais...?',sol:'<div class="sstep"></div><p class="ans">Similares (alinhados).</p>'},
+ {level:'facil',q:'Os valores da softmax somam quanto?',sol:'<div class="sstep"></div><p class="ans">1</p>'}
+],
+consolida:[
+ {level:'medio',q:'A atenção usa \\(QK^\\top\\) para medir o quê entre consultas e chaves?',sol:'<div class="sstep"></div><p class="ans">Similaridade (produtos escalares).</p>'},
+ {level:'medio',q:'Os scores são normalizados por qual função (em pesos)?',sol:'<div class="sstep"></div><p class="ans">A softmax.</p>'},
+ {level:'medio',q:'Dividir por \\(\\sqrt{d_k}\\) evita que os scores fiquem...?',sol:'<div class="sstep"></div><p class="ans">Grandes demais (estabiliza).</p>'},
+ {level:'medio',q:'A saída da atenção é uma soma ponderada de quê?',sol:'<div class="sstep"></div><p class="ans">Dos valores \\(V\\).</p>'},
+ {level:'medio',q:'Score de \\(Q=(1,0)\\) com \\(K=(1,0)\\)?',sol:'<div class="sstep">1 (atenção alta)</div><p class="ans">1</p>'},
+ {level:'medio',q:'Score de \\(Q=(1,0)\\) com \\(K=(0,1)\\)?',sol:'<div class="sstep">0 (atenção baixa)</div><p class="ans">0</p>'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(2,0)\\) (use \\(e^2\\approx7{,}39\\))?',sol:'<div class="sstep">7,39/8,39 ≈ 0,88</div><p class="ans">≈ (0,88, 0,12)</p>'},
+ {level:'medio',q:'A operação central da atenção é o...?',sol:'<div class="sstep"></div><p class="ans">Produto escalar.</p>'},
+ {level:'medio',q:'\\(\\sqrt{d_k}\\) com \\(d_k=4\\)?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(1,1,1)\\)?',sol:'<div class="sstep">cada = 1/3</div><p class="ans">(1/3, 1/3, 1/3)</p>'},
+ {level:'medio',q:'Um score maior gera um peso ___ sobre aquele valor.',sol:'<div class="sstep"></div><p class="ans">Maior.</p>'},
+ {level:'medio',q:'A atenção permite cada token “olhar” para...?',sol:'<div class="sstep"></div><p class="ans">Outros tokens (o contexto).</p>'},
+ {level:'medio',q:'Na auto-atenção, Q, K e V vêm de onde?',sol:'<div class="sstep"></div><p class="ans">Da mesma sequência.</p>'},
+ {level:'medio',q:'Os pesos da softmax ficam entre 0 e 1 e somam...?',sol:'<div class="sstep"></div><p class="ans">1.</p>'},
+ {level:'medio',q:'Escala \\(1/\\sqrt{d_k}\\) com \\(d_k=64\\)?',sol:'<div class="sstep">1/8</div><p class="ans">1/8</p>'},
+ {level:'facil',q:'Score zero entre Q e K significa atenção...?',sol:'<div class="sstep"></div><p class="ans">Baixa (quase nula).</p>'},
+ {level:'dificil',q:'Scores \\((4,0)\\) escalados por \\(1/\\sqrt4=0{,}5\\) e depois softmax?',sol:'<div class="sstep">(2,0) → softmax ≈ (0,88, 0,12)</div><p class="ans">≈ (0,88, 0,12)</p>'},
+ {level:'dificil',q:'Se todas as chaves são idênticas, os pesos de atenção ficam...?',sol:'<div class="sstep"></div><p class="ans">Uniformes (iguais).</p>'},
+ {level:'dificil',q:'Sem codificação posicional, a atenção é invariante a quê?',sol:'<div class="sstep"></div><p class="ans">À ordem dos tokens.</p>'},
+ {level:'desafio',q:'Como a cadeia do caderno se fecha no epílogo?',sol:'<div class="sstep"></div><p class="ans">O produto escalar (Cap. 2) reaparece como o mecanismo central da atenção nos Transformers.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\((1,0)\\cdot(1,0)\\):',options:['0','1','2','−1'],answer:1,sol:'1.'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\):',options:['0','1','2','−1'],answer:0,sol:'Ortogonais.'},
+ {level:'facil',q:'\\(\\operatorname{softmax}(0,0)\\):',options:['(1,0)','(0,5;0,5)','(0,0)','(1,1)'],answer:1,sol:'Iguais.'},
+ {level:'facil',q:'Softmax soma:',options:['0','1','2','depende'],answer:1,sol:'1.'},
+ {level:'medio',q:'\\(QK^\\top\\) mede:',options:['distância','similaridade (dot)','volume','erro'],answer:1,sol:'Produtos escalares.'},
+ {level:'medio',q:'Os scores são normalizados por:',options:['ReLU','softmax','norma','média'],answer:1,sol:'Em pesos.'},
+ {level:'medio',q:'Dividir por \\(\\sqrt{d_k}\\):',options:['aumenta scores','estabiliza (evita grandes)','zera','inverte'],answer:1,sol:'Escala.'},
+ {level:'medio',q:'A saída é soma ponderada de:',options:['Q','K','V','d_k'],answer:2,sol:'Valores.'},
+ {level:'medio',q:'A operação central da atenção:',options:['soma','produto escalar','raiz','log'],answer:1,sol:'Dot product.'},
+ {level:'medio',q:'\\(\\sqrt{d_k}\\) com d_k=4:',options:['1','2','4','16'],answer:1,sol:'2.'},
+ {level:'medio',q:'Score alto → peso:',options:['menor','maior','zero','negativo'],answer:1,sol:'Mais atenção.'},
+ {level:'medio',q:'Auto-atenção: Q,K,V vêm:',options:['de fontes diferentes','da mesma sequência','de rótulos','do kernel'],answer:1,sol:'Self.'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(2,0)\\) ≈',options:['(0,5;0,5)','(0,88;0,12)','(1;0)','(0,73;0,27)'],answer:1,sol:'e²/(e²+1).'},
+ {level:'medio',q:'\\(1/\\sqrt{d_k}\\) com d_k=64:',options:['1/8','1/64','8','1/4'],answer:0,sol:'√64=8.'},
+ {level:'medio',q:'\\(\\operatorname{softmax}(1,1,1)\\):',options:['(1,0,0)','(1/3,1/3,1/3)','(0,5;0,5;0)','(1,1,1)'],answer:1,sol:'Uniforme.'},
+ {level:'medio',q:'A atenção deixa cada token olhar para:',options:['si só','outros tokens (contexto)','o rótulo','o gradiente'],answer:1,sol:'Contexto.'},
+ {level:'dificil',q:'Scores (4,0) escalados 0,5 e softmax ≈',options:['(0,5;0,5)','(0,88;0,12)','(1;0)','(2;0)'],answer:1,sol:'(2,0)→softmax.'},
+ {level:'dificil',q:'Chaves idênticas → pesos:',options:['concentrados','uniformes','zero','negativos'],answer:1,sol:'Iguais.'},
+ {level:'dificil',q:'Sem codificação posicional, a atenção é invariante:',options:['à escala','à ordem dos tokens','à cor','ao tamanho'],answer:1,sol:'Permutação.'},
+ {level:'desafio',q:'O epílogo fecha a cadeia mostrando que reaparece:',options:['o PCA','o produto escalar','o kernel','o XOR'],answer:1,sol:'No centro da atenção.'}
+]
+};
+const EX_IDS=['p1','p2','p3','p4','c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','epi'];
+
+const SECTIONS=[['Movimento 0',[['p1','A','Notação'],['p2','B','Geometria'],['p3','C','Cálculo'],['p4','D','Probabilidade']]],['Movimento I',[['c1','1','Perceptron'],['c2','2','Vetores']]],['Movimento II',[['c3','3','Gradiente'],['c4','4','Probabilidade']]],['Movimento III',[['c5','5','Dimensões'],['c6','6','PCA'],['c7','7','SVM']]],['Movimento IV',[['c8','8','Hopfield'],['c9','9','XOR'],['c10','10','Backprop'],['c11','11','CNN'],['c12','12','Generalização'],['epi','∞','Atenção']]]];
+(function(){const toc=document.getElementById('toc');SECTIONS.forEach(([g,it])=>{toc.insertAdjacentHTML('beforeend',`<h3>${g}</h3>`);it.forEach(([id,n,t])=>toc.insertAdjacentHTML('beforeend',`<a href="#${id}"><b>${n}</b> ${t}</a>`));});const links=[...toc.querySelectorAll('a')];const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id));}),{rootMargin:'-22% 0px -65% 0px'});document.querySelectorAll('section').forEach(s=>ob.observe(s));})();
+addEventListener('DOMContentLoaded',()=>{const r=()=>window.renderMathInElement&&renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});EX_IDS.forEach(id=>renderExercises(id,'ex-'+id));r();setTimeout(r,350);PCT.reset();GD.reset();PCA.reset();});
+function setup(c){const d=devicePixelRatio||1,r=c.getBoundingClientRect();c.width=r.width*d;c.height=310*d;const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return[x,r.width,310]}
+const PCT=(()=>{let pts=[],w=[1,-1],b=0,ep=0;const c=()=>document.getElementById('perceptron'),read=()=>document.getElementById('pct-read');function reset(){pts=[];for(let i=0;i<40;i++){const cls=i<20?1:-1;pts.push({x:(cls>0?160:520)+Math.random()*110-55,y:(cls>0?110:220)+Math.random()*90-45,c:cls})}w=[Math.random()*2-1,Math.random()*2-1];b=Math.random()-.5;ep=0;draw();read().textContent='épocas: 0 · erros: —'}function feat(p,W,H){return[(p.x-W/2)/150,(p.y-H/2)/150]}function pred(p,W,H){const f=feat(p,W,H);return(w[0]*f[0]+w[1]*f[1]+b)>=0?1:-1}function step(){const[,W,H]=setup(c());let err=0;for(const p of pts){const f=feat(p,W,H),yh=pred(p,W,H);if(yh!==p.c){err++;w[0]+=.35*(p.c-yh)*f[0];w[1]+=.35*(p.c-yh)*f[1];b+=.08*(p.c-yh)}}ep++;draw();read().textContent=`épocas: ${ep} · erros: ${err}`;return err}function train(){let i=0;const loop=()=>{const e=step();if(e&&++i<80)requestAnimationFrame(loop)};loop()}function draw(){const[x,W,H]=setup(c());x.clearRect(0,0,W,H);x.strokeStyle='rgba(236,231,225,.12)';for(let gx=0;gx<W;gx+=40){x.beginPath();x.moveTo(gx,0);x.lineTo(gx,H);x.stroke()}x.strokeStyle='#ece7e1';x.lineWidth=2;x.beginPath();const y=X=>H/2+150*(-(w[0]*((X-W/2)/150)+b)/w[1]);x.moveTo(0,y(0));x.lineTo(W,y(W));x.stroke();for(const p of pts){x.beginPath();x.fillStyle=p.c>0?'#ff8a4c':'#7b8ed6';x.arc(p.x,p.y,5,0,7);x.fill()}}return{reset,step,train}})();
+const GD=(()=>{let path=[];const c=()=>document.getElementById('gd');function lr(){return +document.getElementById('gd-lr').value}function read(){document.getElementById('gd-read').textContent=`η = ${lr().toFixed(2)}`}function reset(){path=[[-2.2,1.7]];read();draw()}function run(){let i=0;const loop=()=>{const[p,q]=path[path.length-1],e=lr();path.push([p-e*p,q-e*.35*q]);draw();if(++i<45)requestAnimationFrame(loop)};loop()}function draw(){const[x,W,H]=setup(c()),sx=W/6,sy=H/5,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);for(let r=30;r<230;r+=28){x.strokeStyle='rgba(255,90,31,.14)';x.beginPath();x.ellipse(cx,cy,r,r*.55,0,0,7);x.stroke()}x.strokeStyle='#ece7e1';x.lineWidth=2;x.beginPath();path.forEach(([a,b],i)=>{const X=cx+a*sx,Y=cy-b*sy;i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke();}return{reset,run,read}})();
+const PCA=(()=>{const c=()=>document.getElementById('pca');function reset(){const[x,W,H]=setup(c()),cx=W/2,cy=H/2,s=80;let pts=[];for(let i=0;i<70;i++){const t=(Math.random()*2-1)*2.2,n=(Math.random()*2-1)*.35;pts.push([t*.9-n*.45,t*.55+n*.75])}x.clearRect(0,0,W,H);x.fillStyle='#ff8a4c';pts.forEach(p=>{x.beginPath();x.arc(cx+p[0]*s,cy-p[1]*s,4,0,7);x.fill()});x.strokeStyle='#ece7e1';x.lineWidth=3;x.beginPath();x.moveTo(cx-220,cy+130);x.lineTo(cx+220,cy-130);x.stroke();document.getElementById('pca-read').textContent='PC1: eixo de maior variância'}return{reset}})();
+</script></body></html>
