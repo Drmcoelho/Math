@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Validação estrutural mínima do caderno Math.
+"""Validação estrutural mínima do repositório Math.
 
-Sem dependências externas. A intenção não é provar correção matemática, mas impedir
-quebras grosseiras antes de publicar: arquivos ausentes, âncoras quebradas, IDs
-duplicados e referências locais inexistentes.
+Sem dependências externas. A intenção não é provar correção matemática,
+psicoacústica ou pedagógica, mas impedir quebras grosseiras antes de publicar:
+arquivos ausentes, âncoras quebradas, IDs duplicados, referências locais
+inexistentes e remoção acidental de estruturas centrais dos cadernos.
 """
 from __future__ import annotations
 
@@ -13,10 +14,73 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-# O caderno principal Why Machines Learn agora vive em why-machines-learn.html;
-# index.html é o portal ilustrado que reúne os quatro cadernos.
-INDEX = ROOT / "why-machines-learn.html"
-REQUIRED = ["index.html", "why-machines-learn.html", "favicon.svg", "og-image.svg", ".nojekyll", "README.md"]
+
+REQUIRED = [
+    "index.html",
+    "why-machines-learn.html",
+    "matematica-introdutoria.html",
+    "matematica-fundamental.html",
+    "musica-matematica.html",
+    "favicon.svg",
+    "og-image.svg",
+    ".nojekyll",
+    "README.md",
+]
+
+PAGES = [
+    "index.html",
+    "why-machines-learn.html",
+    "matematica-introdutoria.html",
+    "matematica-fundamental.html",
+    "musica-matematica.html",
+]
+
+WML_SECTIONS = ["p1", "p2", "p3", "p4"] + [f"c{i}" for i in range(1, 13)] + ["epi"]
+WML_CANVASES = ["spiro", "perceptron", "gd", "pca"]
+
+MUSIC_SECTIONS = [
+    "corda",
+    "timbre",
+    "consonancia",
+    "batimentos",
+    "cents",
+    "escala",
+    "temperamento",
+    "tonal",
+    "modelo",
+    "beethoven",
+]
+
+MUSIC_CANVASES = [
+    "hero-canvas",
+    "corda-canvas",
+    "timbre-canvas",
+    "cons-canvas",
+    "diss-curve",
+    "beat-canvas",
+    "cents-canvas",
+    "circle-canvas",
+    "tet-canvas",
+    "puretemp-canvas",
+    "tonal-canvas",
+    "model-canvas",
+    "beet-canvas",
+]
+
+MUSIC_SENTINELS = [
+    "epi math",
+    "epi phys",
+    "epi hist",
+    "epi peda",
+    "snd-desc",
+    "aria-label",
+    "masterLimiter",
+    "function stopAll()",
+    "Som externo, som interno",
+    "caso p&oacute;s-lingual",
+    "n&atilde;o um modelo universal",
+]
+
 
 class Parser(HTMLParser):
     def __init__(self) -> None:
@@ -24,6 +88,9 @@ class Parser(HTMLParser):
         self.ids: list[str] = []
         self.hrefs: list[str] = []
         self.srcs: list[str] = []
+        self.sections: list[str] = []
+        self.canvases: list[str] = []
+
     def handle_starttag(self, tag: str, attrs):
         d = dict(attrs)
         if "id" in d:
@@ -32,68 +99,100 @@ class Parser(HTMLParser):
             self.hrefs.append(d["href"])
         if "src" in d:
             self.srcs.append(d["src"])
+        if tag == "section" and "id" in d:
+            self.sections.append(d["id"])
+        if tag == "canvas" and "id" in d:
+            self.canvases.append(d["id"])
+
 
 def fail(msg: str) -> None:
     raise SystemExit(f"FAIL: {msg}")
 
-def main() -> None:
-    for name in REQUIRED:
-        if not (ROOT / name).exists():
-            fail(f"arquivo obrigatório ausente: {name}")
 
-    html = INDEX.read_text(encoding="utf-8")
-    p = Parser(); p.feed(html)
+def parse_page(name: str) -> tuple[str, Parser]:
+    path = ROOT / name
+    if not path.exists():
+        fail(f"arquivo obrigatório ausente: {name}")
+    html = path.read_text(encoding="utf-8")
+    parser = Parser()
+    parser.feed(html)
+    return html, parser
 
-    duplicated = sorted({x for x in p.ids if p.ids.count(x) > 1})
+
+def validate_common_page(name: str, html: str, parser: Parser) -> None:
+    duplicated = sorted({x for x in parser.ids if parser.ids.count(x) > 1})
     if duplicated:
-        fail(f"IDs duplicados: {duplicated}")
+        fail(f"{name}: IDs duplicados: {duplicated}")
 
-    idset = set(p.ids)
-    broken_anchors = [h for h in p.hrefs if h.startswith("#") and h[1:] not in idset]
+    idset = set(parser.ids)
+    broken_anchors = [h for h in parser.hrefs if h.startswith("#") and h[1:] not in idset]
     if broken_anchors:
-        fail(f"âncoras internas quebradas: {broken_anchors}")
+        fail(f"{name}: âncoras internas quebradas: {broken_anchors}")
 
     local_refs = []
-    for ref in p.hrefs + p.srcs:
+    for ref in parser.hrefs + parser.srcs:
         if not ref or ref.startswith("#") or ref.startswith("data:"):
             continue
         parsed = urlparse(ref)
         if parsed.scheme or parsed.netloc:
             continue
         local_refs.append(parsed.path)
+
     missing = sorted({r for r in local_refs if r and not (ROOT / r).exists()})
     if missing:
-        fail(f"referências locais ausentes: {missing}")
+        fail(f"{name}: referências locais ausentes: {missing}")
 
-    sections = re.findall(r'<section\s+id="([^"]+)"', html)
-    expected = ["p1", "p2", "p3", "p4"] + [f"c{i}" for i in range(1, 13)] + ["epi"]
-    if sections != expected:
-        fail(f"ordem de seções inesperada: {sections}")
 
-    canvases = re.findall(r'<canvas\s+id="([^"]+)"', html)
-    for cid in ["spiro", "perceptron", "gd", "pca"]:
-        if cid not in canvases:
-            fail(f"canvas ausente: {cid}")
+def require_exact_sections(name: str, parser: Parser, expected: list[str]) -> None:
+    if parser.sections != expected:
+        fail(f"{name}: ordem de seções inesperada: {parser.sections}")
 
-    # Cadernos irmãos (trilha de Matemática da Música): precisam existir e
-    # seus links locais (inclusive o cruzamento entre eles) não podem quebrar.
-    extra_pages = ["index.html", "matematica-introdutoria.html", "matematica-fundamental.html", "musica-matematica.html"]
-    for name in extra_pages:
-        page_path = ROOT / name
-        if not page_path.exists():
-            fail(f"caderno ausente: {name}")
-        pp = Parser(); pp.feed(page_path.read_text(encoding="utf-8"))
-        for ref in pp.hrefs + pp.srcs:
-            if not ref or ref.startswith("#") or ref.startswith("data:"):
-                continue
-            parsed = urlparse(ref)
-            if parsed.scheme or parsed.netloc:
-                continue
-            if parsed.path and not (ROOT / parsed.path).exists():
-                fail(f"{name}: referência local ausente: {parsed.path}")
+
+def require_canvases(name: str, parser: Parser, required: list[str]) -> None:
+    missing = [cid for cid in required if cid not in parser.canvases]
+    if missing:
+        fail(f"{name}: canvas ausente: {missing}")
+
+
+def require_sentinels(name: str, html: str, sentinels: list[str]) -> None:
+    missing = [s for s in sentinels if s not in html]
+    if missing:
+        fail(f"{name}: marcador essencial ausente: {missing}")
+
+
+def main() -> None:
+    for name in REQUIRED:
+        if not (ROOT / name).exists():
+            fail(f"arquivo obrigatório ausente: {name}")
+
+    parsed_pages: dict[str, tuple[str, Parser]] = {}
+    for name in PAGES:
+        html, parser = parse_page(name)
+        validate_common_page(name, html, parser)
+        parsed_pages[name] = (html, parser)
+
+    wml_html, wml = parsed_pages["why-machines-learn.html"]
+    require_exact_sections("why-machines-learn.html", wml, WML_SECTIONS)
+    require_canvases("why-machines-learn.html", wml, WML_CANVASES)
+
+    music_html, music = parsed_pages["musica-matematica.html"]
+    require_exact_sections("musica-matematica.html", music, MUSIC_SECTIONS)
+    require_canvases("musica-matematica.html", music, MUSIC_CANVASES)
+    require_sentinels("musica-matematica.html", music_html, MUSIC_SENTINELS)
 
     print("OK: estrutura validada")
-    print(f"sections={len(sections)} canvases={len(canvases)} ids={len(idset)} extra_pages={len(extra_pages)}")
+    print(
+        " ".join(
+            [
+                f"pages={len(PAGES)}",
+                f"wml_sections={len(wml.sections)}",
+                f"wml_canvases={len(wml.canvases)}",
+                f"music_sections={len(music.sections)}",
+                f"music_canvases={len(music.canvases)}",
+            ]
+        )
+    )
+
 
 if __name__ == "__main__":
     main()
