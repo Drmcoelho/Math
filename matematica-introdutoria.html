@@ -28,7 +28,20 @@ p{max-width:72ch}.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 .ex-level{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:8px;border:1px solid;margin-left:8px;vertical-align:middle;white-space:nowrap}.ex-level.facil{color:#5fc28a;border-color:#3a8a5b}.ex-level.medio{color:var(--a2);border-color:#b8642c}.ex-level.dificil{color:#e06a6a;border-color:#a04545}.ex-level.desafio{color:#b79be0;border-color:#6b5499}
 .ex-actions{display:flex;gap:8px;flex-wrap:wrap}.ex-actions button{font:10px var(--mono);text-transform:uppercase;letter-spacing:.08em;background:transparent;border:1px solid var(--line);color:var(--ink);padding:5px 10px;border-radius:7px;cursor:pointer}.ex-actions button.sec{border-color:var(--a);color:var(--a)}.ex-actions button:hover{border-color:var(--a);color:var(--a)}
 .ex-hint{font-size:.95rem;color:var(--a2);background:rgba(255,155,100,.07);border-left:2px solid var(--a2);padding:8px 12px;margin:10px 0 0;border-radius:0 6px 6px 0;display:none}.ex-hint.show{display:block}
-.ex-sol{border-top:1px solid var(--line);padding:14px 16px;background:var(--p2);display:none;line-height:1.75}.ex-sol.show{display:block}.ex-sol .sol-label{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--a);display:block;margin-bottom:8px}
+.ex-sol{border-top:1px solid var(--line);padding:14px 16px;background:var(--p2);display:none;line-height:1.75}.ex-sol.show{display:block}.ex-sol .sol-label,.mcq-fb .sol-label{font:10px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--a);display:block;margin-bottom:8px}
+.ex-group-label{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap;font:11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--a2);border-bottom:1px solid var(--line);padding-bottom:7px;margin:30px 0 14px}
+.ex-group-label .gl-sub{color:var(--m);letter-spacing:.04em;text-transform:none;font-size:11px}
+.ex-list{margin:0}
+.mcq-opts{display:flex;flex-direction:column;gap:8px;margin:2px 0 0}
+.mcq-opt{text-align:left;border:1px solid var(--line);background:#0d0d11;color:var(--ink);padding:10px 12px;border-radius:9px;cursor:pointer;font:1rem var(--serif);transition:border-color .15s,background .15s}
+.mcq-opt:hover{border-color:var(--a2)}
+.mcq-opt .mk{font-family:var(--mono);color:var(--m);margin-right:.6rem}
+.mcq-opt.correct{border-color:#4fb87a;background:rgba(79,184,122,.12)}
+.mcq-opt.correct .mk{color:#5fc28a}
+.mcq-opt.wrong{border-color:#d05a5a;background:rgba(208,90,90,.12)}
+.mcq-opt.wrong .mk{color:#e06a6a}
+.mcq-fb{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;line-height:1.7;display:none}
+.mcq-fb.show{display:block}
 .ex-sol .sstep{background:#0d0d11;border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:8px 0;line-height:1.9;overflow-x:auto}.ex-sol .sstep .an{color:var(--m);font:.85rem var(--mono)}.ex-sol p{margin:8px 0}.ex-sol .ans{color:var(--a);font-weight:700}.ex-sol strong{color:var(--ink)}
 footer{border-top:1px solid var(--line);margin-top:80px;padding-top:24px;color:var(--m);font:13px/1.7 var(--mono)}footer a{color:var(--a2);text-decoration:none}footer a:hover{color:var(--a)}
 @media(max-width:880px){.app{display:block}.toc{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}main{padding:0 20px 80px}}
@@ -68,24 +81,48 @@ addEventListener('scroll',()=>{const h=document.documentElement,sc=h.scrollTop,m
 // ── Motor de exercícios: dados -> cartões com nível, dica e solução passo a passo ──
 const EX={};const LEVEL_LABEL={facil:'fácil',medio:'médio',dificil:'difícil',desafio:'desafio'};
 function renderExercises(setId,containerId){
-  const data=EX[setId]||[];const box=document.getElementById(containerId);if(!box)return;
-  let solved=0;const prog=document.createElement('div');prog.className='ex-progress';
-  const updateProg=()=>prog.textContent=solved+' / '+data.length+' soluções abertas';
-  const filter=document.createElement('div');filter.className='ex-filter';
-  ['todos','facil','medio','dificil','desafio'].forEach(lv=>{const b=document.createElement('button');b.textContent=lv==='todos'?'todos':LEVEL_LABEL[lv];if(lv==='todos')b.classList.add('on');b.addEventListener('click',()=>{filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');list.querySelectorAll('.ex').forEach(c=>{c.style.display=(lv==='todos'||c.dataset.level===lv)?'':'none';});});filter.appendChild(b);});
-  const head=document.createElement('div');head.className='ex-head';const h3=document.createElement('h3');h3.textContent='Exercícios';head.appendChild(h3);head.appendChild(prog);box.appendChild(head);box.appendChild(filter);
-  const list=document.createElement('div');
-  data.forEach((ex,i)=>{const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
-    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=(i+1)+'.';const body=document.createElement('div');body.className='ex-body';
+  const data=EX[setId];const box=document.getElementById(containerId);if(!box||!data)return;
+  let solved=0,total=0;const prog=document.createElement('div');prog.className='ex-progress';
+  const bump=()=>{solved++;prog.textContent=solved+' / '+total+' resolvidos';};
+  function buildFree(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
     const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
     const actions=document.createElement('div');actions.className='ex-actions';
-    const hint=ex.hint?document.createElement('div'):null;
-    if(hint){hint.className='ex-hint';hint.innerHTML='<strong>Dica:</strong> '+ex.hint;const hb=document.createElement('button');hb.textContent='dica';hb.addEventListener('click',()=>hint.classList.toggle('show'));actions.appendChild(hb);}
+    let hint=null;
+    if(ex.hint){hint=document.createElement('div');hint.className='ex-hint';hint.innerHTML='<strong>Dica:</strong> '+ex.hint;const hb=document.createElement('button');hb.textContent='dica';hb.addEventListener('click',()=>hint.classList.toggle('show'));actions.appendChild(hb);}
     const solBtn=document.createElement('button');solBtn.className='sec';solBtn.textContent='ver solução';actions.appendChild(solBtn);
     const sol=document.createElement('div');sol.className='ex-sol';sol.innerHTML='<span class="sol-label">solução passo a passo</span>'+ex.sol;
-    solBtn.addEventListener('click',()=>{const was=sol.classList.contains('show');sol.classList.toggle('show');solBtn.textContent=sol.classList.contains('show')?'ocultar solução':'ver solução';if(!was&&!sol.dataset.counted){sol.dataset.counted='1';solved++;updateProg();}});
-    body.appendChild(qt);body.appendChild(actions);if(hint)body.appendChild(hint);q.appendChild(num);q.appendChild(body);card.appendChild(q);card.appendChild(sol);list.appendChild(card);});
-  box.appendChild(list);updateProg();
+    solBtn.addEventListener('click',()=>{const was=sol.classList.contains('show');sol.classList.toggle('show');solBtn.textContent=sol.classList.contains('show')?'ocultar solução':'ver solução';if(!was&&!sol.dataset.counted){sol.dataset.counted='1';bump();}});
+    body.appendChild(qt);body.appendChild(actions);if(hint)body.appendChild(hint);q.appendChild(num);q.appendChild(body);card.appendChild(q);card.appendChild(sol);return card;
+  }
+  function buildMCQ(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const opts=document.createElement('div');opts.className='mcq-opts';
+    const fb=document.createElement('div');fb.className='mcq-fb';fb.innerHTML='<span class="sol-label">por quê</span>'+(ex.sol||'');
+    let answered=false;
+    ex.options.forEach((opt,oi)=>{const b=document.createElement('button');b.className='mcq-opt';b.type='button';b.innerHTML='<span class="mk">'+String.fromCharCode(65+oi)+'</span>'+opt;
+      b.addEventListener('click',()=>{if(answered)return;answered=true;const ok=oi===ex.answer;b.classList.add(ok?'correct':'wrong');if(!ok)opts.children[ex.answer].classList.add('correct');fb.classList.add('show');bump();});opts.appendChild(b);});
+    body.appendChild(qt);body.appendChild(opts);body.appendChild(fb);q.appendChild(num);q.appendChild(body);card.appendChild(q);return card;
+  }
+  let groups;
+  if(Array.isArray(data)){groups=[{label:'Exercícios',sub:'',type:'free',items:data}];}
+  else{groups=[
+    {label:'Aquecimento',sub:'pré-requisitos — ainda mais básico que o módulo',type:'free',items:data.basico||[]},
+    {label:'Consolidação',sub:'fixar e conectar com o que já vimos',type:'free',items:data.consolida||[]},
+    {label:'Múltipla escolha',sub:'dificuldade crescente',type:'mcq',items:data.mcq||[]},
+  ];}
+  total=groups.reduce((s,g)=>s+g.items.length,0);
+  const filter=document.createElement('div');filter.className='ex-filter';
+  ['todos','facil','medio','dificil','desafio'].forEach(lv=>{const b=document.createElement('button');b.textContent=lv==='todos'?'todos':LEVEL_LABEL[lv];if(lv==='todos')b.classList.add('on');b.addEventListener('click',()=>{filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');box.querySelectorAll('.ex').forEach(c=>{c.style.display=(lv==='todos'||c.dataset.level===lv)?'':'none';});});filter.appendChild(b);});
+  const head=document.createElement('div');head.className='ex-head';const h3=document.createElement('h3');h3.textContent='Exercícios';head.appendChild(h3);head.appendChild(prog);box.appendChild(head);box.appendChild(filter);
+  prog.textContent='0 / '+total+' resolvidos';
+  groups.forEach(g=>{if(!g.items.length)return;
+    if(groups.length>1){const gl=document.createElement('div');gl.className='ex-group-label';gl.innerHTML='<span>'+g.label+'</span><span class="gl-sub">'+g.sub+' · '+g.items.length+'</span>';box.appendChild(gl);}
+    const list=document.createElement('div');list.className='ex-list';
+    g.items.forEach((ex,i)=>list.appendChild(g.type==='mcq'?buildMCQ(ex,i+1):buildFree(ex,i+1)));box.appendChild(list);});
 }
 EX.i1=[
  {level:'facil',q:'Um modelo acerta <em>todos</em> os exemplos de treino. Se \\(L\\) é a fração de exemplos errados, quanto vale \\(L\\)?',hint:'erro = errados ÷ total.',sol:'<div class="sstep">\\(L=\\dfrac{\\text{erros}}{N}=\\dfrac{0}{N}\\)</div><p class="ans">\\(L=0\\)</p><p>Zero erro <strong>no treino</strong> — generalizar é outra história (Parte III).</p>'},
@@ -129,6 +166,242 @@ EX.i8=[
  {level:'facil',q:'Qual ferramenta mede o alinhamento entre os pesos \\(\\mathbf w\\) e a entrada \\(\\mathbf x\\)?',sol:'<p class="ans">O produto escalar \\(\\mathbf w\\cdot\\mathbf x\\) (mais o viés \\(b\\)), que forma o score \\(s(\\mathbf x)\\).</p>'},
  {level:'medio',q:'Por que precisamos da não linearidade \\(\\sigma\\) entre camadas \\(\\sigma(W\\mathbf x+\\mathbf b)\\)?',hint:'O que acontece ao compor duas funções lineares?',sol:'<p>Compor lineares dá outra linear: \\(W_2(W_1\\mathbf x)=(W_2W_1)\\mathbf x\\). Sem \\(\\sigma\\), mil camadas equivalem a uma só. <span class="ans">A não linearidade é o que permite dobrar o espaço e separar o que uma reta não separa.</span></p>'}
 ];
+// ── i1 EXPANDIDO: o contrato (aprender = minimizar erro) ──
+EX.i1={
+basico:[
+ {level:'facil',q:'Qual a média de 2 e 4?',sol:'<div class="sstep">\\(\\frac{2+4}{2}=3\\)</div><p class="ans">3</p>'},
+ {level:'facil',q:'O erro absoluto \\(|3-5|\\) vale?',sol:'<div class="sstep">\\(|3-5|=|-2|=2\\)</div><p class="ans">2</p>'},
+ {level:'facil',q:'O erro quadrático \\((3-1)^2\\) vale?',sol:'<div class="sstep">\\((3-1)^2=2^2=4\\)</div><p class="ans">4</p>'},
+ {level:'facil',q:'Qual o menor valor possível de \\(x^2\\)?',hint:'Um quadrado nunca é negativo.',sol:'<div class="sstep">\\(x^2\\ge 0\\), zero em \\(x=0\\)</div><p class="ans">0</p>'},
+ {level:'facil',q:'Um modelo erra 0 de 10. Taxa de erro?',sol:'<div class="sstep">0/10 = 0</div><p class="ans">0</p>'},
+ {level:'facil',q:'Erra 2 de 10. Taxa de erro?',sol:'<div class="sstep">2/10 = 0,2</div><p class="ans">0,2</p>'},
+ {level:'facil',q:'Substitua \\(w=2\\) em \\((w-3)^2\\).',sol:'<div class="sstep">\\((2-3)^2=1\\)</div><p class="ans">1</p>'},
+ {level:'facil',q:'Substitua \\(w=3\\) em \\((w-3)^2\\).',sol:'<div class="sstep">\\((3-3)^2=0\\)</div><p class="ans">0</p>'},
+ {level:'facil',q:'Qual a média de 0 e 10?',sol:'<div class="sstep">\\(\\frac{0+10}{2}=5\\)</div><p class="ans">5</p>'},
+ {level:'facil',q:'Quanto é \\((5-5)^2\\)?',sol:'<div class="sstep">0</div><p class="ans">0</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(L(w)=(w-3)^2\\). Onde é mínimo e quanto vale?',hint:'Quadrado mínimo quando o miolo zera.',sol:'<div class="sstep">\\(w-3=0\\Rightarrow w=3\\), \\(L=0\\)</div><p class="ans">w = 3, L = 0</p>'},
+ {level:'facil',q:'\\(L(w)=(w-5)^2\\). Onde é mínimo?',sol:'<div class="sstep">\\(w=5,\\ L=0\\)</div><p class="ans">w = 5</p>'},
+ {level:'medio',q:'Erro quadrático médio de \\([2,4]\\) vs alvos \\([3,3]\\)?',hint:'Média de \\((\\hat y-y)^2\\).',sol:'<div class="sstep">\\(\\tfrac12[(2-3)^2+(4-3)^2]=\\tfrac12[1+1]=1\\)</div><p class="ans">1</p>'},
+ {level:'facil',q:'Se \\(L=0\\) no treino, quanto o modelo erra nos exemplos vistos?',sol:'<div class="sstep"></div><p class="ans">Nada — zero erro no treino.</p>'},
+ {level:'medio',q:'Qual x minimiza \\(f(x)=x^2+1\\) e qual o mínimo?',sol:'<div class="sstep">mínimo em \\(x=0\\), \\(f=1\\)</div><p class="ans">x = 0, f = 1</p>'},
+ {level:'facil',q:'Média dos erros \\([1,2,3]\\)?',sol:'<div class="sstep">\\(\\frac{1+2+3}{3}=2\\)</div><p class="ans">2</p>'},
+ {level:'medio',q:'\\(L(w)=(w-2)^2+1\\). Valor mínimo?',sol:'<div class="sstep">quadrado zera em \\(w=2\\); \\(L=1\\)</div><p class="ans">1</p>'},
+ {level:'medio',q:'Por que dividir a soma das perdas por \\(N\\)?',sol:'<div class="sstep"><span class="an">// vira média</span></div><p class="ans">Para virar média — estimativa do erro esperado, sem crescer só por ter mais dados.</p>'},
+ {level:'facil',q:'Modelo A erra 3/10; B erra 1/10. Qual é melhor?',sol:'<div class="sstep">0,1 &lt; 0,3</div><p class="ans">B.</p>'},
+ {level:'facil',q:'Substitua \\(w=4\\) em \\((w-1)^2\\).',sol:'<div class="sstep">\\((4-1)^2=9\\)</div><p class="ans">9</p>'},
+ {level:'facil',q:'O que a perda \\(L\\) mede?',sol:'<div class="sstep"></div><p class="ans">O quanto o modelo erra.</p>'},
+ {level:'medio',q:'Minimizar \\(L\\) significa mover os parâmetros para...?',sol:'<div class="sstep"></div><p class="ans">Reduzir o erro.</p>'},
+ {level:'medio',q:'Aumentando \\(N\\) com o mesmo modelo, a média de erro estima melhor o quê?',sol:'<div class="sstep"></div><p class="ans">O erro verdadeiro (esperado).</p>'},
+ {level:'medio',q:'Resíduo \\(\\hat y-y\\) com \\(\\hat y=0{,}9,\\ y=1\\)?',sol:'<div class="sstep">0,9 − 1 = −0,1</div><p class="ans">−0,1</p>'},
+ {level:'medio',q:'Erro quadrático de \\(\\hat y=0{,}9,\\ y=1\\)?',sol:'<div class="sstep">\\((-0{,}1)^2=0{,}01\\)</div><p class="ans">0,01</p>'},
+ {level:'facil',q:'\\(\\mathbf w=(w_1,w_2)\\). Quantos “botões” há para ajustar?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'medio',q:'O gradiente aponta para a subida. Para minimizar, andamos para qual lado?',sol:'<div class="sstep"></div><p class="ans">Contra o gradiente, \\(-\\nabla L\\).</p>'},
+ {level:'dificil',q:'Onde \\(2(w-1)^2\\) é mínimo e quanto vale?',sol:'<div class="sstep">\\(w=1\\Rightarrow 0\\)</div><p class="ans">w = 1, valor 0</p>'},
+ {level:'dificil',q:'MSE de \\([1,2,3]\\) vs \\([1,2,0]\\)?',hint:'Erros: 0, 0, 3.',sol:'<div class="sstep">\\(\\tfrac13(0^2+0^2+3^2)=\\tfrac{9}{3}=3\\)</div><p class="ans">3</p>'},
+ {level:'desafio',q:'\\(f(w)=(w-2)^2\\): ache \\(w^\\star\\) e \\(L_{\\min}\\). O que representa em “aprender”?',sol:'<div class="sstep">\\(w^\\star=2,\\ L_{\\min}=0\\)</div><p class="ans">O parâmetro que zera o erro — o alvo do aprendizado.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Média de 2 e 4:',options:['2','3','4','6'],answer:1,sol:'(2+4)/2 = 3.'},
+ {level:'facil',q:'\\(|3-5|\\):',options:['2','−2','8','3'],answer:0,sol:'Valor absoluto = 2.'},
+ {level:'facil',q:'Menor valor de \\(x^2\\):',options:['−1','0','1','x'],answer:1,sol:'0 em x=0.'},
+ {level:'facil',q:'Erra 2 de 10. Taxa:',options:['0,2','2','0,02','5'],answer:0,sol:'2/10 = 0,2.'},
+ {level:'facil',q:'\\((w-3)^2\\) em \\(w=3\\):',options:['0','1','3','9'],answer:0,sol:'0.'},
+ {level:'medio',q:'\\(L(w)=(w-3)^2\\) é mínima em:',options:['w=0','w=3','w=−3','w=9'],answer:1,sol:'Miolo zera em w=3.'},
+ {level:'medio',q:'\\(f(x)=x^2+1\\) tem mínimo:',options:['0','1','−1','x'],answer:1,sol:'Em x=0, f=1.'},
+ {level:'medio',q:'MSE de [2,4] vs [3,3]:',options:['0','1','2','4'],answer:1,sol:'½(1+1) = 1.'},
+ {level:'facil',q:'Média dos erros [1,2,3]:',options:['2','3','6','1'],answer:0,sol:'6/3 = 2.'},
+ {level:'medio',q:'Dividir a perda por N a torna uma:',options:['soma','média','potência','raiz'],answer:1,sol:'Média do erro.'},
+ {level:'facil',q:'A perda L mede:',options:['o acerto','o quanto erramos','a velocidade','o nº de dados'],answer:1,sol:'O erro do modelo.'},
+ {level:'medio',q:'Para minimizar L, andamos:',options:['a favor do gradiente','contra o gradiente','perpendicular','aleatório'],answer:1,sol:'−∇L.'},
+ {level:'medio',q:'Resíduo \\(\\hat y-y\\) com 0,9 e 1:',options:['0,1','−0,1','1,9','0'],answer:1,sol:'0,9−1 = −0,1.'},
+ {level:'medio',q:'Erro quadrático de 0,9 vs 1:',options:['0,1','0,01','0,2','1'],answer:1,sol:'(−0,1)² = 0,01.'},
+ {level:'facil',q:'\\(\\mathbf w=(w_1,w_2)\\) tem quantos parâmetros?',options:['1','2','3','4'],answer:1,sol:'Dois.'},
+ {level:'medio',q:'\\((w-2)^2+1\\) tem valor mínimo:',options:['0','1','2','−1'],answer:1,sol:'1 em w=2.'},
+ {level:'medio',q:'\\(2(w-1)^2\\) é mínima em:',options:['w=0','w=1','w=2','w=−1'],answer:1,sol:'w=1.'},
+ {level:'dificil',q:'MSE de [1,2,3] vs [1,2,0]:',options:['1','2','3','9'],answer:2,sol:'(0+0+9)/3 = 3.'},
+ {level:'dificil',q:'Aumentar N estima melhor:',options:['o erro de treino','o erro verdadeiro','a velocidade','o nº de pesos'],answer:1,sol:'O erro esperado.'},
+ {level:'desafio',q:'\\(f(w)=(w-2)^2\\): \\(w^\\star\\) e \\(L_{\\min}\\):',options:['w=0, L=4','w=2, L=0','w=2, L=2','w=−2, L=0'],answer:1,sol:'Miolo zera em w=2.'}
+]
+};
+// ── i2 EXPANDIDO: vetores ──
+EX.i2={
+basico:[
+ {level:'facil',q:'Qual a 2ª componente de \\((5,9)\\)?',sol:'<div class="sstep"></div><p class="ans">9</p>'},
+ {level:'facil',q:'\\((1,2)+(3,4)\\)?',sol:'<div class="sstep">(1+3, 2+4)</div><p class="ans">(4, 6)</p>'},
+ {level:'facil',q:'\\(2\\cdot(1,3)\\)?',sol:'<div class="sstep">(2·1, 2·3)</div><p class="ans">(2, 6)</p>'},
+ {level:'facil',q:'\\((5,5)-(2,1)\\)?',sol:'<div class="sstep">(5−2, 5−1)</div><p class="ans">(3, 4)</p>'},
+ {level:'facil',q:'Quantas componentes tem um vetor em \\(\\mathbb R^3\\)?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'\\((0,0)\\) é qual vetor?',sol:'<div class="sstep"></div><p class="ans">O vetor nulo (zero).</p>'},
+ {level:'facil',q:'Qual a 1ª componente de \\((7,2)\\)?',sol:'<div class="sstep"></div><p class="ans">7</p>'},
+ {level:'facil',q:'\\(3\\cdot(0,1)\\)?',sol:'<div class="sstep">(0, 3)</div><p class="ans">(0, 3)</p>'},
+ {level:'facil',q:'\\((2,2)+(2,2)\\)?',sol:'<div class="sstep">(4, 4)</div><p class="ans">(4, 4)</p>'},
+ {level:'facil',q:'\\(-1\\cdot(3,-4)\\)?',sol:'<div class="sstep">(−3, 4)</div><p class="ans">(−3, 4)</p>'}
+],
+consolida:[
+ {level:'facil',q:'Norma de \\((3,4)\\)?',hint:'\\(\\sqrt{x_1^2+x_2^2}\\).',sol:'<div class="sstep">\\(\\sqrt{9+16}=\\sqrt{25}=5\\)</div><p class="ans">5</p>'},
+ {level:'medio',q:'Norma de \\((1,2,2)\\)?',sol:'<div class="sstep">\\(\\sqrt{1+4+4}=\\sqrt9=3\\)</div><p class="ans">3</p>'},
+ {level:'facil',q:'\\((1,0,0)+(0,1,0)\\)?',sol:'<div class="sstep">(1, 1, 0)</div><p class="ans">(1, 1, 0)</p>'},
+ {level:'facil',q:'\\(5\\cdot(1,-2,3)\\)?',sol:'<div class="sstep">(5, −10, 15)</div><p class="ans">(5, −10, 15)</p>'},
+ {level:'facil',q:'Uma imagem 28×28 vira um vetor de que dimensão?',sol:'<div class="sstep">28×28 = 784</div><p class="ans">784</p>'},
+ {level:'medio',q:'Norma de \\((6,8)\\)?',sol:'<div class="sstep">\\(\\sqrt{36+64}=\\sqrt{100}=10\\)</div><p class="ans">10</p>'},
+ {level:'facil',q:'\\((2,3)+(-2,-3)\\)?',sol:'<div class="sstep">(0, 0)</div><p class="ans">(0, 0)</p>'},
+ {level:'facil',q:'Norma de \\((0,5)\\)?',sol:'<div class="sstep">\\(\\sqrt{25}=5\\)</div><p class="ans">5</p>'},
+ {level:'medio',q:'Qual a distância da origem ao ponto \\((3,4)\\)?',sol:'<div class="sstep"><span class="an">// é a própria norma</span><br>5</div><p class="ans">5</p>'},
+ {level:'facil',q:'\\(2\\cdot(1,1,1)\\)?',sol:'<div class="sstep">(2, 2, 2)</div><p class="ans">(2, 2, 2)</p>'},
+ {level:'medio',q:'Norma de \\((1,1)\\)?',sol:'<div class="sstep">\\(\\sqrt{2}\\approx 1{,}414\\)</div><p class="ans">≈ 1,414</p>'},
+ {level:'facil',q:'A soma de vetores é feita como?',sol:'<div class="sstep"></div><p class="ans">Componente a componente.</p>'},
+ {level:'medio',q:'\\(\\tfrac{1}{10}\\cdot(10,20,30)\\)?',sol:'<div class="sstep">(1, 2, 3)</div><p class="ans">(1, 2, 3)</p>'},
+ {level:'medio',q:'Norma de \\((9,12)\\)?',sol:'<div class="sstep">\\(\\sqrt{81+144}=\\sqrt{225}=15\\)</div><p class="ans">15</p>'},
+ {level:'medio',q:'Qual o vetor unitário na direção x em \\(\\mathbb R^2\\)?',sol:'<div class="sstep"></div><p class="ans">(1, 0)</p>'},
+ {level:'facil',q:'\\((3,4)-(3,4)\\)?',sol:'<div class="sstep">(0, 0)</div><p class="ans">(0, 0)</p>'},
+ {level:'facil',q:'Dobre \\((2,-1)\\).',sol:'<div class="sstep">(4, −2)</div><p class="ans">(4, −2)</p>'},
+ {level:'dificil',q:'Norma de \\((2,3,6)\\)?',sol:'<div class="sstep">\\(\\sqrt{4+9+36}=\\sqrt{49}=7\\)</div><p class="ans">7</p>'},
+ {level:'dificil',q:'Ache \\(k\\) tal que \\(k\\cdot(3,4)\\) tenha norma 10.',hint:'A norma de (3,4) é 5.',sol:'<div class="sstep">\\(\\|k(3,4)\\|=5k=10\\Rightarrow k=2\\)</div><p class="ans">k = 2</p>'},
+ {level:'desafio',q:'Norma de \\((1,2,2,4)\\)?',sol:'<div class="sstep">\\(\\sqrt{1+4+4+16}=\\sqrt{25}=5\\)</div><p class="ans">5</p>'}
+],
+mcq:[
+ {level:'facil',q:'2ª componente de \\((5,9)\\):',options:['5','9','14','2'],answer:1,sol:'9.'},
+ {level:'facil',q:'\\((1,2)+(3,4)\\):',options:['(4,6)','(3,8)','(4,8)','(2,6)'],answer:0,sol:'Componente a componente.'},
+ {level:'facil',q:'\\(2\\cdot(1,3)\\):',options:['(2,3)','(2,6)','(1,6)','(3,6)'],answer:1,sol:'(2,6).'},
+ {level:'facil',q:'Componentes em \\(\\mathbb R^3\\):',options:['2','3','4','1'],answer:1,sol:'3.'},
+ {level:'facil',q:'\\((0,0)\\) é o vetor:',options:['unitário','nulo','base','normal'],answer:1,sol:'Nulo.'},
+ {level:'facil',q:'Norma de \\((3,4)\\):',options:['5','7','12','25'],answer:0,sol:'√25 = 5.'},
+ {level:'medio',q:'Norma de \\((1,2,2)\\):',options:['3','5','9','√5'],answer:0,sol:'√9 = 3.'},
+ {level:'facil',q:'\\(5\\cdot(1,-2,3)\\):',options:['(5,−10,15)','(5,−2,3)','(6,3,8)','(1,−10,3)'],answer:0,sol:'Escalar em cada componente.'},
+ {level:'facil',q:'Imagem 28×28 → dimensão:',options:['56','256','784','28'],answer:2,sol:'28·28 = 784.'},
+ {level:'medio',q:'Norma de \\((6,8)\\):',options:['10','14','48','100'],answer:0,sol:'√100 = 10.'},
+ {level:'facil',q:'Distância da origem a \\((3,4)\\):',options:['3','4','5','7'],answer:2,sol:'A norma, 5.'},
+ {level:'medio',q:'Norma de \\((1,1)\\):',options:['1','2','√2','0'],answer:2,sol:'√2.'},
+ {level:'medio',q:'Norma de \\((9,12)\\):',options:['15','21','11','225'],answer:0,sol:'√225 = 15.'},
+ {level:'facil',q:'Unitário na direção x em \\(\\mathbb R^2\\):',options:['(0,1)','(1,0)','(1,1)','(0,0)'],answer:1,sol:'(1,0).'},
+ {level:'facil',q:'\\((2,3)+(-2,-3)\\):',options:['(0,0)','(4,6)','(0,6)','(4,0)'],answer:0,sol:'Vetor nulo.'},
+ {level:'medio',q:'\\(\\tfrac1{10}(10,20,30)\\):',options:['(1,2,3)','(10,20,30)','(1,20,30)','(0,1,2)'],answer:0,sol:'(1,2,3).'},
+ {level:'dificil',q:'Norma de \\((2,3,6)\\):',options:['7','11','41','6'],answer:0,sol:'√49 = 7.'},
+ {level:'dificil',q:'\\(k\\) com \\(\\|k(3,4)\\|=10\\):',options:['1','2','5','10'],answer:1,sol:'5k=10 → k=2.'},
+ {level:'facil',q:'Dobro de \\((2,-1)\\):',options:['(4,−2)','(2,−2)','(4,−1)','(4,2)'],answer:0,sol:'(4,−2).'},
+ {level:'desafio',q:'Norma de \\((1,2,2,4)\\):',options:['5','9','25','7'],answer:0,sol:'√25 = 5.'}
+]
+};
+// ── i3 EXPANDIDO: produto escalar, norma, hiperplano ──
+EX.i3={
+basico:[
+ {level:'facil',q:'Quanto é \\(1\\cdot3+2\\cdot4\\)?',sol:'<div class="sstep">3 + 8 = 11</div><p class="ans">11</p>'},
+ {level:'facil',q:'Quanto é \\(2\\cdot2+0\\cdot5\\)?',sol:'<div class="sstep">4 + 0 = 4</div><p class="ans">4</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)=1\\cdot0+0\\cdot1\\)?',sol:'<div class="sstep">0 + 0 = 0</div><p class="ans">0</p>'},
+ {level:'facil',q:'\\((1,1)\\cdot(1,1)\\)?',sol:'<div class="sstep">1 + 1 = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'\\(\\cos(0°)\\)?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'\\(\\cos(90°)\\)?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'facil',q:'Norma de \\((3,4)\\)?',sol:'<div class="sstep">\\(\\sqrt{25}=5\\)</div><p class="ans">5</p>'},
+ {level:'facil',q:'O sinal de \\(5\\) é?',sol:'<div class="sstep"></div><p class="ans">Positivo.</p>'},
+ {level:'facil',q:'O sinal de \\(-3\\) é?',sol:'<div class="sstep"></div><p class="ans">Negativo.</p>'},
+ {level:'facil',q:'\\((2,0)\\cdot(3,0)\\)?',sol:'<div class="sstep">6 + 0 = 6</div><p class="ans">6</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\((1,2)\\cdot(3,4)\\)?',sol:'<div class="sstep">1·3 + 2·4 = 3 + 8 = 11</div><p class="ans">11</p>'},
+ {level:'medio',q:'\\((2,1)\\) e \\((-1,2)\\) são ortogonais?',hint:'Produto escalar zero?',sol:'<div class="sstep">2·(−1)+1·2 = 0</div><p class="ans">Sim — produto escalar nulo.</p>'},
+ {level:'medio',q:'Ângulo entre \\((1,0)\\) e \\((1,1)\\)?',sol:'<div class="sstep">\\(\\cos\\theta=\\frac{1}{1\\cdot\\sqrt2}=\\frac1{\\sqrt2}\\)</div><p class="ans">45°</p>'},
+ {level:'medio',q:'Score \\(s=\\mathbf w\\cdot\\mathbf x+b\\) com \\(\\mathbf w=(2,-1),b=1,\\mathbf x=(2,0)\\)?',sol:'<div class="sstep">2·2 + (−1)·0 + 1 = 5</div><p class="ans">5 (classe positiva)</p>'},
+ {level:'medio',q:'Mesmo \\(\\mathbf w,b\\), classifique \\(\\mathbf x=(1,3)\\).',sol:'<div class="sstep">2·1 + (−1)·3 + 1 = 0</div><p class="ans">s = 0 — sobre o hiperplano.</p>'},
+ {level:'facil',q:'Norma de \\((3,4)\\)?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'medio',q:'\\((1,1)\\cdot(1,-1)\\)?',sol:'<div class="sstep">1 − 1 = 0</div><p class="ans">0 (ortogonais)</p>'},
+ {level:'facil',q:'\\((1,1)\\cdot(2,3)\\)?',sol:'<div class="sstep">2 + 3 = 5</div><p class="ans">5</p>'},
+ {level:'medio',q:'O que é o conjunto \\(\\mathbf w\\cdot\\mathbf x+b=0\\)?',sol:'<div class="sstep"></div><p class="ans">O hiperplano — a fronteira de decisão.</p>'},
+ {level:'facil',q:'Se o score \\(s=-4\\), qual a classe (sinal)?',sol:'<div class="sstep"></div><p class="ans">Negativa.</p>'},
+ {level:'facil',q:'\\((3,0)\\cdot(0,5)\\)?',sol:'<div class="sstep">0</div><p class="ans">0 (ortogonais)</p>'},
+ {level:'medio',q:'Norma de \\((5,12)\\)?',sol:'<div class="sstep">\\(\\sqrt{25+144}=\\sqrt{169}=13\\)</div><p class="ans">13</p>'},
+ {level:'facil',q:'\\((1,0)\\cdot(1,0)\\)?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'medio',q:'Um produto escalar grande e positivo indica vetores...?',sol:'<div class="sstep"></div><p class="ans">Alinhados (mesma direção).</p>'},
+ {level:'facil',q:'\\((2,2)\\cdot(2,2)\\)?',sol:'<div class="sstep">4 + 4 = 8</div><p class="ans">8</p>'},
+ {level:'medio',q:'\\(\\mathbf w=(0,1),b=-2,\\mathbf x=(5,3)\\): classifique pelo sinal de \\(s\\).',sol:'<div class="sstep">0·5 + 1·3 − 2 = 1 &gt; 0</div><p class="ans">Classe positiva.</p>'},
+ {level:'medio',q:'\\((1,2,2)\\cdot(2,0,1)\\)?',sol:'<div class="sstep">2 + 0 + 2 = 4</div><p class="ans">4</p>'},
+ {level:'dificil',q:'Ache \\(b\\) para que \\(\\mathbf x=(1,1)\\) esteja na fronteira com \\(\\mathbf w=(2,3)\\).',hint:'\\(s=0\\).',sol:'<div class="sstep">2·1 + 3·1 + b = 0<br>5 + b = 0<br>b = −5</div><p class="ans">b = −5</p>'},
+ {level:'dificil',q:'Dois vetores têm norma 1. Quando \\(\\mathbf a\\cdot\\mathbf b=1\\), qual o ângulo?',sol:'<div class="sstep">\\(\\cos\\theta=\\frac{1}{1\\cdot1}=1\\)</div><p class="ans">0° (mesma direção).</p>'},
+ {level:'desafio',q:'\\(\\mathbf w=(1,2),b=0\\). Classifique \\(\\mathbf x=(2,-2)\\) pelo sinal de \\(s\\).',sol:'<div class="sstep">1·2 + 2·(−2) + 0 = 2 − 4 = −2 &lt; 0</div><p class="ans">Classe negativa.</p>'}
+],
+mcq:[
+ {level:'facil',q:'\\(1\\cdot3+2\\cdot4\\):',options:['10','11','14','7'],answer:1,sol:'3+8 = 11.'},
+ {level:'facil',q:'\\((1,0)\\cdot(0,1)\\):',options:['0','1','2','−1'],answer:0,sol:'Ortogonais.'},
+ {level:'facil',q:'\\(\\cos(90°)\\):',options:['0','1','−1','0,5'],answer:0,sol:'0.'},
+ {level:'facil',q:'\\((1,1)\\cdot(1,1)\\):',options:['1','2','4','0'],answer:1,sol:'1+1 = 2.'},
+ {level:'facil',q:'Sinal de \\(-3\\):',options:['positivo','negativo','zero','nenhum'],answer:1,sol:'Negativo.'},
+ {level:'facil',q:'\\((1,2)\\cdot(3,4)\\):',options:['10','11','14','7'],answer:1,sol:'11.'},
+ {level:'medio',q:'\\((2,1)\\cdot(-1,2)\\):',options:['0','2','−2','4'],answer:0,sol:'Ortogonais.'},
+ {level:'medio',q:'Ângulo entre \\((1,0)\\) e \\((1,1)\\):',options:['30°','45°','60°','90°'],answer:1,sol:'cosθ = 1/√2.'},
+ {level:'medio',q:'\\(s=\\mathbf w\\cdot\\mathbf x+b\\), w=(2,−1),b=1,x=(2,0):',options:['3','5','4','0'],answer:1,sol:'4+0+1 = 5.'},
+ {level:'medio',q:'O hiperplano é o conjunto:',options:['\\(\\mathbf w\\cdot\\mathbf x+b=0\\)','\\(\\|\\mathbf x\\|=1\\)','\\(\\mathbf x=0\\)','\\(\\mathbf w=\\mathbf x\\)'],answer:0,sol:'Score zero = fronteira.'},
+ {level:'medio',q:'\\((1,1)\\cdot(1,-1)\\):',options:['0','2','−2','1'],answer:0,sol:'Ortogonais.'},
+ {level:'medio',q:'Norma de \\((5,12)\\):',options:['13','17','60','169'],answer:0,sol:'√169 = 13.'},
+ {level:'medio',q:'Score \\(s=-4\\) → classe:',options:['positiva','negativa','fronteira','indefinida'],answer:1,sol:'Sinal negativo.'},
+ {level:'medio',q:'Dot grande e positivo indica vetores:',options:['opostos','ortogonais','alinhados','nulos'],answer:2,sol:'Mesma direção.'},
+ {level:'facil',q:'\\((2,2)\\cdot(2,2)\\):',options:['4','8','16','2'],answer:1,sol:'4+4 = 8.'},
+ {level:'medio',q:'w=(0,1),b=−2,x=(5,3) → classe:',options:['positiva','negativa','fronteira','indefinida'],answer:0,sol:'s = 1 > 0.'},
+ {level:'medio',q:'\\((1,2,2)\\cdot(2,0,1)\\):',options:['2','4','6','0'],answer:1,sol:'2+0+2 = 4.'},
+ {level:'dificil',q:'\\(b\\) para (1,1) na fronteira com w=(2,3):',options:['−5','5','1','0'],answer:0,sol:'5+b=0 → b=−5.'},
+ {level:'dificil',q:'Vetores unitários com dot 1 → ângulo:',options:['0°','45°','90°','180°'],answer:0,sol:'cosθ = 1.'},
+ {level:'desafio',q:'w=(1,2),b=0, x=(2,−2) → classe:',options:['positiva','negativa','fronteira','indefinida'],answer:1,sol:'s = −2 < 0.'}
+]
+};
+// ── i4 EXPANDIDO: matrizes e transformações ──
+EX.i4={
+basico:[
+ {level:'facil',q:'Na matriz \\(\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}\\), qual a entrada da linha 1, coluna 1?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'Quantas linhas tem \\(\\begin{bmatrix}1&2&3\\\\4&5&6\\end{bmatrix}\\)?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'E quantas colunas?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'A identidade aplicada a \\((5,7)\\) dá?',sol:'<div class="sstep"><span class="an">// I não muda o vetor</span></div><p class="ans">(5, 7)</p>'},
+ {level:'facil',q:'\\(\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}\\) é qual matriz?',sol:'<div class="sstep"></div><p class="ans">A identidade.</p>'},
+ {level:'facil',q:'\\(\\begin{bmatrix}2&0\\\\0&2\\end{bmatrix}\\) aplicada a \\((1,1)\\)?',sol:'<div class="sstep">(2, 2)</div><p class="ans">(2, 2)</p>'},
+ {level:'facil',q:'Uma matriz \\(W\\in\\mathbb R^{3\\times2}\\) tem quantas linhas e colunas?',sol:'<div class="sstep"></div><p class="ans">3 linhas, 2 colunas.</p>'},
+ {level:'facil',q:'\\(2I\\) aplicada a \\((1,2)\\)?',sol:'<div class="sstep">(2, 4)</div><p class="ans">(2, 4)</p>'},
+ {level:'facil',q:'A matriz nula aplicada a qualquer vetor dá?',sol:'<div class="sstep"></div><p class="ans">O vetor nulo.</p>'},
+ {level:'facil',q:'\\(\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}\\) aplicada a \\((4,9)\\)?',sol:'<div class="sstep"><span class="an">// projeta no eixo x</span></div><p class="ans">(4, 0)</p>'}
+],
+consolida:[
+ {level:'facil',q:'\\(W=\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}\\), \\(\\mathbf x=(1,1)\\). \\(W\\mathbf x\\)?',sol:'<div class="sstep">(2·1+0·1, 0·1+3·1)</div><p class="ans">(2, 3)</p>'},
+ {level:'medio',q:'Rotação \\(\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}\\) aplicada a \\((1,0)\\)?',sol:'<div class="sstep">(0·1−1·0, 1·1+0·0)</div><p class="ans">(0, 1) — girou 90°.</p>'},
+ {level:'medio',q:'Cisalhamento \\(\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}\\) a \\((1,1)\\)?',sol:'<div class="sstep">(1·1+1·1, 0·1+1·1)</div><p class="ans">(2, 1)</p>'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{4\\times3}\\) leva \\(\\mathbb R^3\\) em qual espaço?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbb R^4\\)</p>'},
+ {level:'dificil',q:'\\(W_1\\in\\mathbb R^{3\\times2},W_2\\in\\mathbb R^{4\\times3}\\). \\(W_2W_1\\mathbf x\\) para \\(\\mathbf x\\in\\mathbb R^2\\)?',sol:'<div class="sstep">\\(\\mathbb R^2\\to\\mathbb R^3\\to\\mathbb R^4\\)</div><p class="ans">\\(\\mathbb R^4\\)</p>'},
+ {level:'medio',q:'Quais as três partes de uma camada \\(\\sigma(W\\mathbf x+\\mathbf b)\\)?',sol:'<div class="sstep"></div><p class="ans">Transformação linear (Wx), deslocamento (b) e não linearidade (σ).</p>'},
+ {level:'facil',q:'\\(\\begin{bmatrix}2&0\\\\0&2\\end{bmatrix}\\) a \\((3,-1)\\)?',sol:'<div class="sstep">(6, −2)</div><p class="ans">(6, −2)</p>'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}\\) aplicada a \\((1,0)\\)?',hint:'Dá a 1ª coluna.',sol:'<div class="sstep">(1·1+2·0, 3·1+4·0)</div><p class="ans">(1, 3)</p>'},
+ {level:'medio',q:'A mesma matriz aplicada a \\((0,1)\\)?',sol:'<div class="sstep">(2, 4) — a 2ª coluna</div><p class="ans">(2, 4)</p>'},
+ {level:'facil',q:'\\(I\\) aplicada a \\((7,8)\\)?',sol:'<div class="sstep">(7, 8)</div><p class="ans">(7, 8)</p>'},
+ {level:'facil',q:'\\(3I\\) aplicada a \\((2,2)\\)?',sol:'<div class="sstep">(6, 6)</div><p class="ans">(6, 6)</p>'},
+ {level:'medio',q:'Profundidade = compor camadas. A não linearidade no meio serve para...?',sol:'<div class="sstep"></div><p class="ans">Dobrar o espaço (separar o que uma reta não separa).</p>'},
+ {level:'medio',q:'Sem não linearidade, compor transformações lineares dá...?',sol:'<div class="sstep">\\(W_2(W_1\\mathbf x)=(W_2W_1)\\mathbf x\\)</div><p class="ans">Outra transformação linear.</p>'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}\\) a \\((3,4)\\)?',sol:'<div class="sstep"><span class="an">// reflexão no eixo x</span></div><p class="ans">(3, −4)</p>'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{2\\times3}\\) leva \\(\\mathbb R^3\\) em?',sol:'<div class="sstep"></div><p class="ans">\\(\\mathbb R^2\\)</p>'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}\\) a \\((2,3)\\)?',sol:'<div class="sstep">(2+3, 2+3)</div><p class="ans">(5, 5)</p>'},
+ {level:'dificil',q:'\\(W_2\\cdot I\\) é igual a quê?',sol:'<div class="sstep"><span class="an">// a identidade não altera</span></div><p class="ans">\\(W_2\\)</p>'},
+ {level:'dificil',q:'Aplique a rotação de 90° duas vezes a \\((1,0)\\).',sol:'<div class="sstep">(1,0)→(0,1)→(−1,0)</div><p class="ans">(−1, 0)</p>'},
+ {level:'dificil',q:'\\(\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}\\) a \\((2,-2)\\)?',sol:'<div class="sstep">(4, −6)</div><p class="ans">(4, −6)</p>'},
+ {level:'desafio',q:'Quantas multiplicações para \\(W\\mathbf x\\) com \\(W\\in\\mathbb R^{2\\times3}\\)?',hint:'Cada saída soma 3 produtos.',sol:'<div class="sstep">2 saídas × 3 produtos = 6</div><p class="ans">6</p>'}
+],
+mcq:[
+ {level:'facil',q:'Linhas de \\(\\begin{bmatrix}1&2&3\\\\4&5&6\\end{bmatrix}\\):',options:['2','3','6','1'],answer:0,sol:'2 linhas.'},
+ {level:'facil',q:'\\(\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}\\) é a:',options:['nula','identidade','rotação','projeção'],answer:1,sol:'Identidade.'},
+ {level:'facil',q:'\\(I\\) aplicada a \\((5,7)\\):',options:['(0,0)','(5,7)','(7,5)','(1,1)'],answer:1,sol:'Não muda.'},
+ {level:'facil',q:'\\(\\begin{bmatrix}2&0\\\\0&2\\end{bmatrix}\\) a \\((1,1)\\):',options:['(2,2)','(1,1)','(2,0)','(4,4)'],answer:0,sol:'(2,2).'},
+ {level:'facil',q:'\\(W\\in\\mathbb R^{3\\times2}\\):',options:['3 lin, 2 col','2 lin, 3 col','3 lin, 3 col','2 lin, 2 col'],answer:0,sol:'linhas × colunas.'},
+ {level:'medio',q:'\\(W=\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}\\), x=(1,1):',options:['(2,3)','(3,2)','(2,2)','(1,1)'],answer:0,sol:'(2,3).'},
+ {level:'medio',q:'Rotação \\(\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}\\) a (1,0):',options:['(0,1)','(1,0)','(0,−1)','(−1,0)'],answer:0,sol:'Gira 90°.'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{4\\times3}\\) leva \\(\\mathbb R^3\\) em:',options:['\\(\\mathbb R^3\\)','\\(\\mathbb R^4\\)','\\(\\mathbb R^2\\)','\\(\\mathbb R^{12}\\)'],answer:1,sol:'m=4 saídas.'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}\\) a (1,0):',options:['(1,3)','(2,4)','(1,2)','(3,4)'],answer:0,sol:'1ª coluna.'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}\\) a (0,1):',options:['(1,3)','(2,4)','(0,0)','(4,2)'],answer:1,sol:'2ª coluna.'},
+ {level:'medio',q:'Partes de \\(\\sigma(W\\mathbf x+\\mathbf b)\\):',options:['só Wx','Wx, b e σ','só σ','b e σ'],answer:1,sol:'Linear, deslocamento, não linearidade.'},
+ {level:'medio',q:'Sem não linearidade, compor lineares dá:',options:['uma não linear','outra linear','identidade','zero'],answer:1,sol:'(W₂W₁)x.'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}\\) a (3,4):',options:['(3,−4)','(−3,4)','(3,4)','(4,3)'],answer:0,sol:'Reflete em x.'},
+ {level:'medio',q:'\\(W\\in\\mathbb R^{2\\times3}\\) leva \\(\\mathbb R^3\\) em:',options:['\\(\\mathbb R^2\\)','\\(\\mathbb R^3\\)','\\(\\mathbb R^6\\)','\\(\\mathbb R^1\\)'],answer:0,sol:'2 saídas.'},
+ {level:'medio',q:'\\(\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}\\) a (2,3):',options:['(5,5)','(2,3)','(6,6)','(5,6)'],answer:0,sol:'(5,5).'},
+ {level:'medio',q:'A não linearidade entre camadas serve para:',options:['acelerar','dobrar o espaço','reduzir parâmetros','normalizar'],answer:1,sol:'Separa o não separável por reta.'},
+ {level:'dificil',q:'Rotação de 90° duas vezes a (1,0):',options:['(0,1)','(−1,0)','(1,0)','(0,−1)'],answer:1,sol:'(1,0)→(0,1)→(−1,0).'},
+ {level:'dificil',q:'\\(W_2\\cdot I\\) =',options:['I','\\(W_2\\)','0','\\(W_2^2\\)'],answer:1,sol:'Identidade não altera.'},
+ {level:'dificil',q:'\\(W_2W_1x\\), W1∈ℝ^{3×2}, W2∈ℝ^{4×3}, x∈ℝ²:',options:['\\(\\mathbb R^2\\)','\\(\\mathbb R^3\\)','\\(\\mathbb R^4\\)','\\(\\mathbb R^9\\)'],answer:2,sol:'ℝ²→ℝ³→ℝ⁴.'},
+ {level:'desafio',q:'Multiplicações para \\(W\\mathbf x\\), \\(W\\in\\mathbb R^{2\\times3}\\):',options:['3','5','6','9'],answer:2,sol:'2×3 = 6.'}
+]
+};
 addEventListener('DOMContentLoaded',()=>{['i1','i2','i3','i4','i5','i6','i7','i8'].forEach(id=>renderExercises(id,'ex-'+id));const r=()=>window.renderMathInElement&&renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});r();setTimeout(r,350);});
 </script>
 </body>
