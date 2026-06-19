@@ -140,6 +140,50 @@ footer .sig{color:var(--text-dim)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 @media(max-width:600px){body{font-size:14.5px}.controls{gap:.9rem}.ctrl{min-width:110px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+
+/* ===== EXERCÍCIOS ===== */
+.exercises{margin:2.5rem 0}
+.ex-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem}
+.ex-head h3{margin:0;color:var(--amber);font-family:var(--font-mono)}
+.ex-progress{font-family:var(--font-mono);font-size:.7rem;color:var(--muted)}
+.ex-filter{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.ex-filter button{font-size:.6rem;padding:.25rem .6rem;border-color:var(--border2);color:var(--muted)}
+.ex-filter button.on{border-color:var(--green);color:var(--green)}
+.ex{border:1px solid var(--border);border-radius:6px;margin-bottom:.9rem;overflow:hidden;background:var(--bg2)}
+.ex-q{padding:1rem 1.2rem;display:flex;gap:.8rem;align-items:flex-start}
+.ex-num{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);flex-shrink:0;min-width:2.2rem}
+.ex-body{flex:1;min-width:0}
+.ex-qtext{margin:.2rem 0 .6rem;line-height:1.6}
+.ex-qtext code{font-size:.95em}
+.ex-level{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.1rem .45rem;border-radius:8px;border:1px solid;margin-left:.5rem;vertical-align:middle}
+.ex-level.facil{color:var(--green);border-color:var(--green-dim)}
+.ex-level.medio{color:var(--amber);border-color:var(--amber-dim,#b8842c)}
+.ex-level.dificil{color:var(--red);border-color:var(--red-dim)}
+.ex-level.desafio{color:var(--violet);border-color:#6b5499}
+.ex-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.ex-actions button{font-size:.6rem;padding:.3rem .7rem}
+.ex-actions button.sm{font-size:.6rem;padding:.3rem .7rem}
+.ex-hint{font-size:.84rem;color:var(--bluelight);background:rgba(93,143,204,.07);border-left:2px solid var(--blue-dim);padding:.6rem .9rem;margin:.7rem 0 0;border-radius:0 3px 3px 0;display:none}
+.ex-hint.show{display:block}
+.ex-sol{border-top:1px solid var(--border);padding:1.1rem 1.2rem;background:var(--surface);display:none;font-size:.9rem;line-height:1.75}
+.ex-sol.show{display:block}
+.ex-sol .sol-label,.mcq-fb .sol-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.7rem}
+.ex-sol .sstep{font-family:var(--font-mono);font-size:.86rem;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.5rem .8rem;margin:.5rem 0;line-height:1.7;overflow-x:auto}
+.ex-sol .sstep .an{color:var(--muted);font-size:.78rem}
+.ex-sol p{margin:.6rem 0}.ex-sol .ans{color:var(--green);font-weight:600}.ex-sol strong{color:#fff}
+.ex-group-label{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bluelight);border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:2.2rem 0 1.1rem}
+.ex-group-label .gl-sub{color:var(--muted);letter-spacing:.04em;text-transform:none;font-size:.7rem}
+.ex-list{margin:0}
+.mcq-opts{display:flex;flex-direction:column;gap:.5rem;margin:.2rem 0 0}
+.mcq-opt{text-align:left;border:1px solid var(--border);background:var(--bg2);color:var(--text);padding:.6rem .9rem;border-radius:5px;cursor:pointer;font-family:var(--font-body);font-size:.9rem;text-transform:none;letter-spacing:0;transition:border-color .15s,background .15s}
+.mcq-opt:hover{border-color:var(--bluelight)}
+.mcq-opt .mk{font-family:var(--font-mono);color:var(--muted);margin-right:.6rem}
+.mcq-opt.correct{border-color:var(--green);background:rgba(79,184,122,.12);color:#fff}
+.mcq-opt.correct .mk{color:var(--green)}
+.mcq-opt.wrong{border-color:var(--red);background:rgba(208,90,90,.1)}
+.mcq-opt.wrong .mk{color:var(--red)}
+.mcq-fb{border-top:1px solid var(--border);margin-top:.7rem;padding-top:.7rem;font-size:.85rem;line-height:1.7;display:none}
+.mcq-fb.show{display:block}
 </style>
 </head>
 <body>
@@ -297,6 +341,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-corda"></div>
 </section>
 
 <section id="timbre">
@@ -357,6 +402,7 @@ footer .sig{color:var(--text-dim)}
       ou colidem. &Eacute; o pr&oacute;ximo n&iacute;vel.
     </div>
   </div>
+<div class="exercises" id="ex-timbre"></div>
 </section>
 
 <section id="consonancia">
@@ -451,6 +497,7 @@ footer .sig{color:var(--text-dim)}
       cultura escolhe quais habitar.</p>
     </div>
   </div>
+<div class="exercises" id="ex-consonancia"></div>
 </section>
 
 <section id="batimentos">
@@ -505,6 +552,7 @@ footer .sig{color:var(--text-dim)}
       logar&iacute;tmica para a percep&ccedil;&atilde;o &mdash; os <em class="term">cents</em>.
     </div>
   </div>
+<div class="exercises" id="ex-batimentos"></div>
 </section>
 
 <section id="cents">
@@ -548,6 +596,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-cents"></div>
 </section>
 
 <section id="escala">
@@ -593,6 +642,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-escala"></div>
 </section>
 
 <section id="temperamento">
@@ -660,6 +710,7 @@ footer .sig{color:var(--text-dim)}
       <em>funciona</em> &mdash; n&atilde;o que ele seja o &uacute;nico poss&iacute;vel.</p>
     </div>
   </div>
+<div class="exercises" id="ex-temperamento"></div>
 </section>
 
 <section id="tonal">
@@ -704,6 +755,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-tonal"></div>
 </section>
 
 <section id="modelo">
@@ -771,6 +823,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-modelo"></div>
 </section>
 
 <section id="beethoven">
@@ -854,6 +907,7 @@ footer .sig{color:var(--text-dim)}
       o necess&aacute;rio com o habitual &mdash; &eacute; a li&ccedil;&atilde;o mais transfer&iacute;vel do caderno, para muito al&eacute;m da m&uacute;sica.
     </div>
   </div>
+<div class="exercises" id="ex-beethoven"></div>
 </section>
 </main>
 
@@ -1775,6 +1829,228 @@ const MONO = '11px "Courier New", monospace';
     links.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+act));
   },{passive:true});
 })();
+
+
+/* ===== MOTOR DE EXERCÍCIOS ===== */
+const EX={};const LEVEL_LABEL={facil:'fácil',medio:'médio',dificil:'difícil',desafio:'desafio'};
+function renderExercises(setId,containerId){
+  const data=EX[setId];const box=document.getElementById(containerId);if(!box||!data)return;
+  let solved=0,total=0;const prog=document.createElement('div');prog.className='ex-progress';
+  const bump=()=>{solved++;prog.textContent=solved+' / '+total+' resolvidos';};
+  function buildFree(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const actions=document.createElement('div');actions.className='ex-actions';let hint=null;
+    if(ex.hint){hint=document.createElement('div');hint.className='ex-hint';hint.innerHTML='<strong>Dica:</strong> '+ex.hint;const hb=document.createElement('button');hb.className='sm';hb.textContent='dica';hb.addEventListener('click',()=>hint.classList.toggle('show'));actions.appendChild(hb);}
+    const solBtn=document.createElement('button');solBtn.className='sec';solBtn.textContent='ver solução';actions.appendChild(solBtn);
+    const sol=document.createElement('div');sol.className='ex-sol';sol.innerHTML='<span class="sol-label">solução passo a passo</span>'+ex.sol;
+    solBtn.addEventListener('click',()=>{const was=sol.classList.contains('show');sol.classList.toggle('show');solBtn.textContent=sol.classList.contains('show')?'ocultar solução':'ver solução';if(!was&&!sol.dataset.counted){sol.dataset.counted='1';bump();}});
+    body.appendChild(qt);body.appendChild(actions);if(hint)body.appendChild(hint);q.appendChild(num);q.appendChild(body);card.appendChild(q);card.appendChild(sol);return card;
+  }
+  function buildMCQ(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const opts=document.createElement('div');opts.className='mcq-opts';
+    const fb=document.createElement('div');fb.className='mcq-fb';fb.innerHTML='<span class="sol-label">por quê</span>'+(ex.sol||'');
+    let answered=false;
+    ex.options.forEach((opt,oi)=>{const b=document.createElement('button');b.className='mcq-opt';b.type='button';b.innerHTML='<span class="mk">'+String.fromCharCode(65+oi)+'</span>'+opt;
+      b.addEventListener('click',()=>{if(answered)return;answered=true;const ok=oi===ex.answer;b.classList.add(ok?'correct':'wrong');if(!ok)opts.children[ex.answer].classList.add('correct');fb.classList.add('show');bump();});opts.appendChild(b);});
+    body.appendChild(qt);body.appendChild(opts);body.appendChild(fb);q.appendChild(num);q.appendChild(body);card.appendChild(q);return card;
+  }
+  let groups;
+  if(Array.isArray(data)){groups=[{label:'Exercícios',sub:'',type:'free',items:data}];}
+  else{groups=[
+    {label:'Aquecimento',sub:'pré-requisitos — ainda mais básico que o módulo',type:'free',items:data.basico||[]},
+    {label:'Consolidação',sub:'fixar e conectar com o que já vimos',type:'free',items:data.consolida||[]},
+    {label:'Múltipla escolha',sub:'dificuldade crescente',type:'mcq',items:data.mcq||[]},
+  ];}
+  total=groups.reduce((a,g)=>a+g.items.length,0);
+  const filter=document.createElement('div');filter.className='ex-filter';
+  ['todos','facil','medio','dificil','desafio'].forEach(lv=>{const b=document.createElement('button');b.textContent=lv==='todos'?'todos':LEVEL_LABEL[lv];if(lv==='todos')b.classList.add('on');b.addEventListener('click',()=>{filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');box.querySelectorAll('.ex').forEach(c=>{c.style.display=(lv==='todos'||c.dataset.level===lv)?'':'none';});});filter.appendChild(b);});
+  const head=document.createElement('div');head.className='ex-head';const h3=document.createElement('h3');h3.textContent='Exercícios';head.appendChild(h3);head.appendChild(prog);box.appendChild(head);box.appendChild(filter);
+  prog.textContent='0 / '+total+' resolvidos';
+  groups.forEach(g=>{if(!g.items.length)return;
+    if(groups.length>1){const gl=document.createElement('div');gl.className='ex-group-label';gl.innerHTML='<span>'+g.label+'</span><span class="gl-sub">'+g.sub+' · '+g.items.length+'</span>';box.appendChild(gl);}
+    const list=document.createElement('div');list.className='ex-list';g.items.forEach((ex,i)=>list.appendChild(g.type==='mcq'?buildMCQ(ex,i+1):buildFree(ex,i+1)));box.appendChild(list);});
+}
+EX.corda={
+basico:[
+ {level:'facil',q:'Quanto é <code>2 × 100</code>?',sol:'<div class="sstep">200</div><p class="ans">200</p>'},
+ {level:'facil',q:'Quanto é <code>3 × 100</code>?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>4 × 110</code>?',sol:'<div class="sstep">440</div><p class="ans">440</p>'},
+ {level:'facil',q:'Qual o 3º múltiplo inteiro de 5?',sol:'<div class="sstep">5, 10, 15</div><p class="ans">15</p>'},
+ {level:'facil',q:'Metade de 600?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>5 × 88</code>?',sol:'<div class="sstep">440</div><p class="ans">440</p>'},
+ {level:'facil',q:'Quais são os 3 primeiros inteiros positivos?',sol:'<div class="sstep"></div><p class="ans">1, 2, 3</p>'},
+ {level:'facil',q:'Quanto é <code>6 × 100</code>?',sol:'<div class="sstep">600</div><p class="ans">600</p>'},
+ {level:'facil',q:'Um terço de 900?',sol:'<div class="sstep">900 ÷ 3 = 300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Uma corda vibra inteira. Dividida ao meio, a frequência fica maior ou menor?',sol:'<div class="sstep"><span class="an">// metade do comprimento → dobro da frequência</span></div><p class="ans">Maior (o dobro).</p>'}
+],
+consolida:[
+ {level:'facil',q:'Fundamental 100 Hz. Qual o 2º harmônico (2f)?',sol:'<div class="sstep">2 × 100 = 200</div><p class="ans">200 Hz</p>'},
+ {level:'facil',q:'3º harmônico de 100 Hz?',sol:'<div class="sstep">3 × 100 = 300</div><p class="ans">300 Hz</p>'},
+ {level:'facil',q:'4º harmônico de 110 Hz?',sol:'<div class="sstep">4 × 110 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Os 4 primeiros harmônicos de 50 Hz?',sol:'<div class="sstep">50, 100, 150, 200</div><p class="ans">50, 100, 150, 200 Hz</p>'},
+ {level:'facil',q:'O harmônico <code>n</code> tem que frequência?',sol:'<div class="sstep"><span class="an">// múltiplos inteiros de f</span></div><p class="ans">n · f</p>'},
+ {level:'medio',q:'5º harmônico de 88 Hz?',sol:'<div class="sstep">5 × 88 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Razão entre o 2º harmônico e o fundamental?',sol:'<div class="sstep">2f : f = 2:1</div><p class="ans">2:1 (uma oitava)</p>'},
+ {level:'medio',q:'Razão entre o 3º e o 2º harmônicos?',sol:'<div class="sstep">3f : 2f = 3:2</div><p class="ans">3:2 (uma quinta)</p>'},
+ {level:'medio',q:'Razão entre o 4º e o 3º harmônicos?',sol:'<div class="sstep">4:3</div><p class="ans">4:3 (uma quarta)</p>'},
+ {level:'medio',q:'Uma corda dividida exatamente ao meio soa qual harmônico?',sol:'<div class="sstep"><span class="an">// 2f</span></div><p class="ans">O 2º (uma oitava acima).</p>'},
+ {level:'medio',q:'Tocando a corda em 1/3 do comprimento, qual harmônico soa?',sol:'<div class="sstep"></div><p class="ans">O 3º (3f).</p>'},
+ {level:'medio',q:'O comprimento de onda do 2º harmônico é que fração do fundamental?',sol:'<div class="sstep"><span class="an">// λ ∝ 1/n</span></div><p class="ans">1/2.</p>'},
+ {level:'medio',q:'Os 3 primeiros harmônicos de 220 Hz?',sol:'<div class="sstep">220, 440, 660</div><p class="ans">220, 440, 660 Hz</p>'},
+ {level:'facil',q:'“A natureza conta de 1 em 1”: os multiplicadores dos harmônicos são...?',sol:'<div class="sstep"></div><p class="ans">Inteiros: 1, 2, 3, …</p>'},
+ {level:'medio',q:'6º harmônico de 100 Hz?',sol:'<div class="sstep">600</div><p class="ans">600 Hz</p>'},
+ {level:'medio',q:'Se o 2º harmônico é 880 Hz, qual o fundamental?',sol:'<div class="sstep">880 ÷ 2 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Se o 3º harmônico é 660 Hz, qual o fundamental?',sol:'<div class="sstep">660 ÷ 3 = 220</div><p class="ans">220 Hz</p>'},
+ {level:'dificil',q:'Qual a diferença (em Hz) entre harmônicos consecutivos de f = 100 Hz?',sol:'<div class="sstep"><span class="an">// (n+1)f − nf = f</span></div><p class="ans">100 Hz (constante, igual a f).</p>'},
+ {level:'dificil',q:'7º harmônico de 60 Hz?',sol:'<div class="sstep">7 × 60 = 420</div><p class="ans">420 Hz</p>'},
+ {level:'desafio',q:'O fundamental é 110 Hz. Qual harmônico vale 550 Hz?',sol:'<div class="sstep">550 ÷ 110 = 5</div><p class="ans">O 5º harmônico.</p>'}
+],
+mcq:[
+ {level:'facil',q:'2º harmônico de 100 Hz:',options:['100','200','300','400'],answer:1,sol:'2×100.'},
+ {level:'facil',q:'3º harmônico de 100 Hz:',options:['200','300','400','50'],answer:1,sol:'3×100.'},
+ {level:'facil',q:'O harmônico n tem frequência:',options:['f/n','n·f','f+n','fⁿ'],answer:1,sol:'Múltiplos inteiros.'},
+ {level:'facil',q:'4º harmônico de 110 Hz:',options:['330','440','220','550'],answer:1,sol:'4×110.'},
+ {level:'medio',q:'Razão 2º harmônico : fundamental:',options:['2:1','3:2','4:3','5:4'],answer:0,sol:'2f:f.'},
+ {level:'medio',q:'Razão 3º : 2º harmônico:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'3f:2f.'},
+ {level:'medio',q:'Corda dividida ao meio soa:',options:['a oitava acima','a quinta','a mesma nota','uma oitava abaixo'],answer:0,sol:'2f.'},
+ {level:'facil',q:'A natureza conta os harmônicos:',options:['de 1 em 1 (inteiros)','de 0,5 em 0,5','aleatório','em log'],answer:0,sol:'Múltiplos inteiros.'},
+ {level:'medio',q:'5º harmônico de 88 Hz:',options:['352','440','176','528'],answer:1,sol:'5×88.'},
+ {level:'medio',q:'Se o 2º harmônico = 880, o fundamental é:',options:['220','440','1760','660'],answer:1,sol:'880/2.'},
+ {level:'medio',q:'5º harmônico de 100 Hz:',options:['400','500','600','50'],answer:1,sol:'5×100.'},
+ {level:'medio',q:'λ do 2º harmônico vs fundamental:',options:['dobro','metade','igual','triplo'],answer:1,sol:'λ ∝ 1/n.'},
+ {level:'medio',q:'Razão 4º : 3º harmônico:',options:['3:2','4:3','5:4','2:1'],answer:1,sol:'4f:3f.'},
+ {level:'medio',q:'3º harmônico de 220 Hz:',options:['440','660','880','330'],answer:1,sol:'3×220.'},
+ {level:'medio',q:'Diferença entre harmônicos consecutivos de 100 Hz:',options:['50','100','200','varia'],answer:1,sol:'Sempre f.'},
+ {level:'medio',q:'Se o 3º harmônico = 660, o fundamental é:',options:['110','220','330','990'],answer:1,sol:'660/3.'},
+ {level:'medio',q:'6º harmônico de 100 Hz:',options:['500','600','700','360'],answer:1,sol:'6×100.'},
+ {level:'dificil',q:'7º harmônico de 60 Hz:',options:['360','420','480','427'],answer:1,sol:'7×60.'},
+ {level:'dificil',q:'Qual harmônico de 110 Hz vale 550?',options:['4º','5º','6º','3º'],answer:1,sol:'550/110 = 5.'},
+ {level:'desafio',q:'O n-ésimo harmônico de 100 Hz é 700. n =',options:['5','6','7','8'],answer:2,sol:'700/100 = 7.'}
+]
+};
+EX.timbre={
+basico:[
+ {level:'facil',q:'Quanto é <code>1 + 0,5 + 0,25</code>?',sol:'<div class="sstep">1,75</div><p class="ans">1,75</p>'},
+ {level:'facil',q:'Metade de 1?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Metade de 0,5?',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'},
+ {level:'facil',q:'Escreva 1/4 em decimal.',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'},
+ {level:'facil',q:'Qual é maior: 0,2 ou 0,8?',sol:'<div class="sstep"></div><p class="ans">0,8</p>'},
+ {level:'facil',q:'Quanto é <code>0,6 + 0,3 + 0,1</code>?',sol:'<div class="sstep">1,0</div><p class="ans">1</p>'},
+ {level:'facil',q:'Para representar 3 harmônicos, quantas senoides somamos?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'Quanto é <code>0,1 × 10</code>?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'Quanto é <code>2 × 0,25</code>?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Média de 0 e 1?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'}
+],
+consolida:[
+ {level:'facil',q:'Violino e flauta no mesmo Lá têm a mesma frequência fundamental?',sol:'<div class="sstep"></div><p class="ans">Sim — a mesma nota.</p>'},
+ {level:'medio',q:'Então o que os faz soar diferente?',sol:'<div class="sstep"></div><p class="ans">As amplitudes (a mistura) dos harmônicos — o timbre.</p>'},
+ {level:'medio',q:'Um som complexo é a soma de quê?',sol:'<div class="sstep"></div><p class="ans">Senoides (os harmônicos).</p>'},
+ {level:'medio',q:'Se só o 1º harmônico tem amplitude, o som é...?',sol:'<div class="sstep"></div><p class="ans">Um tom puro (senoidal).</p>'},
+ {level:'medio',q:'Amplitudes [1; 0,5; 0,25] nos harmônicos 1–3. Soma das amplitudes?',sol:'<div class="sstep">1 + 0,5 + 0,25 = 1,75</div><p class="ans">1,75</p>'},
+ {level:'facil',q:'Se a amplitude do 2º harmônico é 0, ele está...?',sol:'<div class="sstep"></div><p class="ans">Ausente.</p>'},
+ {level:'medio',q:'Dois sons com os mesmos harmônicos mas amplitudes diferentes soam...?',sol:'<div class="sstep"></div><p class="ans">Diferentes (timbres distintos).</p>'},
+ {level:'medio',q:'A frequência define a altura; a amplitude relativa dos harmônicos define o...?',sol:'<div class="sstep"></div><p class="ans">Timbre.</p>'},
+ {level:'medio',q:'O teorema de Fourier: toda onda periódica é soma de...?',sol:'<div class="sstep"></div><p class="ans">Senoides.</p>'},
+ {level:'medio',q:'Se as amplitudes dos harmônicos agudos aumentam, o som fica mais...?',sol:'<div class="sstep"></div><p class="ans">Brilhante (e áspero).</p>'},
+ {level:'medio',q:'Um diapasão produz aproximadamente o quê?',sol:'<div class="sstep"></div><p class="ans">Um tom puro (1 harmônico).</p>'},
+ {level:'facil',q:'Violino e flauta no mesmo Lá3: qual a frequência fundamental dos dois?',sol:'<div class="sstep"></div><p class="ans">220 Hz (a mesma).</p>'},
+ {level:'facil',q:'A “cor” do som é o quê?',sol:'<div class="sstep"></div><p class="ans">O timbre.</p>'},
+ {level:'medio',q:'Soma das amplitudes 0,6 + 0,3 + 0,1?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'medio',q:'Em geral, qual harmônico tem a maior amplitude?',sol:'<div class="sstep"></div><p class="ans">O 1º (a fundamental).</p>'},
+ {level:'medio',q:'Dobrar a amplitude geral do som muda a nota ou o volume?',sol:'<div class="sstep"></div><p class="ans">O volume (não a nota).</p>'},
+ {level:'medio',q:'Um som com só harmônicos ímpares (1, 3, 5…) é típico de qual instrumento?',hint:'Falta o 2º (e os pares).',sol:'<div class="sstep"></div><p class="ans">Clarinete.</p>'},
+ {level:'dificil',q:'Soma das amplitudes da série 1; 1/2; 1/3; 1/4?',sol:'<div class="sstep">1 + 0,5 + 0,333 + 0,25 ≈ 2,083</div><p class="ans">≈ 2,08</p>'},
+ {level:'dificil',q:'Removendo o fundamental e mantendo os harmônicos, a altura percebida...?',sol:'<div class="sstep"><span class="an">// fenômeno do fundamental ausente</span></div><p class="ans">Permanece (o cérebro reconstrói o fundamental).</p>'},
+ {level:'desafio',q:'Dois sinais com a mesma frequência e o mesmo conjunto de amplitudes harmônicas têm o mesmo...?',sol:'<div class="sstep"></div><p class="ans">Timbre.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Violino e flauta no mesmo Lá têm a mesma:',options:['amplitude','frequência fundamental','timbre','duração'],answer:1,sol:'Mesma nota.'},
+ {level:'facil',q:'O que diferencia o timbre:',options:['a frequência','as amplitudes dos harmônicos','a duração','o silêncio'],answer:1,sol:'A mistura de harmônicos.'},
+ {level:'facil',q:'Um som complexo é soma de:',options:['retas','senoides','quadrados','logaritmos'],answer:1,sol:'Fourier.'},
+ {level:'facil',q:'<code>1 + 0,5 + 0,25</code>:',options:['1,5','1,75','2','1,25'],answer:1,sol:'1,75.'},
+ {level:'facil',q:'Um tom puro tem quantos harmônicos:',options:['1','2','3','infinitos'],answer:0,sol:'Só o fundamental.'},
+ {level:'medio',q:'A altura (nota) é definida pela:',options:['amplitude','frequência','fase','duração'],answer:1,sol:'Frequência.'},
+ {level:'facil',q:'O timbre é a ___ do som:',options:['altura','cor','duração','intensidade'],answer:1,sol:'A “cor”.'},
+ {level:'medio',q:'Fourier: onda periódica = soma de:',options:['senoides','inteiros','frações','vetores'],answer:0,sol:'Senoides.'},
+ {level:'medio',q:'Harmônicos agudos fortes → som mais:',options:['grave','brilhante','baixo','curto'],answer:1,sol:'Brilhante.'},
+ {level:'medio',q:'Um diapasão produz:',options:['um acorde','um tom puro','ruído','um glissando'],answer:1,sol:'≈ tom puro.'},
+ {level:'medio',q:'Mudar a amplitude do 2º harmônico muda:',options:['a nota','o timbre','o tempo','nada'],answer:1,sol:'O timbre.'},
+ {level:'medio',q:'O clarinete reforça harmônicos:',options:['pares','ímpares','nenhum','todos iguais'],answer:1,sol:'Ímpares.'},
+ {level:'medio',q:'Mesma frequência + mesmas amplitudes harmônicas →',options:['mesmo timbre','volumes diferentes','alturas diferentes','nada igual'],answer:0,sol:'Mesmo timbre.'},
+ {level:'medio',q:'A maior amplitude costuma ser do:',options:['fundamental','5º','10º','último'],answer:0,sol:'1º harmônico.'},
+ {level:'medio',q:'Dobrar a amplitude geral muda:',options:['a nota','o volume','o timbre','a frequência'],answer:1,sol:'O volume.'},
+ {level:'facil',q:'<code>0,6 + 0,3 + 0,1</code>:',options:['0,9','1','1,1','0,8'],answer:1,sol:'1.'},
+ {level:'dificil',q:'Série 1; 1/2; 1/3; 1/4 soma ≈',options:['1,5','2,08','3','2,5'],answer:1,sol:'≈ 2,08.'},
+ {level:'dificil',q:'Sem o fundamental, a altura percebida:',options:['some','permanece (fundamental ausente)','dobra','zera'],answer:1,sol:'O cérebro reconstrói.'},
+ {level:'medio',q:'Senoides para representar 5 harmônicos:',options:['3','5','10','1'],answer:1,sol:'Uma por harmônico.'},
+ {level:'desafio',q:'440 Hz puro vs 440 Hz com muitos harmônicos diferem em:',options:['altura','timbre','ambas','nenhuma'],answer:1,sol:'Mesma altura, timbre diferente.'}
+]
+};
+EX.consonancia={
+basico:[
+ {level:'facil',q:'Simplifique <code>4/2</code>.',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'Simplifique <code>6/4</code>.',sol:'<div class="sstep">÷2 → 3/2</div><p class="ans">3/2</p>'},
+ {level:'facil',q:'Qual razão é mais simples: <code>2:1</code> ou <code>16:15</code>?',sol:'<div class="sstep"></div><p class="ans">2:1</p>'},
+ {level:'facil',q:'<code>2:1</code> em decimal?',sol:'<div class="sstep">2/1 = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'<code>3:2</code> em decimal?',sol:'<div class="sstep">3/2 = 1,5</div><p class="ans">1,5</p>'},
+ {level:'facil',q:'Mais simples: <code>3:2</code> ou <code>45:32</code>?',sol:'<div class="sstep"></div><p class="ans">3:2</p>'},
+ {level:'facil',q:'<code>2/1 = 4/2</code>?',sol:'<div class="sstep">4/2 = 2</div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'<code>4:3</code> em decimal (aprox.)?',sol:'<div class="sstep">4/3 ≈ 1,333</div><p class="ans">≈ 1,333</p>'},
+ {level:'facil',q:'<code>5:4</code> em decimal?',sol:'<div class="sstep">5/4 = 1,25</div><p class="ans">1,25</p>'},
+ {level:'facil',q:'Qual o menor inteiro maior que 1?',sol:'<div class="sstep"></div><p class="ans">2</p>'}
+],
+consolida:[
+ {level:'facil',q:'A oitava corresponde a que razão de frequências?',sol:'<div class="sstep"></div><p class="ans">2:1</p>'},
+ {level:'facil',q:'A quinta justa?',sol:'<div class="sstep"></div><p class="ans">3:2</p>'},
+ {level:'facil',q:'A quarta justa?',sol:'<div class="sstep"></div><p class="ans">4:3</p>'},
+ {level:'facil',q:'A terça maior?',sol:'<div class="sstep"></div><p class="ans">5:4</p>'},
+ {level:'medio',q:'Razões mais simples tendem a soar mais...?',sol:'<div class="sstep"></div><p class="ans">Consoantes.</p>'},
+ {level:'medio',q:'220 Hz e 440 Hz: que razão e que intervalo?',sol:'<div class="sstep">440/220 = 2/1</div><p class="ans">2:1 — oitava (muito consoante).</p>'},
+ {level:'medio',q:'220 Hz e 330 Hz: que razão?',sol:'<div class="sstep">330/220 = 3/2</div><p class="ans">3:2 — quinta.</p>'},
+ {level:'medio',q:'256 Hz e 320 Hz: que razão?',sol:'<div class="sstep">320/256 = 5/4</div><p class="ans">5:4 — terça maior.</p>'},
+ {level:'medio',q:'Dois tons muito próximos (440 e 441 Hz) soam...?',sol:'<div class="sstep"><span class="an">// batimentos lentos → aspereza</span></div><p class="ans">Ásperos (dissonantes).</p>'},
+ {level:'medio',q:'A consonância está ligada ao alinhamento de quê?',sol:'<div class="sstep"></div><p class="ans">Dos harmônicos das duas notas.</p>'},
+ {level:'medio',q:'Quando harmônicos quase coincidem (sem coincidir), surge...?',sol:'<div class="sstep"></div><p class="ans">Aspereza (dissonância).</p>'},
+ {level:'medio',q:'A razão 16:15 (um semitom) é simples ou complexa?',sol:'<div class="sstep"></div><p class="ans">Complexa — dissonante.</p>'},
+ {level:'medio',q:'Ordene de mais para menos consoante: 9:8, 2:1, 3:2.',sol:'<div class="sstep"><span class="an">// quanto mais simples, mais consoante</span></div><p class="ans">2:1, 3:2, 9:8</p>'},
+ {level:'medio',q:'660 Hz e 440 Hz: que razão?',sol:'<div class="sstep">660/440 = 3/2</div><p class="ans">3:2 (quinta).</p>'},
+ {level:'medio',q:'480 Hz e 320 Hz: que razão?',sol:'<div class="sstep">480/320 = 3/2</div><p class="ans">3:2.</p>'},
+ {level:'medio',q:'Na oitava 2:1, o 2º harmônico do grave coincide com o fundamental do agudo?',sol:'<div class="sstep"></div><p class="ans">Sim — alinhamento forte, muito consoante.</p>'},
+ {level:'medio',q:'O trítono (~45:32) é consoante ou dissonante?',sol:'<div class="sstep"><span class="an">// razão complexa</span></div><p class="ans">Dissonante.</p>'},
+ {level:'dificil',q:'300 Hz e 200 Hz: razão?',sol:'<div class="sstep">300/200 = 3/2</div><p class="ans">3:2.</p>'},
+ {level:'dificil',q:'500 Hz e 400 Hz: razão e intervalo?',sol:'<div class="sstep">500/400 = 5/4</div><p class="ans">5:4 — terça maior.</p>'},
+ {level:'desafio',q:'Por que 3:2 soa mais consoante que 9:8?',sol:'<div class="sstep"></div><p class="ans">Razão mais simples — os harmônicos coincidem mais cedo e com mais frequência.</p>'}
+],
+mcq:[
+ {level:'facil',q:'A oitava é a razão:',options:['2:1','3:2','4:3','5:4'],answer:0,sol:'2:1.'},
+ {level:'facil',q:'A quinta justa é:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'3:2.'},
+ {level:'facil',q:'Razões simples soam mais:',options:['dissonantes','consoantes','agudas','curtas'],answer:1,sol:'Consoantes.'},
+ {level:'facil',q:'220 e 440 Hz:',options:['2:1','3:2','4:3','5:4'],answer:0,sol:'Oitava.'},
+ {level:'facil',q:'A quarta justa é:',options:['2:1','3:2','4:3','5:4'],answer:2,sol:'4:3.'},
+ {level:'facil',q:'A terça maior é:',options:['2:1','3:2','4:3','5:4'],answer:3,sol:'5:4.'},
+ {level:'medio',q:'A mais consoante:',options:['2:1','16:15','45:32','9:8'],answer:0,sol:'A mais simples.'},
+ {level:'medio',q:'220 e 330 Hz:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'Quinta.'},
+ {level:'medio',q:'Dois tons quase iguais soam:',options:['consoantes','ásperos','oitava','quinta'],answer:1,sol:'Batimentos/aspereza.'},
+ {level:'medio',q:'A consonância liga-se ao alinhamento dos:',options:['harmônicos','timbres','tempos','volumes'],answer:0,sol:'Harmônicos.'},
+ {level:'medio',q:'<code>3:2</code> em decimal:',options:['1,2','1,33','1,5','2'],answer:2,sol:'1,5.'},
+ {level:'medio',q:'256 e 320 Hz:',options:['3:2','4:3','5:4','2:1'],answer:2,sol:'Terça maior.'},
+ {level:'medio',q:'<code>16:15</code> é:',options:['muito consoante','dissonante','oitava','quinta'],answer:1,sol:'Razão complexa.'},
+ {level:'medio',q:'660 e 440 Hz:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'Quinta.'},
+ {level:'medio',q:'<code>5:4</code> em decimal:',options:['1,2','1,25','1,33','1,5'],answer:1,sol:'1,25.'},
+ {level:'medio',q:'480 e 320 Hz:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'3:2.'},
+ {level:'medio',q:'O trítono (~45:32) é:',options:['consoante','dissonante','oitava','uníssono'],answer:1,sol:'Dissonante.'},
+ {level:'medio',q:'500 e 400 Hz:',options:['3:2','4:3','5:4','2:1'],answer:2,sol:'Terça maior.'},
+ {level:'dificil',q:'A mais consoante entre estas:',options:['9:8','3:2','2:1','45:32'],answer:2,sol:'2:1 é a mais simples.'},
+ {level:'desafio',q:'3:2 é mais consoante que 9:8 porque:',options:['é mais aguda','a razão é mais simples','é mais grave','tem mais harmônicos'],answer:1,sol:'Coincidência mais cedo dos harmônicos.'}
+]
+};
+const EX_IDS=['corda','timbre','consonancia','batimentos','cents','escala','temperamento','tonal','modelo','beethoven'];
+EX_IDS.forEach(id=>renderExercises(id,'ex-'+id));
 
 </script>
 </body>
