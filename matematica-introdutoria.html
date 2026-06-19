@@ -124,48 +124,6 @@ function renderExercises(setId,containerId){
     const list=document.createElement('div');list.className='ex-list';
     g.items.forEach((ex,i)=>list.appendChild(g.type==='mcq'?buildMCQ(ex,i+1):buildFree(ex,i+1)));box.appendChild(list);});
 }
-EX.i1=[
- {level:'facil',q:'Um modelo acerta <em>todos</em> os exemplos de treino. Se \\(L\\) é a fração de exemplos errados, quanto vale \\(L\\)?',hint:'erro = errados ÷ total.',sol:'<div class="sstep">\\(L=\\dfrac{\\text{erros}}{N}=\\dfrac{0}{N}\\)</div><p class="ans">\\(L=0\\)</p><p>Zero erro <strong>no treino</strong> — generalizar é outra história (Parte III).</p>'},
- {level:'medio',q:'A perda é \\(L(w)=(w-3)^2\\). Qual \\(w\\) minimiza \\(L\\) e qual é o valor mínimo?',hint:'Um quadrado é mínimo quando o que está dentro é zero.',sol:'<div class="sstep">\\((w-3)^2\\ge 0\\) sempre;<br><span class="an">// igual a zero quando o miolo zera</span><br>\\(w-3=0\\Rightarrow w=3\\)</div><p class="ans">\\(w^\\star=3,\\quad L_{\\min}=0\\)</p>'},
- {level:'desafio',q:'No problema \\(\\arg\\min_{\\mathbf w}\\frac1N\\sum_k L(f_{\\mathbf w}(\\mathbf x_k),y_k)\\), por que dividir por \\(N\\)?',sol:'<p>Dividir por \\(N\\) torna a perda uma <strong>média</strong>, não uma soma. Assim o valor não cresce só por haver mais dados, e a média amostral estima o erro esperado sobre a distribuição real \\(\\mathbb E[L]\\). <span class="ans">É uma estimativa do erro verdadeiro.</span></p>'}
-];
-EX.i2=[
- {level:'facil',q:'Some \\(\\mathbf a=(3,4)\\) e \\(\\mathbf b=(1,2)\\).',hint:'Componente a componente.',sol:'<div class="sstep">\\(\\mathbf a+\\mathbf b=(3+1,\\ 4+2)\\)</div><p class="ans">\\((4,6)\\)</p>'},
- {level:'facil',q:'Calcule \\(2\\,\\mathbf x\\) para \\(\\mathbf x=(3,-1)\\).',sol:'<div class="sstep">\\(2\\,(3,-1)=(2\\cdot3,\\ 2\\cdot(-1))\\)</div><p class="ans">\\((6,-2)\\)</p>'},
- {level:'medio',q:'Qual a norma \\(\\|\\mathbf x\\|\\) de \\(\\mathbf x=(3,4)\\)?',hint:'\\(\\|\\mathbf x\\|=\\sqrt{x_1^2+x_2^2}\\).',sol:'<div class="sstep">\\(\\|\\mathbf x\\|=\\sqrt{3^2+4^2}=\\sqrt{9+16}=\\sqrt{25}\\)</div><p class="ans">\\(\\|\\mathbf x\\|=5\\)</p>'}
-];
-EX.i3=[
- {level:'facil',q:'Calcule \\(\\mathbf a\\cdot\\mathbf b\\) para \\(\\mathbf a=(1,2)\\), \\(\\mathbf b=(3,4)\\).',hint:'Multiplique e some.',sol:'<div class="sstep">\\(\\mathbf a\\cdot\\mathbf b=1\\cdot3+2\\cdot4=3+8\\)</div><p class="ans">\\(\\mathbf a\\cdot\\mathbf b=11\\)</p>'},
- {level:'medio',q:'Os vetores \\((2,1)\\) e \\((-1,2)\\) são ortogonais?',hint:'Ortogonais ⇔ produto escalar zero.',sol:'<div class="sstep">\\((2,1)\\cdot(-1,2)=2\\cdot(-1)+1\\cdot2=-2+2=0\\)</div><p class="ans">Sim — produto escalar nulo, logo perpendiculares.</p>'},
- {level:'medio',q:'Qual o ângulo entre \\((1,0)\\) e \\((1,1)\\)?',hint:'Use \\(\\cos\\theta=\\frac{\\mathbf a\\cdot\\mathbf b}{\\|\\mathbf a\\|\\|\\mathbf b\\|}\\).',sol:'<div class="sstep">\\(\\mathbf a\\cdot\\mathbf b=1\\)<br>\\(\\|\\mathbf a\\|=1,\\ \\|\\mathbf b\\|=\\sqrt2\\)<br>\\(\\cos\\theta=\\dfrac{1}{1\\cdot\\sqrt2}=\\dfrac{1}{\\sqrt2}\\)</div><p class="ans">\\(\\theta=45^\\circ\\)</p>'},
- {level:'dificil',q:'Com \\(\\mathbf w=(2,-1)\\) e \\(b=1\\), classifique \\(\\mathbf x=(2,0)\\) pelo sinal de \\(s=\\mathbf w\\cdot\\mathbf x+b\\). E \\(\\mathbf x=(1,3)\\)?',hint:'Calcule \\(s\\) e olhe o sinal.',sol:'<div class="sstep">\\(s(2,0)=2\\cdot2+(-1)\\cdot0+1=5>0\\)<br>\\(s(1,3)=2\\cdot1+(-1)\\cdot3+1=0\\)</div><p class="ans">\\((2,0)\\): classe positiva. \\((1,3)\\): exatamente sobre o hiperplano.</p>'}
-];
-EX.i4=[
- {level:'facil',q:'Com \\(W=\\begin{bmatrix}2&0\\\\0&3\\end{bmatrix}\\) e \\(\\mathbf x=(1,1)\\), calcule \\(W\\mathbf x\\).',sol:'<div class="sstep">\\(W\\mathbf x=(2\\cdot1+0\\cdot1,\\ 0\\cdot1+3\\cdot1)\\)</div><p class="ans">\\((2,3)\\)</p>'},
- {level:'medio',q:'Aplique a rotação \\(R=\\begin{bmatrix}0&-1\\\\1&0\\end{bmatrix}\\) a \\((1,0)\\).',hint:'Linha por coluna.',sol:'<div class="sstep">\\(R\\,(1,0)=(0\\cdot1+(-1)\\cdot0,\\ 1\\cdot1+0\\cdot0)\\)</div><p class="ans">\\((0,1)\\) — girou \\(90^\\circ\\).</p>'},
- {level:'dificil',q:'Se \\(W_1\\in\\mathbb R^{3\\times2}\\) e \\(W_2\\in\\mathbb R^{4\\times3}\\), qual a dimensão de \\(W_2W_1\\mathbf x\\) para \\(\\mathbf x\\in\\mathbb R^2\\)?',hint:'Acompanhe as dimensões passo a passo.',sol:'<div class="sstep">\\(\\mathbf x\\in\\mathbb R^2\\xrightarrow{W_1}\\mathbb R^3\\xrightarrow{W_2}\\mathbb R^4\\)</div><p class="ans">\\(\\mathbb R^4\\) — composição encadeia as dimensões.</p>'}
-];
-EX.i5=[
- {level:'facil',q:'Qual a média \\(\\bar{\\mathbf x}\\) dos pontos \\((2,0),(4,0),(0,0)\\)?',sol:'<div class="sstep">\\(\\bar{\\mathbf x}=\\tfrac13\\big((2,0)+(4,0)+(0,0)\\big)=\\tfrac13(6,0)\\)</div><p class="ans">\\((2,0)\\)</p>'},
- {level:'medio',q:'Para \\(\\Sigma=\\begin{bmatrix}4&0\\\\0&1\\end{bmatrix}\\), qual a direção principal e quanta variância ela captura?',hint:'Matriz diagonal: autovetores são os eixos, autovalores a diagonal.',sol:'<div class="sstep">Autovalores: \\(\\lambda_1=4\\ (\\text{eixo }x),\\ \\lambda_2=1\\ (\\text{eixo }y)\\)</div><p class="ans">Direção principal \\((1,0)\\), com variância \\(\\lambda=4\\) (maior).</p>'},
- {level:'dificil',q:'Verifique que \\(\\mathbf v=\\tfrac1{\\sqrt2}(1,1)\\) é autovetor de \\(\\Sigma=\\begin{bmatrix}3&1\\\\1&3\\end{bmatrix}\\) e ache \\(\\lambda\\).',hint:'Calcule \\(\\Sigma\\mathbf v\\) e compare com \\(\\lambda\\mathbf v\\).',sol:'<div class="sstep">\\(\\Sigma\\,(1,1)=(3+1,\\ 1+3)=(4,4)=4\\,(1,1)\\)<br><span class="an">// a constante na escala 1/√2 não muda a direção</span></div><p class="ans">\\(\\lambda=4\\) — \\(\\mathbf v\\) é autovetor.</p>'}
-];
-EX.i6=[
- {level:'facil',q:'Quanto vale \\(\\sigma(0)\\) para \\(\\sigma(z)=\\frac1{1+e^{-z}}\\)?',sol:'<div class="sstep">\\(\\sigma(0)=\\dfrac{1}{1+e^{0}}=\\dfrac{1}{1+1}\\)</div><p class="ans">\\(\\sigma(0)=0{,}5\\)</p>'},
- {level:'medio',q:'Calcule \\(\\operatorname{softmax}(1,1)\\).',hint:'Scores iguais ⇒ probabilidades iguais.',sol:'<div class="sstep">\\(\\dfrac{e^{1}}{e^{1}+e^{1}}=\\dfrac{e}{2e}=\\dfrac12\\) para cada</div><p class="ans">\\((0{,}5,\\ 0{,}5)\\)</p>'},
- {level:'dificil',q:'Doença com \\(P(C)=0{,}1\\). Teste: \\(P(\\text{+}\\mid C)=0{,}8\\), \\(P(\\text{+}\\mid \\lnot C)=0{,}2\\). Qual \\(P(C\\mid\\text{+})\\)?',hint:'Bayes; o denominador soma os dois caminhos para “+”.',sol:'<div class="sstep">\\(P(+)=0{,}8\\cdot0{,}1+0{,}2\\cdot0{,}9=0{,}08+0{,}18=0{,}26\\)<br>\\(P(C\\mid+)=\\dfrac{0{,}8\\cdot0{,}1}{0{,}26}=\\dfrac{0{,}08}{0{,}26}\\)</div><p class="ans">\\(\\approx 0{,}31\\) — apesar do teste “positivo”, ainda é mais provável <em>não</em> ter a doença.</p>'},
- {level:'medio',q:'A entropia cruzada de um exemplo com rótulo \\(y=1\\) e previsão \\(\\hat y\\) é \\(-\\log\\hat y\\). Quanto vale para \\(\\hat y=0{,}8\\)?',sol:'<div class="sstep">\\(-\\ln(0{,}8)\\approx 0{,}223\\)</div><p class="ans">\\(\\approx 0{,}22\\) — quanto mais perto de 1 a previsão, menor a surpresa.</p>'}
-];
-EX.i7=[
- {level:'facil',q:'Para \\(f(w)=w^2\\), dê um passo de gradiente descendente a partir de \\(w=1\\) com \\(\\eta=0{,}1\\).',hint:'\\(f\'(w)=2w\\); novo \\(w=w-\\eta f\'(w)\\).',sol:'<div class="sstep">\\(f\'(1)=2\\)<br>\\(w\\leftarrow 1-0{,}1\\cdot2=0{,}8\\)</div><p class="ans">\\(w=0{,}8\\) — andou na direção do mínimo \\(w=0\\).</p>'},
- {level:'medio',q:'Com \\(L(w)=(w-3)^2\\), dê um passo a partir de \\(w=0\\) com \\(\\eta=0{,}25\\).',hint:'\\(\\nabla L=2(w-3)\\).',sol:'<div class="sstep">\\(\\nabla L(0)=2(0-3)=-6\\)<br>\\(w\\leftarrow 0-0{,}25\\cdot(-6)=1{,}5\\)</div><p class="ans">\\(w=1{,}5\\) — caminhando em direção a \\(w^\\star=3\\).</p>'},
- {level:'dificil',q:'Regra da cadeia: \\(L=a^2\\) e \\(a=3w\\). Calcule \\(\\dfrac{dL}{dw}\\) em \\(w=2\\).',hint:'\\(\\frac{dL}{dw}=\\frac{dL}{da}\\cdot\\frac{da}{dw}\\).',sol:'<div class="sstep">\\(\\dfrac{dL}{da}=2a,\\quad \\dfrac{da}{dw}=3\\)<br>\\(\\dfrac{dL}{dw}=2a\\cdot3=6a=18w\\)<br>em \\(w=2:\\ 18\\cdot2\\)</div><p class="ans">\\(\\dfrac{dL}{dw}=36\\)</p>'},
- {level:'desafio',q:'Qual o gradiente de \\(f(w_1,w_2)=w_1^2+3w_2^2\\)? E onde está o mínimo?',sol:'<div class="sstep">\\(\\nabla f=\\left(\\dfrac{\\partial f}{\\partial w_1},\\dfrac{\\partial f}{\\partial w_2}\\right)=(2w_1,\\ 6w_2)\\)<br><span class="an">// zera quando ambas as componentes zeram</span></div><p class="ans">\\(\\nabla f=(2w_1,6w_2)\\); mínimo em \\((0,0)\\).</p>'}
-];
-EX.i8=[
- {level:'facil',q:'Qual ferramenta mede o alinhamento entre os pesos \\(\\mathbf w\\) e a entrada \\(\\mathbf x\\)?',sol:'<p class="ans">O produto escalar \\(\\mathbf w\\cdot\\mathbf x\\) (mais o viés \\(b\\)), que forma o score \\(s(\\mathbf x)\\).</p>'},
- {level:'medio',q:'Por que precisamos da não linearidade \\(\\sigma\\) entre camadas \\(\\sigma(W\\mathbf x+\\mathbf b)\\)?',hint:'O que acontece ao compor duas funções lineares?',sol:'<p>Compor lineares dá outra linear: \\(W_2(W_1\\mathbf x)=(W_2W_1)\\mathbf x\\). Sem \\(\\sigma\\), mil camadas equivalem a uma só. <span class="ans">A não linearidade é o que permite dobrar o espaço e separar o que uma reta não separa.</span></p>'}
-];
 // ── i1 EXPANDIDO: o contrato (aprender = minimizar erro) ──
 EX.i1={
 basico:[

@@ -140,6 +140,50 @@ footer .sig{color:var(--text-dim)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 @media(max-width:600px){body{font-size:14.5px}.controls{gap:.9rem}.ctrl{min-width:110px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+
+/* ===== EXERCÍCIOS ===== */
+.exercises{margin:2.5rem 0}
+.ex-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem}
+.ex-head h3{margin:0;color:var(--amber);font-family:var(--font-mono)}
+.ex-progress{font-family:var(--font-mono);font-size:.7rem;color:var(--muted)}
+.ex-filter{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.ex-filter button{font-size:.6rem;padding:.25rem .6rem;border-color:var(--border2);color:var(--muted)}
+.ex-filter button.on{border-color:var(--green);color:var(--green)}
+.ex{border:1px solid var(--border);border-radius:6px;margin-bottom:.9rem;overflow:hidden;background:var(--bg2)}
+.ex-q{padding:1rem 1.2rem;display:flex;gap:.8rem;align-items:flex-start}
+.ex-num{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);flex-shrink:0;min-width:2.2rem}
+.ex-body{flex:1;min-width:0}
+.ex-qtext{margin:.2rem 0 .6rem;line-height:1.6}
+.ex-qtext code{font-size:.95em}
+.ex-level{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.1rem .45rem;border-radius:8px;border:1px solid;margin-left:.5rem;vertical-align:middle}
+.ex-level.facil{color:var(--green);border-color:var(--green-dim)}
+.ex-level.medio{color:var(--amber);border-color:var(--amber-dim,#b8842c)}
+.ex-level.dificil{color:var(--red);border-color:var(--red-dim)}
+.ex-level.desafio{color:var(--violet);border-color:#6b5499}
+.ex-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.ex-actions button{font-size:.6rem;padding:.3rem .7rem}
+.ex-actions button.sm{font-size:.6rem;padding:.3rem .7rem}
+.ex-hint{font-size:.84rem;color:var(--bluelight);background:rgba(93,143,204,.07);border-left:2px solid var(--blue-dim);padding:.6rem .9rem;margin:.7rem 0 0;border-radius:0 3px 3px 0;display:none}
+.ex-hint.show{display:block}
+.ex-sol{border-top:1px solid var(--border);padding:1.1rem 1.2rem;background:var(--surface);display:none;font-size:.9rem;line-height:1.75}
+.ex-sol.show{display:block}
+.ex-sol .sol-label,.mcq-fb .sol-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.7rem}
+.ex-sol .sstep{font-family:var(--font-mono);font-size:.86rem;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.5rem .8rem;margin:.5rem 0;line-height:1.7;overflow-x:auto}
+.ex-sol .sstep .an{color:var(--muted);font-size:.78rem}
+.ex-sol p{margin:.6rem 0}.ex-sol .ans{color:var(--green);font-weight:600}.ex-sol strong{color:#fff}
+.ex-group-label{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bluelight);border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:2.2rem 0 1.1rem}
+.ex-group-label .gl-sub{color:var(--muted);letter-spacing:.04em;text-transform:none;font-size:.7rem}
+.ex-list{margin:0}
+.mcq-opts{display:flex;flex-direction:column;gap:.5rem;margin:.2rem 0 0}
+.mcq-opt{text-align:left;border:1px solid var(--border);background:var(--bg2);color:var(--text);padding:.6rem .9rem;border-radius:5px;cursor:pointer;font-family:var(--font-body);font-size:.9rem;text-transform:none;letter-spacing:0;transition:border-color .15s,background .15s}
+.mcq-opt:hover{border-color:var(--bluelight)}
+.mcq-opt .mk{font-family:var(--font-mono);color:var(--muted);margin-right:.6rem}
+.mcq-opt.correct{border-color:var(--green);background:rgba(79,184,122,.12);color:#fff}
+.mcq-opt.correct .mk{color:var(--green)}
+.mcq-opt.wrong{border-color:var(--red);background:rgba(208,90,90,.1)}
+.mcq-opt.wrong .mk{color:var(--red)}
+.mcq-fb{border-top:1px solid var(--border);margin-top:.7rem;padding-top:.7rem;font-size:.85rem;line-height:1.7;display:none}
+.mcq-fb.show{display:block}
 </style>
 </head>
 <body>
@@ -297,6 +341,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-corda"></div>
 </section>
 
 <section id="timbre">
@@ -357,6 +402,7 @@ footer .sig{color:var(--text-dim)}
       ou colidem. &Eacute; o pr&oacute;ximo n&iacute;vel.
     </div>
   </div>
+<div class="exercises" id="ex-timbre"></div>
 </section>
 
 <section id="consonancia">
@@ -451,6 +497,7 @@ footer .sig{color:var(--text-dim)}
       cultura escolhe quais habitar.</p>
     </div>
   </div>
+<div class="exercises" id="ex-consonancia"></div>
 </section>
 
 <section id="batimentos">
@@ -505,6 +552,7 @@ footer .sig{color:var(--text-dim)}
       logar&iacute;tmica para a percep&ccedil;&atilde;o &mdash; os <em class="term">cents</em>.
     </div>
   </div>
+<div class="exercises" id="ex-batimentos"></div>
 </section>
 
 <section id="cents">
@@ -548,6 +596,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-cents"></div>
 </section>
 
 <section id="escala">
@@ -593,6 +642,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-escala"></div>
 </section>
 
 <section id="temperamento">
@@ -660,6 +710,7 @@ footer .sig{color:var(--text-dim)}
       <em>funciona</em> &mdash; n&atilde;o que ele seja o &uacute;nico poss&iacute;vel.</p>
     </div>
   </div>
+<div class="exercises" id="ex-temperamento"></div>
 </section>
 
 <section id="tonal">
@@ -704,6 +755,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-tonal"></div>
 </section>
 
 <section id="modelo">
@@ -771,6 +823,7 @@ footer .sig{color:var(--text-dim)}
       </div>
     </div>
   </div>
+<div class="exercises" id="ex-modelo"></div>
 </section>
 
 <section id="beethoven">
@@ -854,6 +907,7 @@ footer .sig{color:var(--text-dim)}
       o necess&aacute;rio com o habitual &mdash; &eacute; a li&ccedil;&atilde;o mais transfer&iacute;vel do caderno, para muito al&eacute;m da m&uacute;sica.
     </div>
   </div>
+<div class="exercises" id="ex-beethoven"></div>
 </section>
 </main>
 
@@ -1775,6 +1829,634 @@ const MONO = '11px "Courier New", monospace';
     links.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+act));
   },{passive:true});
 })();
+
+
+/* ===== MOTOR DE EXERCÍCIOS ===== */
+const EX={};const LEVEL_LABEL={facil:'fácil',medio:'médio',dificil:'difícil',desafio:'desafio'};
+function renderExercises(setId,containerId){
+  const data=EX[setId];const box=document.getElementById(containerId);if(!box||!data)return;
+  let solved=0,total=0;const prog=document.createElement('div');prog.className='ex-progress';
+  const bump=()=>{solved++;prog.textContent=solved+' / '+total+' resolvidos';};
+  function buildFree(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const actions=document.createElement('div');actions.className='ex-actions';let hint=null;
+    if(ex.hint){hint=document.createElement('div');hint.className='ex-hint';hint.innerHTML='<strong>Dica:</strong> '+ex.hint;const hb=document.createElement('button');hb.className='sm';hb.textContent='dica';hb.addEventListener('click',()=>hint.classList.toggle('show'));actions.appendChild(hb);}
+    const solBtn=document.createElement('button');solBtn.className='sec';solBtn.textContent='ver solução';actions.appendChild(solBtn);
+    const sol=document.createElement('div');sol.className='ex-sol';sol.innerHTML='<span class="sol-label">solução passo a passo</span>'+ex.sol;
+    solBtn.addEventListener('click',()=>{const was=sol.classList.contains('show');sol.classList.toggle('show');solBtn.textContent=sol.classList.contains('show')?'ocultar solução':'ver solução';if(!was&&!sol.dataset.counted){sol.dataset.counted='1';bump();}});
+    body.appendChild(qt);body.appendChild(actions);if(hint)body.appendChild(hint);q.appendChild(num);q.appendChild(body);card.appendChild(q);card.appendChild(sol);return card;
+  }
+  function buildMCQ(ex,n){
+    const card=document.createElement('div');card.className='ex';card.dataset.level=ex.level;
+    const q=document.createElement('div');q.className='ex-q';const num=document.createElement('div');num.className='ex-num';num.textContent=n+'.';const body=document.createElement('div');body.className='ex-body';
+    const qt=document.createElement('div');qt.className='ex-qtext';qt.innerHTML=ex.q+' <span class="ex-level '+ex.level+'">'+LEVEL_LABEL[ex.level]+'</span>';
+    const opts=document.createElement('div');opts.className='mcq-opts';
+    const fb=document.createElement('div');fb.className='mcq-fb';fb.innerHTML='<span class="sol-label">por quê</span>'+(ex.sol||'');
+    let answered=false;
+    ex.options.forEach((opt,oi)=>{const b=document.createElement('button');b.className='mcq-opt';b.type='button';b.innerHTML='<span class="mk">'+String.fromCharCode(65+oi)+'</span>'+opt;
+      b.addEventListener('click',()=>{if(answered)return;answered=true;const ok=oi===ex.answer;b.classList.add(ok?'correct':'wrong');if(!ok)opts.children[ex.answer].classList.add('correct');fb.classList.add('show');bump();});opts.appendChild(b);});
+    body.appendChild(qt);body.appendChild(opts);body.appendChild(fb);q.appendChild(num);q.appendChild(body);card.appendChild(q);return card;
+  }
+  let groups;
+  if(Array.isArray(data)){groups=[{label:'Exercícios',sub:'',type:'free',items:data}];}
+  else{groups=[
+    {label:'Aquecimento',sub:'pré-requisitos — ainda mais básico que o módulo',type:'free',items:data.basico||[]},
+    {label:'Consolidação',sub:'fixar e conectar com o que já vimos',type:'free',items:data.consolida||[]},
+    {label:'Múltipla escolha',sub:'dificuldade crescente',type:'mcq',items:data.mcq||[]},
+  ];}
+  total=groups.reduce((a,g)=>a+g.items.length,0);
+  const filter=document.createElement('div');filter.className='ex-filter';
+  ['todos','facil','medio','dificil','desafio'].forEach(lv=>{const b=document.createElement('button');b.textContent=lv==='todos'?'todos':LEVEL_LABEL[lv];if(lv==='todos')b.classList.add('on');b.addEventListener('click',()=>{filter.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');box.querySelectorAll('.ex').forEach(c=>{c.style.display=(lv==='todos'||c.dataset.level===lv)?'':'none';});});filter.appendChild(b);});
+  const head=document.createElement('div');head.className='ex-head';const h3=document.createElement('h3');h3.textContent='Exercícios';head.appendChild(h3);head.appendChild(prog);box.appendChild(head);box.appendChild(filter);
+  prog.textContent='0 / '+total+' resolvidos';
+  groups.forEach(g=>{if(!g.items.length)return;
+    if(groups.length>1){const gl=document.createElement('div');gl.className='ex-group-label';gl.innerHTML='<span>'+g.label+'</span><span class="gl-sub">'+g.sub+' · '+g.items.length+'</span>';box.appendChild(gl);}
+    const list=document.createElement('div');list.className='ex-list';g.items.forEach((ex,i)=>list.appendChild(g.type==='mcq'?buildMCQ(ex,i+1):buildFree(ex,i+1)));box.appendChild(list);});
+}
+EX.corda={
+basico:[
+ {level:'facil',q:'Quanto é <code>2 × 100</code>?',sol:'<div class="sstep">200</div><p class="ans">200</p>'},
+ {level:'facil',q:'Quanto é <code>3 × 100</code>?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>4 × 110</code>?',sol:'<div class="sstep">440</div><p class="ans">440</p>'},
+ {level:'facil',q:'Qual o 3º múltiplo inteiro de 5?',sol:'<div class="sstep">5, 10, 15</div><p class="ans">15</p>'},
+ {level:'facil',q:'Metade de 600?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>5 × 88</code>?',sol:'<div class="sstep">440</div><p class="ans">440</p>'},
+ {level:'facil',q:'Quais são os 3 primeiros inteiros positivos?',sol:'<div class="sstep"></div><p class="ans">1, 2, 3</p>'},
+ {level:'facil',q:'Quanto é <code>6 × 100</code>?',sol:'<div class="sstep">600</div><p class="ans">600</p>'},
+ {level:'facil',q:'Um terço de 900?',sol:'<div class="sstep">900 ÷ 3 = 300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Uma corda vibra inteira. Dividida ao meio, a frequência fica maior ou menor?',sol:'<div class="sstep"><span class="an">// metade do comprimento → dobro da frequência</span></div><p class="ans">Maior (o dobro).</p>'}
+],
+consolida:[
+ {level:'facil',q:'Fundamental 100 Hz. Qual o 2º harmônico (2f)?',sol:'<div class="sstep">2 × 100 = 200</div><p class="ans">200 Hz</p>'},
+ {level:'facil',q:'3º harmônico de 100 Hz?',sol:'<div class="sstep">3 × 100 = 300</div><p class="ans">300 Hz</p>'},
+ {level:'facil',q:'4º harmônico de 110 Hz?',sol:'<div class="sstep">4 × 110 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Os 4 primeiros harmônicos de 50 Hz?',sol:'<div class="sstep">50, 100, 150, 200</div><p class="ans">50, 100, 150, 200 Hz</p>'},
+ {level:'facil',q:'O harmônico <code>n</code> tem que frequência?',sol:'<div class="sstep"><span class="an">// múltiplos inteiros de f</span></div><p class="ans">n · f</p>'},
+ {level:'medio',q:'5º harmônico de 88 Hz?',sol:'<div class="sstep">5 × 88 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Razão entre o 2º harmônico e o fundamental?',sol:'<div class="sstep">2f : f = 2:1</div><p class="ans">2:1 (uma oitava)</p>'},
+ {level:'medio',q:'Razão entre o 3º e o 2º harmônicos?',sol:'<div class="sstep">3f : 2f = 3:2</div><p class="ans">3:2 (uma quinta)</p>'},
+ {level:'medio',q:'Razão entre o 4º e o 3º harmônicos?',sol:'<div class="sstep">4:3</div><p class="ans">4:3 (uma quarta)</p>'},
+ {level:'medio',q:'Uma corda dividida exatamente ao meio soa qual harmônico?',sol:'<div class="sstep"><span class="an">// 2f</span></div><p class="ans">O 2º (uma oitava acima).</p>'},
+ {level:'medio',q:'Tocando a corda em 1/3 do comprimento, qual harmônico soa?',sol:'<div class="sstep"></div><p class="ans">O 3º (3f).</p>'},
+ {level:'medio',q:'O comprimento de onda do 2º harmônico é que fração do fundamental?',sol:'<div class="sstep"><span class="an">// λ ∝ 1/n</span></div><p class="ans">1/2.</p>'},
+ {level:'medio',q:'Os 3 primeiros harmônicos de 220 Hz?',sol:'<div class="sstep">220, 440, 660</div><p class="ans">220, 440, 660 Hz</p>'},
+ {level:'facil',q:'“A natureza conta de 1 em 1”: os multiplicadores dos harmônicos são...?',sol:'<div class="sstep"></div><p class="ans">Inteiros: 1, 2, 3, …</p>'},
+ {level:'medio',q:'6º harmônico de 100 Hz?',sol:'<div class="sstep">600</div><p class="ans">600 Hz</p>'},
+ {level:'medio',q:'Se o 2º harmônico é 880 Hz, qual o fundamental?',sol:'<div class="sstep">880 ÷ 2 = 440</div><p class="ans">440 Hz</p>'},
+ {level:'medio',q:'Se o 3º harmônico é 660 Hz, qual o fundamental?',sol:'<div class="sstep">660 ÷ 3 = 220</div><p class="ans">220 Hz</p>'},
+ {level:'dificil',q:'Qual a diferença (em Hz) entre harmônicos consecutivos de f = 100 Hz?',sol:'<div class="sstep"><span class="an">// (n+1)f − nf = f</span></div><p class="ans">100 Hz (constante, igual a f).</p>'},
+ {level:'dificil',q:'7º harmônico de 60 Hz?',sol:'<div class="sstep">7 × 60 = 420</div><p class="ans">420 Hz</p>'},
+ {level:'desafio',q:'O fundamental é 110 Hz. Qual harmônico vale 550 Hz?',sol:'<div class="sstep">550 ÷ 110 = 5</div><p class="ans">O 5º harmônico.</p>'}
+],
+mcq:[
+ {level:'facil',q:'2º harmônico de 100 Hz:',options:['100','200','300','400'],answer:1,sol:'2×100.'},
+ {level:'facil',q:'3º harmônico de 100 Hz:',options:['200','300','400','50'],answer:1,sol:'3×100.'},
+ {level:'facil',q:'O harmônico n tem frequência:',options:['f/n','n·f','f+n','fⁿ'],answer:1,sol:'Múltiplos inteiros.'},
+ {level:'facil',q:'4º harmônico de 110 Hz:',options:['330','440','220','550'],answer:1,sol:'4×110.'},
+ {level:'medio',q:'Razão 2º harmônico : fundamental:',options:['2:1','3:2','4:3','5:4'],answer:0,sol:'2f:f.'},
+ {level:'medio',q:'Razão 3º : 2º harmônico:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'3f:2f.'},
+ {level:'medio',q:'Corda dividida ao meio soa:',options:['a oitava acima','a quinta','a mesma nota','uma oitava abaixo'],answer:0,sol:'2f.'},
+ {level:'facil',q:'A natureza conta os harmônicos:',options:['de 1 em 1 (inteiros)','de 0,5 em 0,5','aleatório','em log'],answer:0,sol:'Múltiplos inteiros.'},
+ {level:'medio',q:'5º harmônico de 88 Hz:',options:['352','440','176','528'],answer:1,sol:'5×88.'},
+ {level:'medio',q:'Se o 2º harmônico = 880, o fundamental é:',options:['220','440','1760','660'],answer:1,sol:'880/2.'},
+ {level:'medio',q:'5º harmônico de 100 Hz:',options:['400','500','600','50'],answer:1,sol:'5×100.'},
+ {level:'medio',q:'λ do 2º harmônico vs fundamental:',options:['dobro','metade','igual','triplo'],answer:1,sol:'λ ∝ 1/n.'},
+ {level:'medio',q:'Razão 4º : 3º harmônico:',options:['3:2','4:3','5:4','2:1'],answer:1,sol:'4f:3f.'},
+ {level:'medio',q:'3º harmônico de 220 Hz:',options:['440','660','880','330'],answer:1,sol:'3×220.'},
+ {level:'medio',q:'Diferença entre harmônicos consecutivos de 100 Hz:',options:['50','100','200','varia'],answer:1,sol:'Sempre f.'},
+ {level:'medio',q:'Se o 3º harmônico = 660, o fundamental é:',options:['110','220','330','990'],answer:1,sol:'660/3.'},
+ {level:'medio',q:'6º harmônico de 100 Hz:',options:['500','600','700','360'],answer:1,sol:'6×100.'},
+ {level:'dificil',q:'7º harmônico de 60 Hz:',options:['360','420','480','427'],answer:1,sol:'7×60.'},
+ {level:'dificil',q:'Qual harmônico de 110 Hz vale 550?',options:['4º','5º','6º','3º'],answer:1,sol:'550/110 = 5.'},
+ {level:'desafio',q:'O n-ésimo harmônico de 100 Hz é 700. n =',options:['5','6','7','8'],answer:2,sol:'700/100 = 7.'}
+]
+};
+EX.timbre={
+basico:[
+ {level:'facil',q:'Quanto é <code>1 + 0,5 + 0,25</code>?',sol:'<div class="sstep">1,75</div><p class="ans">1,75</p>'},
+ {level:'facil',q:'Metade de 1?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Metade de 0,5?',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'},
+ {level:'facil',q:'Escreva 1/4 em decimal.',sol:'<div class="sstep">0,25</div><p class="ans">0,25</p>'},
+ {level:'facil',q:'Qual é maior: 0,2 ou 0,8?',sol:'<div class="sstep"></div><p class="ans">0,8</p>'},
+ {level:'facil',q:'Quanto é <code>0,6 + 0,3 + 0,1</code>?',sol:'<div class="sstep">1,0</div><p class="ans">1</p>'},
+ {level:'facil',q:'Para representar 3 harmônicos, quantas senoides somamos?',sol:'<div class="sstep"></div><p class="ans">3</p>'},
+ {level:'facil',q:'Quanto é <code>0,1 × 10</code>?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'Quanto é <code>2 × 0,25</code>?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'},
+ {level:'facil',q:'Média de 0 e 1?',sol:'<div class="sstep">0,5</div><p class="ans">0,5</p>'}
+],
+consolida:[
+ {level:'facil',q:'Violino e flauta no mesmo Lá têm a mesma frequência fundamental?',sol:'<div class="sstep"></div><p class="ans">Sim — a mesma nota.</p>'},
+ {level:'medio',q:'Então o que os faz soar diferente?',sol:'<div class="sstep"></div><p class="ans">As amplitudes (a mistura) dos harmônicos — o timbre.</p>'},
+ {level:'medio',q:'Um som complexo é a soma de quê?',sol:'<div class="sstep"></div><p class="ans">Senoides (os harmônicos).</p>'},
+ {level:'medio',q:'Se só o 1º harmônico tem amplitude, o som é...?',sol:'<div class="sstep"></div><p class="ans">Um tom puro (senoidal).</p>'},
+ {level:'medio',q:'Amplitudes [1; 0,5; 0,25] nos harmônicos 1–3. Soma das amplitudes?',sol:'<div class="sstep">1 + 0,5 + 0,25 = 1,75</div><p class="ans">1,75</p>'},
+ {level:'facil',q:'Se a amplitude do 2º harmônico é 0, ele está...?',sol:'<div class="sstep"></div><p class="ans">Ausente.</p>'},
+ {level:'medio',q:'Dois sons com os mesmos harmônicos mas amplitudes diferentes soam...?',sol:'<div class="sstep"></div><p class="ans">Diferentes (timbres distintos).</p>'},
+ {level:'medio',q:'A frequência define a altura; a amplitude relativa dos harmônicos define o...?',sol:'<div class="sstep"></div><p class="ans">Timbre.</p>'},
+ {level:'medio',q:'O teorema de Fourier: toda onda periódica é soma de...?',sol:'<div class="sstep"></div><p class="ans">Senoides.</p>'},
+ {level:'medio',q:'Se as amplitudes dos harmônicos agudos aumentam, o som fica mais...?',sol:'<div class="sstep"></div><p class="ans">Brilhante (e áspero).</p>'},
+ {level:'medio',q:'Um diapasão produz aproximadamente o quê?',sol:'<div class="sstep"></div><p class="ans">Um tom puro (1 harmônico).</p>'},
+ {level:'facil',q:'Violino e flauta no mesmo Lá3: qual a frequência fundamental dos dois?',sol:'<div class="sstep"></div><p class="ans">220 Hz (a mesma).</p>'},
+ {level:'facil',q:'A “cor” do som é o quê?',sol:'<div class="sstep"></div><p class="ans">O timbre.</p>'},
+ {level:'medio',q:'Soma das amplitudes 0,6 + 0,3 + 0,1?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'medio',q:'Em geral, qual harmônico tem a maior amplitude?',sol:'<div class="sstep"></div><p class="ans">O 1º (a fundamental).</p>'},
+ {level:'medio',q:'Dobrar a amplitude geral do som muda a nota ou o volume?',sol:'<div class="sstep"></div><p class="ans">O volume (não a nota).</p>'},
+ {level:'medio',q:'Um som com só harmônicos ímpares (1, 3, 5…) é típico de qual instrumento?',hint:'Falta o 2º (e os pares).',sol:'<div class="sstep"></div><p class="ans">Clarinete.</p>'},
+ {level:'dificil',q:'Soma das amplitudes da série 1; 1/2; 1/3; 1/4?',sol:'<div class="sstep">1 + 0,5 + 0,333 + 0,25 ≈ 2,083</div><p class="ans">≈ 2,08</p>'},
+ {level:'dificil',q:'Removendo o fundamental e mantendo os harmônicos, a altura percebida...?',sol:'<div class="sstep"><span class="an">// fenômeno do fundamental ausente</span></div><p class="ans">Permanece (o cérebro reconstrói o fundamental).</p>'},
+ {level:'desafio',q:'Dois sinais com a mesma frequência e o mesmo conjunto de amplitudes harmônicas têm o mesmo...?',sol:'<div class="sstep"></div><p class="ans">Timbre.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Violino e flauta no mesmo Lá têm a mesma:',options:['amplitude','frequência fundamental','timbre','duração'],answer:1,sol:'Mesma nota.'},
+ {level:'facil',q:'O que diferencia o timbre:',options:['a frequência','as amplitudes dos harmônicos','a duração','o silêncio'],answer:1,sol:'A mistura de harmônicos.'},
+ {level:'facil',q:'Um som complexo é soma de:',options:['retas','senoides','quadrados','logaritmos'],answer:1,sol:'Fourier.'},
+ {level:'facil',q:'<code>1 + 0,5 + 0,25</code>:',options:['1,5','1,75','2','1,25'],answer:1,sol:'1,75.'},
+ {level:'facil',q:'Um tom puro tem quantos harmônicos:',options:['1','2','3','infinitos'],answer:0,sol:'Só o fundamental.'},
+ {level:'medio',q:'A altura (nota) é definida pela:',options:['amplitude','frequência','fase','duração'],answer:1,sol:'Frequência.'},
+ {level:'facil',q:'O timbre é a ___ do som:',options:['altura','cor','duração','intensidade'],answer:1,sol:'A “cor”.'},
+ {level:'medio',q:'Fourier: onda periódica = soma de:',options:['senoides','inteiros','frações','vetores'],answer:0,sol:'Senoides.'},
+ {level:'medio',q:'Harmônicos agudos fortes → som mais:',options:['grave','brilhante','baixo','curto'],answer:1,sol:'Brilhante.'},
+ {level:'medio',q:'Um diapasão produz:',options:['um acorde','um tom puro','ruído','um glissando'],answer:1,sol:'≈ tom puro.'},
+ {level:'medio',q:'Mudar a amplitude do 2º harmônico muda:',options:['a nota','o timbre','o tempo','nada'],answer:1,sol:'O timbre.'},
+ {level:'medio',q:'O clarinete reforça harmônicos:',options:['pares','ímpares','nenhum','todos iguais'],answer:1,sol:'Ímpares.'},
+ {level:'medio',q:'Mesma frequência + mesmas amplitudes harmônicas →',options:['mesmo timbre','volumes diferentes','alturas diferentes','nada igual'],answer:0,sol:'Mesmo timbre.'},
+ {level:'medio',q:'A maior amplitude costuma ser do:',options:['fundamental','5º','10º','último'],answer:0,sol:'1º harmônico.'},
+ {level:'medio',q:'Dobrar a amplitude geral muda:',options:['a nota','o volume','o timbre','a frequência'],answer:1,sol:'O volume.'},
+ {level:'facil',q:'<code>0,6 + 0,3 + 0,1</code>:',options:['0,9','1','1,1','0,8'],answer:1,sol:'1.'},
+ {level:'dificil',q:'Série 1; 1/2; 1/3; 1/4 soma ≈',options:['1,5','2,08','3','2,5'],answer:1,sol:'≈ 2,08.'},
+ {level:'dificil',q:'Sem o fundamental, a altura percebida:',options:['some','permanece (fundamental ausente)','dobra','zera'],answer:1,sol:'O cérebro reconstrói.'},
+ {level:'medio',q:'Senoides para representar 5 harmônicos:',options:['3','5','10','1'],answer:1,sol:'Uma por harmônico.'},
+ {level:'desafio',q:'440 Hz puro vs 440 Hz com muitos harmônicos diferem em:',options:['altura','timbre','ambas','nenhuma'],answer:1,sol:'Mesma altura, timbre diferente.'}
+]
+};
+EX.consonancia={
+basico:[
+ {level:'facil',q:'Simplifique <code>4/2</code>.',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'Simplifique <code>6/4</code>.',sol:'<div class="sstep">÷2 → 3/2</div><p class="ans">3/2</p>'},
+ {level:'facil',q:'Qual razão é mais simples: <code>2:1</code> ou <code>16:15</code>?',sol:'<div class="sstep"></div><p class="ans">2:1</p>'},
+ {level:'facil',q:'<code>2:1</code> em decimal?',sol:'<div class="sstep">2/1 = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'<code>3:2</code> em decimal?',sol:'<div class="sstep">3/2 = 1,5</div><p class="ans">1,5</p>'},
+ {level:'facil',q:'Mais simples: <code>3:2</code> ou <code>45:32</code>?',sol:'<div class="sstep"></div><p class="ans">3:2</p>'},
+ {level:'facil',q:'<code>2/1 = 4/2</code>?',sol:'<div class="sstep">4/2 = 2</div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'<code>4:3</code> em decimal (aprox.)?',sol:'<div class="sstep">4/3 ≈ 1,333</div><p class="ans">≈ 1,333</p>'},
+ {level:'facil',q:'<code>5:4</code> em decimal?',sol:'<div class="sstep">5/4 = 1,25</div><p class="ans">1,25</p>'},
+ {level:'facil',q:'Qual o menor inteiro maior que 1?',sol:'<div class="sstep"></div><p class="ans">2</p>'}
+],
+consolida:[
+ {level:'facil',q:'A oitava corresponde a que razão de frequências?',sol:'<div class="sstep"></div><p class="ans">2:1</p>'},
+ {level:'facil',q:'A quinta justa?',sol:'<div class="sstep"></div><p class="ans">3:2</p>'},
+ {level:'facil',q:'A quarta justa?',sol:'<div class="sstep"></div><p class="ans">4:3</p>'},
+ {level:'facil',q:'A terça maior?',sol:'<div class="sstep"></div><p class="ans">5:4</p>'},
+ {level:'medio',q:'Razões mais simples tendem a soar mais...?',sol:'<div class="sstep"></div><p class="ans">Consoantes.</p>'},
+ {level:'medio',q:'220 Hz e 440 Hz: que razão e que intervalo?',sol:'<div class="sstep">440/220 = 2/1</div><p class="ans">2:1 — oitava (muito consoante).</p>'},
+ {level:'medio',q:'220 Hz e 330 Hz: que razão?',sol:'<div class="sstep">330/220 = 3/2</div><p class="ans">3:2 — quinta.</p>'},
+ {level:'medio',q:'256 Hz e 320 Hz: que razão?',sol:'<div class="sstep">320/256 = 5/4</div><p class="ans">5:4 — terça maior.</p>'},
+ {level:'medio',q:'Dois tons muito próximos (440 e 441 Hz) soam...?',sol:'<div class="sstep"><span class="an">// batimentos lentos → aspereza</span></div><p class="ans">Ásperos (dissonantes).</p>'},
+ {level:'medio',q:'A consonância está ligada ao alinhamento de quê?',sol:'<div class="sstep"></div><p class="ans">Dos harmônicos das duas notas.</p>'},
+ {level:'medio',q:'Quando harmônicos quase coincidem (sem coincidir), surge...?',sol:'<div class="sstep"></div><p class="ans">Aspereza (dissonância).</p>'},
+ {level:'medio',q:'A razão 16:15 (um semitom) é simples ou complexa?',sol:'<div class="sstep"></div><p class="ans">Complexa — dissonante.</p>'},
+ {level:'medio',q:'Ordene de mais para menos consoante: 9:8, 2:1, 3:2.',sol:'<div class="sstep"><span class="an">// quanto mais simples, mais consoante</span></div><p class="ans">2:1, 3:2, 9:8</p>'},
+ {level:'medio',q:'660 Hz e 440 Hz: que razão?',sol:'<div class="sstep">660/440 = 3/2</div><p class="ans">3:2 (quinta).</p>'},
+ {level:'medio',q:'480 Hz e 320 Hz: que razão?',sol:'<div class="sstep">480/320 = 3/2</div><p class="ans">3:2.</p>'},
+ {level:'medio',q:'Na oitava 2:1, o 2º harmônico do grave coincide com o fundamental do agudo?',sol:'<div class="sstep"></div><p class="ans">Sim — alinhamento forte, muito consoante.</p>'},
+ {level:'medio',q:'O trítono (~45:32) é consoante ou dissonante?',sol:'<div class="sstep"><span class="an">// razão complexa</span></div><p class="ans">Dissonante.</p>'},
+ {level:'dificil',q:'300 Hz e 200 Hz: razão?',sol:'<div class="sstep">300/200 = 3/2</div><p class="ans">3:2.</p>'},
+ {level:'dificil',q:'500 Hz e 400 Hz: razão e intervalo?',sol:'<div class="sstep">500/400 = 5/4</div><p class="ans">5:4 — terça maior.</p>'},
+ {level:'desafio',q:'Por que 3:2 soa mais consoante que 9:8?',sol:'<div class="sstep"></div><p class="ans">Razão mais simples — os harmônicos coincidem mais cedo e com mais frequência.</p>'}
+],
+mcq:[
+ {level:'facil',q:'A oitava é a razão:',options:['2:1','3:2','4:3','5:4'],answer:0,sol:'2:1.'},
+ {level:'facil',q:'A quinta justa é:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'3:2.'},
+ {level:'facil',q:'Razões simples soam mais:',options:['dissonantes','consoantes','agudas','curtas'],answer:1,sol:'Consoantes.'},
+ {level:'facil',q:'220 e 440 Hz:',options:['2:1','3:2','4:3','5:4'],answer:0,sol:'Oitava.'},
+ {level:'facil',q:'A quarta justa é:',options:['2:1','3:2','4:3','5:4'],answer:2,sol:'4:3.'},
+ {level:'facil',q:'A terça maior é:',options:['2:1','3:2','4:3','5:4'],answer:3,sol:'5:4.'},
+ {level:'medio',q:'A mais consoante:',options:['2:1','16:15','45:32','9:8'],answer:0,sol:'A mais simples.'},
+ {level:'medio',q:'220 e 330 Hz:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'Quinta.'},
+ {level:'medio',q:'Dois tons quase iguais soam:',options:['consoantes','ásperos','oitava','quinta'],answer:1,sol:'Batimentos/aspereza.'},
+ {level:'medio',q:'A consonância liga-se ao alinhamento dos:',options:['harmônicos','timbres','tempos','volumes'],answer:0,sol:'Harmônicos.'},
+ {level:'medio',q:'<code>3:2</code> em decimal:',options:['1,2','1,33','1,5','2'],answer:2,sol:'1,5.'},
+ {level:'medio',q:'256 e 320 Hz:',options:['3:2','4:3','5:4','2:1'],answer:2,sol:'Terça maior.'},
+ {level:'medio',q:'<code>16:15</code> é:',options:['muito consoante','dissonante','oitava','quinta'],answer:1,sol:'Razão complexa.'},
+ {level:'medio',q:'660 e 440 Hz:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'Quinta.'},
+ {level:'medio',q:'<code>5:4</code> em decimal:',options:['1,2','1,25','1,33','1,5'],answer:1,sol:'1,25.'},
+ {level:'medio',q:'480 e 320 Hz:',options:['2:1','3:2','4:3','5:4'],answer:1,sol:'3:2.'},
+ {level:'medio',q:'O trítono (~45:32) é:',options:['consoante','dissonante','oitava','uníssono'],answer:1,sol:'Dissonante.'},
+ {level:'medio',q:'500 e 400 Hz:',options:['3:2','4:3','5:4','2:1'],answer:2,sol:'Terça maior.'},
+ {level:'dificil',q:'A mais consoante entre estas:',options:['9:8','3:2','2:1','45:32'],answer:2,sol:'2:1 é a mais simples.'},
+ {level:'desafio',q:'3:2 é mais consoante que 9:8 porque:',options:['é mais aguda','a razão é mais simples','é mais grave','tem mais harmônicos'],answer:1,sol:'Coincidência mais cedo dos harmônicos.'}
+]
+};
+EX.batimentos={
+basico:[
+ {level:'facil',q:'Quanto é <code>|440 − 441|</code>?',sol:'<div class="sstep">1</div><p class="ans">1</p>'},
+ {level:'facil',q:'Quanto é <code>|440 − 444|</code>?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'Quanto é <code>|200 − 195|</code>?',sol:'<div class="sstep">5</div><p class="ans">5</p>'},
+ {level:'facil',q:'Quanto é <code>6 − 4</code>?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'Quanto é <code>|3 − 10|</code>?',sol:'<div class="sstep">7</div><p class="ans">7</p>'},
+ {level:'facil',q:'Quanto é <code>|10 − 3|</code>?',sol:'<div class="sstep"><span class="an">// o módulo não depende da ordem</span></div><p class="ans">7</p>'},
+ {level:'facil',q:'Quanto é <code>5 − 5</code>?',sol:'<div class="sstep">0</div><p class="ans">0</p>'},
+ {level:'facil',q:'Maior menos menor de 442 e 440?',sol:'<div class="sstep">442 − 440 = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'Quanto é <code>|0 − 4|</code>?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'A diferença entre dois números iguais é?',sol:'<div class="sstep"></div><p class="ans">0</p>'}
+],
+consolida:[
+ {level:'facil',q:'Batimentos entre 440 e 442 Hz?',hint:'Taxa = |f₁ − f₂|.',sol:'<div class="sstep">|442 − 440| = 2</div><p class="ans">2 batimentos/s</p>'},
+ {level:'facil',q:'Batimentos entre 440 e 445 Hz?',sol:'<div class="sstep">5</div><p class="ans">5 batimentos/s</p>'},
+ {level:'facil',q:'Batimentos entre 440 e 440 Hz?',sol:'<div class="sstep">0</div><p class="ans">0 (afinado)</p>'},
+ {level:'facil',q:'Quando não há batimentos, as notas estão...?',sol:'<div class="sstep"></div><p class="ans">Em uníssono (afinadas).</p>'},
+ {level:'medio',q:'Quanto mais próximas as frequências, os batimentos ficam mais...?',sol:'<div class="sstep"></div><p class="ans">Lentos.</p>'},
+ {level:'facil',q:'Batimentos entre 300 e 303 Hz?',sol:'<div class="sstep">3</div><p class="ans">3 batimentos/s</p>'},
+ {level:'medio',q:'A taxa de batimento é igual a quê?',sol:'<div class="sstep"></div><p class="ans">|f₁ − f₂|</p>'},
+ {level:'medio',q:'Afinar é reduzir os batimentos até...?',sol:'<div class="sstep"></div><p class="ans">Zero.</p>'},
+ {level:'facil',q:'Dois Lás a 440 e 438 Hz: quantos batimentos/s?',sol:'<div class="sstep">|440 − 438| = 2</div><p class="ans">2</p>'},
+ {level:'medio',q:'Com 2 batimentos/s, quantos batimentos em 10 s?',sol:'<div class="sstep">2 × 10 = 20</div><p class="ans">20</p>'},
+ {level:'facil',q:'Batimentos entre 100 e 104 Hz?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'medio',q:'Ouço 1 batimento/s entre 440 e f, com f &gt; 440. Qual f?',sol:'<div class="sstep">f − 440 = 1</div><p class="ans">441 Hz</p>'},
+ {level:'medio',q:'E se f &lt; 440 (mesmo 1 batimento/s)?',sol:'<div class="sstep">440 − f = 1</div><p class="ans">439 Hz</p>'},
+ {level:'medio',q:'Um batimento de 0,5 Hz ocorre a cada quantos segundos?',sol:'<div class="sstep">1 ÷ 0,5 = 2</div><p class="ans">2 segundos</p>'},
+ {level:'facil',q:'Batimentos entre 256 e 260 Hz?',sol:'<div class="sstep">4</div><p class="ans">4</p>'},
+ {level:'facil',q:'Batimentos entre 220 e 223 Hz?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'medio',q:'Dois osciladores afinados não produzem batimento porque |f₁ − f₂| = ?',sol:'<div class="sstep"></div><p class="ans">0</p>'},
+ {level:'dificil',q:'Para zerar os batimentos de 442 contra a referência 440, devo mudar 442 em quanto?',sol:'<div class="sstep">442 − 440 = 2 → baixar 2 Hz</div><p class="ans">Baixar 2 Hz (até 440).</p>'},
+ {level:'dificil',q:'A fórmula |f₁ − f₂| aplicada a 660 e 440 dá 220. Isso soa como batimento lento?',sol:'<div class="sstep"><span class="an">// 220/s é rápido demais</span></div><p class="ans">Não — 220 Hz é alto demais; batimentos só são percebidos quando as notas estão próximas.</p>'},
+ {level:'desafio',q:'Ouço 3 batimentos/s afinando uma corda contra 440. Quais as duas frequências possíveis da corda?',sol:'<div class="sstep">440 ± 3</div><p class="ans">443 Hz ou 437 Hz.</p>'}
+],
+mcq:[
+ {level:'facil',q:'<code>|440 − 441|</code>:',options:['0','1','2','441'],answer:1,sol:'1.'},
+ {level:'facil',q:'Batimentos entre 440 e 444:',options:['2','4','884','440'],answer:1,sol:'|444−440|.'},
+ {level:'facil',q:'Sem batimentos significa:',options:['dissonância','afinado','oitava','quinta'],answer:1,sol:'Uníssono.'},
+ {level:'medio',q:'A taxa de batimento é:',options:['f₁+f₂','|f₁−f₂|','f₁·f₂','f₁/f₂'],answer:1,sol:'Diferença.'},
+ {level:'facil',q:'440 e 440 → batimentos:',options:['0','1','2','440'],answer:0,sol:'Afinado.'},
+ {level:'medio',q:'Mais próximas → batimentos mais:',options:['rápidos','lentos','altos','agudos'],answer:1,sol:'Lentos.'},
+ {level:'facil',q:'300 e 303:',options:['1','2','3','603'],answer:2,sol:'3.'},
+ {level:'medio',q:'Afinar = reduzir batimentos até:',options:['1','0','o máximo','440'],answer:1,sol:'Zero.'},
+ {level:'facil',q:'100 e 104:',options:['2','4','204','96'],answer:1,sol:'4.'},
+ {level:'medio',q:'2 batimentos/s em 10 s:',options:['2','10','20','5'],answer:2,sol:'2×10.'},
+ {level:'facil',q:'256 e 260:',options:['2','4','516','6'],answer:1,sol:'4.'},
+ {level:'facil',q:'220 e 223:',options:['1','2','3','443'],answer:2,sol:'3.'},
+ {level:'medio',q:'1 batimento/s, f &gt; 440 → f:',options:['439','441','442','880'],answer:1,sol:'440+1.'},
+ {level:'medio',q:'Batimento de 0,5 Hz = 1 a cada:',options:['0,5 s','1 s','2 s','4 s'],answer:2,sol:'1/0,5.'},
+ {level:'facil',q:'438 e 440:',options:['1','2','3','878'],answer:1,sol:'2.'},
+ {level:'medio',q:'442 → 440: mudar:',options:['1','2','3','442'],answer:1,sol:'Baixar 2.'},
+ {level:'facil',q:'<code>|0 − 4|</code>:',options:['0','4','−4','16'],answer:1,sol:'4.'},
+ {level:'facil',q:'<code>5 − 5</code>:',options:['0','5','10','1'],answer:0,sol:'0.'},
+ {level:'medio',q:'3 batimentos/s contra 440 → corda em:',options:['443 (ou 437)','440','446','220'],answer:0,sol:'440±3.'},
+ {level:'desafio',q:'660 e 440: |diferença| =',options:['220','2','3','110'],answer:0,sol:'Rápido demais p/ soar como batimento.'}
+]
+};
+EX.cents={
+basico:[
+ {level:'facil',q:'Quanto é <code>1200 ÷ 12</code>?',sol:'<div class="sstep">100</div><p class="ans">100</p>'},
+ {level:'facil',q:'Quanto é <code>1200 ÷ 2</code>?',sol:'<div class="sstep">600</div><p class="ans">600</p>'},
+ {level:'facil',q:'Quanto é <code>100 × 3</code>?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>1200 ÷ 4</code>?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>2 × 600</code>?',sol:'<div class="sstep">1200</div><p class="ans">1200</p>'},
+ {level:'facil',q:'Metade de 1200?',sol:'<div class="sstep">600</div><p class="ans">600</p>'},
+ {level:'facil',q:'Quantos semitons há numa oitava?',sol:'<div class="sstep"></div><p class="ans">12</p>'},
+ {level:'facil',q:'Quanto é <code>100 × 12</code>?',sol:'<div class="sstep">1200</div><p class="ans">1200</p>'},
+ {level:'facil',q:'Quanto é <code>1200 ÷ 6</code>?',sol:'<div class="sstep">200</div><p class="ans">200</p>'},
+ {level:'facil',q:'Quanto é <code>50 × 2</code>?',sol:'<div class="sstep">100</div><p class="ans">100</p>'}
+],
+consolida:[
+ {level:'facil',q:'Uma oitava tem quantos cents?',sol:'<div class="sstep"></div><p class="ans">1200</p>'},
+ {level:'facil',q:'Um semitom tem quantos cents?',sol:'<div class="sstep">1200 ÷ 12 = 100</div><p class="ans">100</p>'},
+ {level:'facil',q:'Quantos cents há em 3 semitons?',sol:'<div class="sstep">3 × 100 = 300</div><p class="ans">300</p>'},
+ {level:'medio',q:'Meia oitava (em passos iguais) tem quantos cents?',sol:'<div class="sstep">1200 ÷ 2 = 600</div><p class="ans">600</p>'},
+ {level:'medio',q:'A percepção de altura é linear ou logarítmica?',sol:'<div class="sstep"><span class="an">// cents medem em escala log</span></div><p class="ans">Logarítmica.</p>'},
+ {level:'facil',q:'Duas oitavas em cents?',sol:'<div class="sstep">2 × 1200 = 2400</div><p class="ans">2400</p>'},
+ {level:'medio',q:'De 220 para 440 Hz (uma oitava): quantos cents?',sol:'<div class="sstep"></div><p class="ans">1200</p>'},
+ {level:'medio',q:'De 220 para 880 Hz (duas oitavas): quantos cents?',sol:'<div class="sstep">2 oitavas → 2400</div><p class="ans">2400</p>'},
+ {level:'facil',q:'Um tom inteiro (2 semitons) em cents?',sol:'<div class="sstep">2 × 100 = 200</div><p class="ans">200</p>'},
+ {level:'medio',q:'Por que medir em cents (log) e não em Hz (linear)?',sol:'<div class="sstep"></div><p class="ans">Porque razões iguais soam como distâncias iguais — a audição é logarítmica.</p>'},
+ {level:'medio',q:'Uma quarta justa tem 5 semitons. Quantos cents?',sol:'<div class="sstep">5 × 100 = 500</div><p class="ans">500</p>'},
+ {level:'medio',q:'Uma quinta justa tem 7 semitons. Quantos cents (temperados)?',sol:'<div class="sstep">7 × 100 = 700</div><p class="ans">700</p>'},
+ {level:'medio',q:'Uma terça maior tem 4 semitons. Quantos cents (temperados)?',sol:'<div class="sstep">4 × 100 = 400</div><p class="ans">400</p>'},
+ {level:'medio',q:'De 100 para 200 Hz: quantos cents?',sol:'<div class="sstep">razão ×2 = oitava</div><p class="ans">1200</p>'},
+ {level:'medio',q:'De 200 para 400 Hz: quantos cents?',sol:'<div class="sstep">também ×2</div><p class="ans">1200 (mesma oitava!)</p>'},
+ {level:'medio',q:'Isso mostra que cents dependem da razão, não da...?',sol:'<div class="sstep"></div><p class="ans">Diferença em Hz.</p>'},
+ {level:'facil',q:'0 cents corresponde a quê?',sol:'<div class="sstep"></div><p class="ans">Uníssono (mesma nota).</p>'},
+ {level:'dificil',q:'1200 cents equivalem a multiplicar a frequência por quanto?',sol:'<div class="sstep">oitava = ×2</div><p class="ans">×2</p>'},
+ {level:'dificil',q:'Quantos semitons são 600 cents?',sol:'<div class="sstep">600 ÷ 100 = 6</div><p class="ans">6</p>'},
+ {level:'desafio',q:'A quinta pura (3:2) ≈ 702 cents; a temperada tem 700. Qual a diferença?',sol:'<div class="sstep">702 − 700 = 2</div><p class="ans">≈ 2 cents</p>'}
+],
+mcq:[
+ {level:'facil',q:'<code>1200 ÷ 12</code>:',options:['10','100','120','12'],answer:1,sol:'100.'},
+ {level:'facil',q:'Uma oitava em cents:',options:['100','1000','1200','120'],answer:2,sol:'1200.'},
+ {level:'facil',q:'Um semitom em cents:',options:['10','100','1200','12'],answer:1,sol:'1200/12.'},
+ {level:'facil',q:'3 semitons:',options:['100','200','300','30'],answer:2,sol:'300.'},
+ {level:'medio',q:'A percepção de altura é:',options:['linear','logarítmica','quadrática','aleatória'],answer:1,sol:'Log.'},
+ {level:'facil',q:'Duas oitavas:',options:['1200','2400','600','2'],answer:1,sol:'2400.'},
+ {level:'facil',q:'Tom inteiro (2 semitons):',options:['100','200','300','12'],answer:1,sol:'200.'},
+ {level:'medio',q:'Meia oitava (passos iguais):',options:['300','600','1200','100'],answer:1,sol:'600.'},
+ {level:'medio',q:'Quinta (7 semitons):',options:['500','600','700','120'],answer:2,sol:'700.'},
+ {level:'medio',q:'Quarta (5 semitons):',options:['400','500','600','700'],answer:1,sol:'500.'},
+ {level:'medio',q:'220→440 em cents:',options:['600','1200','2400','100'],answer:1,sol:'Oitava.'},
+ {level:'medio',q:'200→400 em cents:',options:['600','1200','2400','0'],answer:1,sol:'Mesma razão.'},
+ {level:'medio',q:'Cents dependem da:',options:['diferença em Hz','razão','amplitude','fase'],answer:1,sol:'Razão.'},
+ {level:'facil',q:'0 cents =',options:['oitava','uníssono','quinta','semitom'],answer:1,sol:'Mesma nota.'},
+ {level:'medio',q:'Terça maior (4 semitons):',options:['300','400','500','200'],answer:1,sol:'400.'},
+ {level:'medio',q:'6 semitons em cents:',options:['500','600','700','1200'],answer:1,sol:'600.'},
+ {level:'medio',q:'1200 cents = razão:',options:['×1,5','×2','×3','×12'],answer:1,sol:'Oitava.'},
+ {level:'dificil',q:'Quinta pura ≈702 vs temperada 700:',options:['2','10','100','0'],answer:0,sol:'≈2 cents.'},
+ {level:'medio',q:'Três oitavas:',options:['2400','3600','1200','300'],answer:1,sol:'3×1200.'},
+ {level:'desafio',q:'Meio semitom em cents:',options:['25','50','100','200'],answer:1,sol:'100/2.'}
+]
+};
+EX.escala={
+basico:[
+ {level:'facil',q:'Quanto é <code>100 × 3/2</code>?',sol:'<div class="sstep">150</div><p class="ans">150</p>'},
+ {level:'facil',q:'Quanto é <code>200 × 3/2</code>?',sol:'<div class="sstep">300</div><p class="ans">300</p>'},
+ {level:'facil',q:'Quanto é <code>2 × 2 × 2</code>?',sol:'<div class="sstep">8</div><p class="ans">8</p>'},
+ {level:'facil',q:'Quanto é <code>(3/2) × (3/2)</code>?',sol:'<div class="sstep">9/4 = 2,25</div><p class="ans">2,25</p>'},
+ {level:'facil',q:'Reduzir 300 à oitava de 200 (dividir por 2)?',sol:'<div class="sstep">300 ÷ 2 = 150</div><p class="ans">150</p>'},
+ {level:'facil',q:'Quantas quintas há em “12 quintas”?',sol:'<div class="sstep"></div><p class="ans">12</p>'},
+ {level:'facil',q:'7 oitavas = dobrar 7 vezes = <code>2⁷</code>?',sol:'<div class="sstep">2⁷ = 128</div><p class="ans">128</p>'},
+ {level:'facil',q:'Quanto é <code>1,5 × 1,5</code>?',sol:'<div class="sstep">2,25</div><p class="ans">2,25</p>'},
+ {level:'facil',q:'Quanto é <code>1,5 × 2</code>?',sol:'<div class="sstep">3</div><p class="ans">3</p>'},
+ {level:'facil',q:'Quanto é <code>3²</code>?',sol:'<div class="sstep">9</div><p class="ans">9</p>'}
+],
+consolida:[
+ {level:'facil',q:'Empilhe uma quinta (×3/2) sobre 200 Hz.',sol:'<div class="sstep">200 × 3/2 = 300</div><p class="ans">300 Hz</p>'},
+ {level:'medio',q:'Empilhe duas quintas sobre 100 Hz (×3/2 ×3/2).',sol:'<div class="sstep">100 × 3/2 = 150<br>150 × 3/2 = 225</div><p class="ans">225 Hz</p>'},
+ {level:'medio',q:'Reduza 300 à oitava de 200 (÷2). Que intervalo sobra?',sol:'<div class="sstep">300 ÷ 2 = 150 → 150/200... na verdade 150 está acima de 100</div><p class="ans">150 Hz (uma quinta dentro da oitava).</p>'},
+ {level:'medio',q:'12 quintas puras dão ×(3/2)¹² ≈ 129,7; 7 oitavas dão 2⁷ = 128. São exatamente iguais?',sol:'<div class="sstep">129,7 ≠ 128</div><p class="ans">Não — quase iguais, mas não exatamente.</p>'},
+ {level:'medio',q:'Essa pequena diferença tem um nome. Qual?',sol:'<div class="sstep"></div><p class="ans">A coma pitagórica.</p>'},
+ {level:'medio',q:'(3/2)¹² ≈ 129,7 vs 128: a diferença é de aproximadamente?',sol:'<div class="sstep">129,7 − 128 ≈ 1,7</div><p class="ans">≈ 1,7 (a coma).</p>'},
+ {level:'medio',q:'Por isso o “ciclo das quintas” faz o quê?',sol:'<div class="sstep"></div><p class="ans">Não fecha exatamente.</p>'},
+ {level:'medio',q:'Empilhe 3 quintas sobre 100 Hz.',sol:'<div class="sstep">100 × (3/2)³ = 100 × 3,375 = 337,5</div><p class="ans">337,5 Hz</p>'},
+ {level:'medio',q:'Reduza 337,5 por uma oitava (÷2).',sol:'<div class="sstep">337,5 ÷ 2 = 168,75</div><p class="ans">168,75 Hz</p>'},
+ {level:'facil',q:'A escala maior tem quantas notas (sem repetir a oitava)?',sol:'<div class="sstep"></div><p class="ans">7</p>'},
+ {level:'facil',q:'A escala cromática tem quantas notas?',sol:'<div class="sstep"></div><p class="ans">12</p>'},
+ {level:'facil',q:'Uma quinta acima de 440 Hz?',sol:'<div class="sstep">440 × 3/2 = 660</div><p class="ans">660 Hz</p>'},
+ {level:'medio',q:'Uma quinta abaixo de 600 Hz (÷3/2)?',sol:'<div class="sstep">600 ÷ 1,5 = 400</div><p class="ans">400 Hz</p>'},
+ {level:'medio',q:'(3/2)² reduzido por uma oitava (÷2) dá 9/8. Em decimal?',sol:'<div class="sstep">2,25 ÷ 2 = 1,125</div><p class="ans">1,125</p>'},
+ {level:'medio',q:'O intervalo 9/8 corresponde a quê?',sol:'<div class="sstep"></div><p class="ans">Um tom inteiro.</p>'},
+ {level:'medio',q:'Subir 7 oitavas a partir de 20 Hz?',sol:'<div class="sstep">20 × 128 = 2560</div><p class="ans">2560 Hz</p>'},
+ {level:'dificil',q:'4 quintas sobre 100 Hz e reduzir 2 oitavas: 100×(3/2)⁴ ÷ 4 = ?',sol:'<div class="sstep">100 × 5,0625 = 506,25<br>506,25 ÷ 4 = 126,5625</div><p class="ans">≈ 126,56 Hz (a terça pitagórica)</p>'},
+ {level:'dificil',q:'A coma pitagórica, em cents, vale aproximadamente?',sol:'<div class="sstep"></div><p class="ans">≈ 23,5 cents</p>'},
+ {level:'dificil',q:'(3/2)¹² é aproximadamente igual a qual potência de 2?',sol:'<div class="sstep">≈ 129,7 ≈ 2⁷ = 128</div><p class="ans">2⁷ (sete oitavas), aproximadamente.</p>'},
+ {level:'desafio',q:'Por que precisamos de “temperamento”?',sol:'<div class="sstep"></div><p class="ans">Para fechar o ciclo das quintas, distribuindo a coma e permitindo tocar em qualquer tonalidade.</p>'}
+],
+mcq:[
+ {level:'facil',q:'Quinta (×3/2) acima de 200:',options:['250','300','400','150'],answer:1,sol:'300.'},
+ {level:'facil',q:'<code>(3/2)×(3/2)</code>:',options:['2','2,25','3','1,5'],answer:1,sol:'9/4.'},
+ {level:'facil',q:'<code>2⁷</code>:',options:['64','128','256','49'],answer:1,sol:'128.'},
+ {level:'medio',q:'Duas quintas sobre 100:',options:['150','200','225','300'],answer:2,sol:'225.'},
+ {level:'medio',q:'12 quintas puras vs 7 oitavas:',options:['iguais','quase iguais','muito diferentes','opostos'],answer:1,sol:'≈ mas não exato.'},
+ {level:'medio',q:'A pequena diferença é a:',options:['quinta','coma pitagórica','oitava','terça'],answer:1,sol:'Coma.'},
+ {level:'medio',q:'O ciclo das quintas:',options:['fecha exato','não fecha exato','some','dobra'],answer:1,sol:'Não fecha.'},
+ {level:'facil',q:'Escala maior: notas:',options:['5','7','12','8'],answer:1,sol:'7.'},
+ {level:'facil',q:'Escala cromática: notas:',options:['7','12','8','5'],answer:1,sol:'12.'},
+ {level:'facil',q:'Quinta acima de 440:',options:['550','660','880','330'],answer:1,sol:'×3/2.'},
+ {level:'medio',q:'(3/2)² ÷ 2 = 9/8 ≈',options:['1,125','1,5','2','0,75'],answer:0,sol:'2,25/2.'},
+ {level:'medio',q:'9/8 é:',options:['um semitom','um tom','uma quinta','uma oitava'],answer:1,sol:'Um tom.'},
+ {level:'medio',q:'7 oitavas acima de 20 Hz:',options:['1280','2560','640','256'],answer:1,sol:'20×128.'},
+ {level:'medio',q:'3 quintas sobre 100:',options:['225','337,5','300','450'],answer:1,sol:'100×3,375.'},
+ {level:'medio',q:'Reduzir 300 à oitava de 200 (÷2):',options:['100','150','600','300'],answer:1,sol:'150.'},
+ {level:'dificil',q:'Coma pitagórica em cents ≈',options:['2','12','23,5','100'],answer:2,sol:'≈23,5.'},
+ {level:'medio',q:'Quinta abaixo de 600 (÷3/2):',options:['300','400','900','450'],answer:1,sol:'400.'},
+ {level:'dificil',q:'(3/2)¹² ≈',options:['128','129,7','120','144'],answer:1,sol:'≈129,7.'},
+ {level:'medio',q:'Precisamos de temperamento para:',options:['aumentar volume','fechar o ciclo das quintas','afinar tambores','medir Hz'],answer:1,sol:'Fechar o ciclo.'},
+ {level:'desafio',q:'log₂((3/2)¹²) ≈',options:['6','7','12','3,5'],answer:1,sol:'≈7,02 oitavas.'}
+]
+};
+EX.temperamento={
+basico:[
+ {level:'facil',q:'<code>2^(1/12)</code> ≈ ?',sol:'<div class="sstep">≈ 1,0595</div><p class="ans">≈ 1,0595</p>'},
+ {level:'facil',q:'<code>(2^(1/12))¹²</code>?',sol:'<div class="sstep">2^(12/12) = 2</div><p class="ans">2</p>'},
+ {level:'facil',q:'<code>1200 ÷ 12</code>?',sol:'<div class="sstep">100</div><p class="ans">100</p>'},
+ {level:'facil',q:'<code>12 × 100</code>?',sol:'<div class="sstep">1200</div><p class="ans">1200</p>'},
+ {level:'facil',q:'<code>2^(1/2)</code> ≈ ?',sol:'<div class="sstep">√2 ≈ 1,414</div><p class="ans">≈ 1,414</p>'},
+ {level:'facil',q:'A raiz décima-segunda de 2 escreve-se como?',sol:'<div class="sstep"></div><p class="ans">2^(1/12)</p>'},
+ {level:'facil',q:'<code>2¹</code>?',sol:'<div class="sstep">2</div><p class="ans">2</p>'},
+ {level:'facil',q:'100 cents correspondem a 1 quê?',sol:'<div class="sstep"></div><p class="ans">Semitom.</p>'},
+ {level:'facil',q:'<code>(2^(1/12))⁰</code>?',sol:'<div class="sstep">qualquer base⁰ = 1</div><p class="ans">1</p>'},
+ {level:'facil',q:'<code>2^(1/12)</code> é maior ou menor que 1?',sol:'<div class="sstep"></div><p class="ans">Maior.</p>'}
+],
+consolida:[
+ {level:'facil',q:'No temperamento igual, cada semitom multiplica a frequência por quanto?',sol:'<div class="sstep"></div><p class="ans">2^(1/12)</p>'},
+ {level:'medio',q:'12 semitons iguais resultam em qual multiplicação?',sol:'<div class="sstep">(2^(1/12))¹² = 2</div><p class="ans">×2 (uma oitava exata).</p>'},
+ {level:'medio',q:'<code>(2^(1/12))⁷</code> ≈ 1,498. Qual intervalo isso aproxima?',sol:'<div class="sstep">3:2 = 1,5</div><p class="ans">A quinta justa.</p>'},
+ {level:'medio',q:'A quinta temperada (700 cents) vs a pura (702): diferença ≈?',sol:'<div class="sstep">2</div><p class="ans">≈ 2 cents.</p>'},
+ {level:'medio',q:'A terça maior temperada (≈1,26) vs a pura (5:4 = 1,25): a temperada é ligeiramente...?',sol:'<div class="sstep"></div><p class="ans">Mais alta (aguda).</p>'},
+ {level:'medio',q:'O temperamento igual sacrifica a pureza das razões para quê?',sol:'<div class="sstep"></div><p class="ans">Fechar o ciclo e tocar em qualquer tonalidade.</p>'},
+ {level:'facil',q:'Qual intervalo permanece puro no temperamento igual?',sol:'<div class="sstep">(2^(1/12))¹² = 2</div><p class="ans">A oitava (2:1).</p>'},
+ {level:'facil',q:'Cada semitom, em cents (exato)?',sol:'<div class="sstep"></div><p class="ans">100</p>'},
+ {level:'medio',q:'Quantos semitons há na oitava?',sol:'<div class="sstep"></div><p class="ans">12</p>'},
+ {level:'medio',q:'A coma é distribuída entre as 12 quintas; cada quinta perde ≈ quantos cents?',sol:'<div class="sstep">≈ 23,5 / 12 ≈ 2</div><p class="ans">≈ 2 cents.</p>'},
+ {level:'medio',q:'<code>2^(5/12)</code> ≈ 1,335 aproxima qual intervalo?',sol:'<div class="sstep">4:3 ≈ 1,333</div><p class="ans">A quarta justa.</p>'},
+ {level:'medio',q:'Frequência de um semitom acima de 440 Hz?',sol:'<div class="sstep">440 × 2^(1/12) ≈ 440 × 1,0595</div><p class="ans">≈ 466,16 Hz</p>'},
+ {level:'medio',q:'Dois semitons acima de 440 Hz?',sol:'<div class="sstep">440 × 2^(2/12) ≈ 440 × 1,1225</div><p class="ans">≈ 493,88 Hz</p>'},
+ {level:'medio',q:'O número 2^(1/12) é racional ou irracional?',sol:'<div class="sstep"></div><p class="ans">Irracional.</p>'},
+ {level:'medio',q:'Por que não usar só intervalos puros (justa entonação)?',sol:'<div class="sstep"></div><p class="ans">Ao mudar de tom, desafina; o temperamento iguala os passos.</p>'},
+ {level:'medio',q:'A oitava no temperamento igual é pura ou aproximada?',sol:'<div class="sstep"></div><p class="ans">Pura (2:1).</p>'},
+ {level:'dificil',q:'<code>(2^(1/12))²⁴</code>?',sol:'<div class="sstep">2^(24/12) = 2² = 4</div><p class="ans">4 (duas oitavas)</p>'},
+ {level:'dificil',q:'<code>2^(6/12)</code> = ? Que intervalo?',sol:'<div class="sstep">2^(1/2) = √2 ≈ 1,414</div><p class="ans">≈ 1,414 — o trítono (meia oitava).</p>'},
+ {level:'dificil',q:'A quinta justa pura é 3:2 = 1,5; a temperada 2^(7/12) ≈ 1,498. A temperada é um pouco mais...?',sol:'<div class="sstep"></div><p class="ans">Baixa (apenas ≈2 cents menor).</p>'},
+ {level:'desafio',q:'O temperamento igual é um compromisso entre pureza e o quê?',sol:'<div class="sstep"></div><p class="ans">Flexibilidade tonal (tocar em todas as tonalidades).</p>'}
+],
+mcq:[
+ {level:'facil',q:'<code>2^(1/12)</code> ≈',options:['1,02','1,06','1,12','1,5'],answer:1,sol:'≈1,0595.'},
+ {level:'facil',q:'<code>(2^(1/12))¹²</code>:',options:['√2','2','12','24'],answer:1,sol:'2.'},
+ {level:'facil',q:'Cada semitom, em cents:',options:['10','100','1200','12'],answer:1,sol:'100.'},
+ {level:'medio',q:'A quinta temperada aproxima a razão:',options:['4:3','3:2','5:4','2:1'],answer:1,sol:'≈1,498≈1,5.'},
+ {level:'facil',q:'A oitava no temperamento igual é:',options:['aproximada','pura','dissonante','eliminada'],answer:1,sol:'2:1 exata.'},
+ {level:'medio',q:'<code>(2^(1/12))⁷</code> ≈',options:['1,25','1,33','1,498','2'],answer:2,sol:'≈ quinta.'},
+ {level:'medio',q:'O temperamento sacrifica pureza para:',options:['aumentar volume','fechar o ciclo','afinar tambor','medir cents'],answer:1,sol:'Tocar em qualquer tom.'},
+ {level:'facil',q:'A raiz 12ª de 2 é:',options:['2¹²','2^(1/12)','12²','√2'],answer:1,sol:'2^(1/12).'},
+ {level:'facil',q:'Semitons na oitava:',options:['7','12','8','24'],answer:1,sol:'12.'},
+ {level:'medio',q:'<code>2^(1/12)</code> é:',options:['racional','irracional','inteiro','negativo'],answer:1,sol:'Irracional.'},
+ {level:'medio',q:'Um semitom acima de 440 ≈',options:['466','494','450','415'],answer:0,sol:'440×1,0595.'},
+ {level:'medio',q:'Quinta pura vs temperada ≈',options:['0','2','12','100'],answer:1,sol:'≈2 cents.'},
+ {level:'medio',q:'<code>2^(5/12)</code> aproxima:',options:['3:2','4:3','5:4','2:1'],answer:1,sol:'≈1,335≈4/3.'},
+ {level:'dificil',q:'<code>(2^(1/12))²⁴</code>:',options:['2','4','8','16'],answer:1,sol:'2²=4.'},
+ {level:'medio',q:'<code>2^(6/12)</code> =',options:['1,25','1,33','1,414','1,5'],answer:2,sol:'√2.'},
+ {level:'medio',q:'A justa entonação desafina ao:',options:['aumentar volume','mudar de tom','tocar devagar','usar oitavas'],answer:1,sol:'Trocar de tonalidade.'},
+ {level:'medio',q:'12 semitons iguais =',options:['uma quinta','uma oitava','duas oitavas','um tom'],answer:1,sol:'×2.'},
+ {level:'medio',q:'Cada quinta temperada perde ≈',options:['2','12','24','100'],answer:0,sol:'≈2 cents.'},
+ {level:'medio',q:'Dois semitons acima de 440 ≈',options:['466','494','523','415'],answer:1,sol:'440×1,1225.'},
+ {level:'desafio',q:'O temperamento igual equilibra pureza e:',options:['volume','flexibilidade tonal','duração','timbre'],answer:1,sol:'Tocar em todos os tons.'}
+]
+};
+EX.tonal={
+basico:[
+ {level:'facil',q:'Qual o maior número entre 1 e 5?',sol:'<div class="sstep"></div><p class="ans">5</p>'},
+ {level:'facil',q:'Entre estável e instável, qual “quer descansar” (resolver)?',sol:'<div class="sstep"></div><p class="ans">O instável.</p>'},
+ {level:'facil',q:'O fim de uma frase musical costuma ser estável ou instável?',sol:'<div class="sstep"></div><p class="ans">Estável (repouso).</p>'},
+ {level:'facil',q:'Quantos graus tem a escala maior?',sol:'<div class="sstep"></div><p class="ans">7</p>'},
+ {level:'facil',q:'O 1º grau (tônica) é o ponto de quê?',sol:'<div class="sstep"></div><p class="ans">Repouso.</p>'},
+ {level:'facil',q:'Tensão pede o quê?',sol:'<div class="sstep"></div><p class="ans">Resolução.</p>'},
+ {level:'facil',q:'Estados A→B e B→A: quantas transições?',sol:'<div class="sstep"></div><p class="ans">2</p>'},
+ {level:'facil',q:'Num grafo, as ligações entre nós chamam-se?',sol:'<div class="sstep"></div><p class="ans">Arestas.</p>'},
+ {level:'facil',q:'Qual a probabilidade de um evento certo?',sol:'<div class="sstep"></div><p class="ans">1</p>'},
+ {level:'facil',q:'A soma das probabilidades de todas as transições saindo de um estado é?',sol:'<div class="sstep"></div><p class="ans">1</p>'}
+],
+consolida:[
+ {level:'facil',q:'A tônica (I) é o estado de...?',sol:'<div class="sstep"></div><p class="ans">Repouso / estabilidade.</p>'},
+ {level:'facil',q:'A dominante (V) cria o quê?',sol:'<div class="sstep"></div><p class="ans">Tensão, que pede resolução.</p>'},
+ {level:'facil',q:'A dominante (V) resolve naturalmente para qual grau?',sol:'<div class="sstep"></div><p class="ans">A tônica (I).</p>'},
+ {level:'medio',q:'A sensível (7º grau) tende a resolver para onde?',sol:'<div class="sstep"><span class="an">// meio tom acima</span></div><p class="ans">A tônica.</p>'},
+ {level:'medio',q:'Música tonal pode ser vista como que tipo de estrutura?',sol:'<div class="sstep"></div><p class="ans">Um grafo de estados (acordes).</p>'},
+ {level:'medio',q:'Num grafo musical, cada acorde é um ___ e cada progressão provável é uma ___.',sol:'<div class="sstep"></div><p class="ans">Nó; aresta.</p>'},
+ {level:'medio',q:'A cadência V–I dá sensação de...?',sol:'<div class="sstep"></div><p class="ans">Conclusão / repouso.</p>'},
+ {level:'medio',q:'Onde a tensão é máxima, logo antes de resolver?',sol:'<div class="sstep"></div><p class="ans">Na dominante.</p>'},
+ {level:'medio',q:'Resolução é ir de instável para...?',sol:'<div class="sstep"></div><p class="ans">Estável.</p>'},
+ {level:'medio',q:'A sensível está a quantos semitons da tônica?',sol:'<div class="sstep"></div><p class="ans">1 (meio tom).</p>'},
+ {level:'medio',q:'Uma progressão “previsível” usa transições de alta o quê?',sol:'<div class="sstep"></div><p class="ans">Probabilidade.</p>'},
+ {level:'medio',q:'Surpresa musical é uma transição de baixa...?',sol:'<div class="sstep"></div><p class="ans">Probabilidade.</p>'},
+ {level:'facil',q:'O repouso final típico de uma peça tonal é em qual grau?',sol:'<div class="sstep"></div><p class="ans">A tônica.</p>'},
+ {level:'medio',q:'Num grafo dirigido de 3 acordes totalmente conectados, quantas arestas?',sol:'<div class="sstep">3 × 2 = 6</div><p class="ans">6</p>'},
+ {level:'medio',q:'A “gramática” tonal define quais transições são...?',sol:'<div class="sstep"></div><p class="ans">Prováveis / esperadas.</p>'},
+ {level:'medio',q:'A expectativa da próxima nota/acorde é parte do modelo mental do ouvinte?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'dificil',q:'De um estado saem 4 transições igualmente prováveis. Probabilidade de cada uma?',sol:'<div class="sstep">1 ÷ 4 = 0,25</div><p class="ans">0,25</p>'},
+ {level:'dificil',q:'A “surpresa” (entropia) é maior quando as transições são como?',sol:'<div class="sstep"></div><p class="ans">Igualmente prováveis (mais imprevisível).</p>'},
+ {level:'dificil',q:'Em cadências finais, V→I é a transição esperada (alta probabilidade)?',sol:'<div class="sstep"></div><p class="ans">Sim — é a resolução típica.</p>'},
+ {level:'desafio',q:'Por que a estrutura musical pode ser tratada como um sistema formal?',sol:'<div class="sstep"></div><p class="ans">Porque tem estados (acordes) e regras de transição — como um grafo/autômato.</p>'}
+],
+mcq:[
+ {level:'facil',q:'A tônica (I) é o ponto de:',options:['tensão','repouso','surpresa','ruído'],answer:1,sol:'Estabilidade.'},
+ {level:'facil',q:'A dominante (V) cria:',options:['repouso','tensão','silêncio','timbre'],answer:1,sol:'Pede resolução.'},
+ {level:'facil',q:'A dominante (V) resolve para:',options:['IV','V','I','II'],answer:2,sol:'Tônica.'},
+ {level:'facil',q:'Música tonal pode ser vista como:',options:['um número','um grafo de estados','uma reta','uma cor'],answer:1,sol:'Estados e transições.'},
+ {level:'medio',q:'A sensível resolve para a:',options:['dominante','tônica','subdominante','oitava'],answer:1,sol:'Meio tom acima.'},
+ {level:'medio',q:'A cadência V–I dá sensação de:',options:['tensão','conclusão','dúvida','aspereza'],answer:1,sol:'Repouso final.'},
+ {level:'facil',q:'Graus da escala maior:',options:['5','7','12','8'],answer:1,sol:'7.'},
+ {level:'facil',q:'Ligações entre nós de um grafo:',options:['vértices','arestas','folhas','raízes'],answer:1,sol:'Arestas.'},
+ {level:'medio',q:'Resolução = de instável para:',options:['mais instável','estável','aleatório','agudo'],answer:1,sol:'Estável.'},
+ {level:'medio',q:'A sensível está a ___ da tônica:',options:['1 semitom','2 semitons','3 semitons','7 semitons'],answer:0,sol:'Meio tom.'},
+ {level:'medio',q:'Progressão previsível usa transições de:',options:['baixa probabilidade','alta probabilidade','sem probabilidade','ruído'],answer:1,sol:'Esperadas.'},
+ {level:'medio',q:'Surpresa = transição de:',options:['alta probabilidade','baixa probabilidade','prob. 1','prob. zero'],answer:1,sol:'Inesperada.'},
+ {level:'dificil',q:'4 transições igualmente prováveis: cada uma:',options:['0,1','0,25','0,5','1'],answer:1,sol:'1/4.'},
+ {level:'dificil',q:'Entropia máxima quando as opções são:',options:['uma só','igualmente prováveis','zero','infinitas'],answer:1,sol:'Mais imprevisível.'},
+ {level:'facil',q:'Repouso final típico:',options:['dominante','tônica','sensível','subdominante'],answer:1,sol:'Tônica.'},
+ {level:'medio',q:'Grafo dirigido de 3 acordes totalmente conectado: arestas:',options:['3','6','9','2'],answer:1,sol:'3×2.'},
+ {level:'medio',q:'A tensão é máxima na:',options:['tônica','dominante','oitava','pausa'],answer:1,sol:'Antes de resolver.'},
+ {level:'medio',q:'Soma das probabilidades saindo de um estado:',options:['0','0,5','1','depende'],answer:2,sol:'Normalizada.'},
+ {level:'medio',q:'A gramática tonal define transições:',options:['só proibidas','prováveis','aleatórias','sem regra'],answer:1,sol:'Esperadas.'},
+ {level:'desafio',q:'Tratar música como sistema formal significa ter:',options:['só sons','estados e regras de transição','só ritmo','nenhuma estrutura'],answer:1,sol:'Como um autômato.'}
+]
+};
+EX.modelo={
+basico:[
+ {level:'facil',q:'O som no ar é uma onda de quê?',sol:'<div class="sstep"></div><p class="ans">Pressão.</p>'},
+ {level:'facil',q:'O ouvido converte vibração em quê?',sol:'<div class="sstep"></div><p class="ans">Impulsos nervosos (sinal).</p>'},
+ {level:'facil',q:'Imaginar uma melodia é som interno ou externo?',sol:'<div class="sstep"></div><p class="ans">Interno.</p>'},
+ {level:'facil',q:'Tocar uma nota num alto-falante é som interno ou externo?',sol:'<div class="sstep"></div><p class="ans">Externo.</p>'},
+ {level:'facil',q:'Quais os dois tipos de “som” discutidos?',sol:'<div class="sstep"></div><p class="ans">Externo e interno.</p>'},
+ {level:'facil',q:'A audição começa com a vibração de qual estrutura?',sol:'<div class="sstep"></div><p class="ans">O tímpano.</p>'},
+ {level:'facil',q:'O cérebro constrói o quê a partir do sinal?',sol:'<div class="sstep"></div><p class="ans">Um modelo (representação).</p>'},
+ {level:'facil',q:'Dá para imaginar música em silêncio? (V/F)',sol:'<div class="sstep"></div><p class="ans">Verdadeiro.</p>'},
+ {level:'facil',q:'A frequência externa vira percepção de quê?',sol:'<div class="sstep"></div><p class="ans">Altura.</p>'},
+ {level:'facil',q:'A representação mental do som é um...?',sol:'<div class="sstep"></div><p class="ans">Modelo.</p>'}
+],
+consolida:[
+ {level:'facil',q:'O som externo é, fisicamente, o quê?',sol:'<div class="sstep"></div><p class="ans">Uma onda de pressão no ar.</p>'},
+ {level:'facil',q:'O som interno é o quê?',sol:'<div class="sstep"></div><p class="ans">Uma representação mental (modelo perceptivo).</p>'},
+ {level:'medio',q:'Compor sem ouvir externamente usa qual modelo?',sol:'<div class="sstep"></div><p class="ans">O interno.</p>'},
+ {level:'medio',q:'A distinção interno/externo é necessária ou apenas habitual?',sol:'<div class="sstep"></div><p class="ans">Necessária — são coisas diferentes.</p>'},
+ {level:'medio',q:'A frequência é física; a altura é...?',sol:'<div class="sstep"></div><p class="ans">Perceptual (do modelo).</p>'},
+ {level:'medio',q:'A amplitude física vira percepção de...?',sol:'<div class="sstep"></div><p class="ans">Volume.</p>'},
+ {level:'medio',q:'A versão precisa de “surdez não impede música” diz o quê?',sol:'<div class="sstep"></div><p class="ans">O modelo interno pode operar sem o som externo.</p>'},
+ {level:'medio',q:'O ouvido transforma pressão em...?',sol:'<div class="sstep"></div><p class="ans">Impulsos nervosos.</p>'},
+ {level:'medio',q:'Timbre, altura e volume são atributos físicos puros ou percebidos?',sol:'<div class="sstep"></div><p class="ans">Percebidos (do modelo).</p>'},
+ {level:'medio',q:'Dá para ensaiar mentalmente uma peça?',sol:'<div class="sstep"></div><p class="ans">Sim (audição interna).</p>'},
+ {level:'medio',q:'A expectativa musical (callback tonal) vive em qual som?',sol:'<div class="sstep"></div><p class="ans">No interno (o modelo).</p>'},
+ {level:'medio',q:'A surdez total elimina o som externo, mas não necessariamente o...?',sol:'<div class="sstep"></div><p class="ans">Interno.</p>'},
+ {level:'medio',q:'A tese do caderno: a estrutura musical é um sistema ___ e a audição é uma ___.',sol:'<div class="sstep"></div><p class="ans">Formal; interface.</p>'},
+ {level:'facil',q:'A altura correlaciona-se com qual grandeza física?',sol:'<div class="sstep"></div><p class="ans">A frequência.</p>'},
+ {level:'medio',q:'O modelo interno permite prever a próxima nota?',sol:'<div class="sstep"></div><p class="ans">Sim (expectativa).</p>'},
+ {level:'medio',q:'O som externo sozinho é suficiente para a experiência musical?',sol:'<div class="sstep"></div><p class="ans">Não — precisa da interpretação (modelo).</p>'},
+ {level:'dificil',q:'Por que é possível compor sem ouvir?',sol:'<div class="sstep"></div><p class="ans">Porque a estrutura é formal e o modelo interno a manipula.</p>'},
+ {level:'dificil',q:'Dois ouvintes podem ter modelos internos diferentes do mesmo som externo?',sol:'<div class="sstep"></div><p class="ans">Sim — a percepção varia.</p>'},
+ {level:'dificil',q:'“Ouvir” internamente e “ouvir” externamente são o mesmo processo?',sol:'<div class="sstep"></div><p class="ans">Não — um é físico-sensorial, o outro é representacional.</p>'},
+ {level:'desafio',q:'Em uma frase, qual a relação entre som externo, ouvido e modelo?',sol:'<div class="sstep"></div><p class="ans">O som externo (pressão) é transduzido pelo ouvido e interpretado pelo modelo interno, que é onde a “música” acontece.</p>'}
+],
+mcq:[
+ {level:'facil',q:'O som no ar é uma onda de:',options:['luz','pressão','calor','elétrons'],answer:1,sol:'Pressão.'},
+ {level:'facil',q:'Imaginar uma melodia é som:',options:['externo','interno','nenhum','ruído'],answer:1,sol:'Interno.'},
+ {level:'facil',q:'O cérebro constrói um:',options:['som físico','modelo','alto-falante','tímpano'],answer:1,sol:'Representação.'},
+ {level:'medio',q:'A frequência é física; a altura é:',options:['física','perceptual','aleatória','constante'],answer:1,sol:'Do modelo.'},
+ {level:'medio',q:'Compor sem ouvir usa o modelo:',options:['externo','interno','digital','nenhum'],answer:1,sol:'Interno.'},
+ {level:'medio',q:'A amplitude física vira percepção de:',options:['altura','volume','timbre','duração'],answer:1,sol:'Volume.'},
+ {level:'medio',q:'A distinção interno/externo é:',options:['habitual só','necessária','inútil','falsa'],answer:1,sol:'São coisas diferentes.'},
+ {level:'facil',q:'O ouvido converte vibração em:',options:['luz','impulsos nervosos','pressão','calor'],answer:1,sol:'Sinal nervoso.'},
+ {level:'medio',q:'A expectativa da próxima nota vive:',options:['no ar','no modelo interno','no alto-falante','no papel'],answer:1,sol:'Modelo.'},
+ {level:'medio',q:'A surdez total remove o som:',options:['interno','externo','ambos','nenhum'],answer:1,sol:'Externo.'},
+ {level:'facil',q:'Ensaiar uma peça mentalmente é possível?',options:['sim','não'],answer:0,sol:'Audição interna.'},
+ {level:'medio',q:'A tese: estrutura musical é um sistema:',options:['aleatório','formal','físico só','sonoro só'],answer:1,sol:'Formal.'},
+ {level:'medio',q:'A audição é uma ___ com a estrutura:',options:['cópia','interface','causa','cor'],answer:1,sol:'Interface.'},
+ {level:'medio',q:'O som externo sozinho, para a música, é:',options:['suficiente','insuficiente sozinho','irrelevante','impossível'],answer:1,sol:'Precisa do modelo.'},
+ {level:'medio',q:'Timbre/altura/volume são atributos:',options:['físicos puros','percebidos','inexistentes','aleatórios'],answer:1,sol:'Do modelo.'},
+ {level:'medio',q:'Mesmo som externo, modelos internos:',options:['sempre iguais','podem diferir','impossíveis','idênticos'],answer:1,sol:'Percepção varia.'},
+ {level:'medio',q:'“Ouvir” interno e externo são:',options:['o mesmo','processos diferentes','idênticos','impossíveis'],answer:1,sol:'Físico vs representacional.'},
+ {level:'medio',q:'A altura correlaciona-se com a:',options:['amplitude','frequência','fase','duração'],answer:1,sol:'Frequência.'},
+ {level:'facil',q:'A representação mental do som é um:',options:['ruído','modelo','eco','timbre'],answer:1,sol:'Modelo.'},
+ {level:'desafio',q:'Compor surdo é possível porque:',options:['o som externo basta','o modelo interno manipula a estrutura formal','não é possível','usa só ritmo'],answer:1,sol:'Estrutura formal + modelo.'}
+]
+};
+EX.beethoven={
+basico:[
+ {level:'facil',q:'Um exemplo é o mesmo que uma regra geral?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'facil',q:'Um único caso prova uma lei universal?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'facil',q:'De ver 1 cisne branco, conclui-se “todo cisne é branco”?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'facil',q:'Generalizar a partir de um único exemplo é arriscado?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'Beethoven compôs surdo: isso é um caso específico ou universal?',sol:'<div class="sstep"></div><p class="ans">Específico.</p>'},
+ {level:'facil',q:'Evidência de 1 caso é forte ou fraca para leis gerais?',sol:'<div class="sstep"></div><p class="ans">Fraca.</p>'},
+ {level:'facil',q:'Um contraexemplo derruba uma afirmação universal?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'facil',q:'“Necessário” e “habitual” são sinônimos?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'facil',q:'Confundir um caso isolado com um modelo geral é um...?',sol:'<div class="sstep"></div><p class="ans">Erro.</p>'},
+ {level:'facil',q:'Quantos cisnes pretos bastam para refutar “todo cisne é branco”?',sol:'<div class="sstep"></div><p class="ans">1.</p>'}
+],
+consolida:[
+ {level:'medio',q:'Beethoven surdo compondo mostra que o som externo, para compor, é...?',sol:'<div class="sstep"></div><p class="ans">Habitual, não necessário.</p>'},
+ {level:'medio',q:'Isso prova que “qualquer pessoa surda compõe sinfonias”?',sol:'<div class="sstep"></div><p class="ans">Não — é um caso específico, não um modelo universal.</p>'},
+ {level:'medio',q:'A lição transferível é distinguir o necessário do...?',sol:'<div class="sstep"></div><p class="ans">Habitual.</p>'},
+ {level:'medio',q:'1 caso positivo basta para refutar “é impossível compor surdo”?',sol:'<div class="sstep"><span class="an">// um contraexemplo</span></div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'1 caso basta para afirmar “surdez não afeta a composição de ninguém”?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'medio',q:'O que permitiu a Beethoven compor surdo (callback modelo)?',sol:'<div class="sstep"></div><p class="ans">O modelo interno, manipulando a estrutura sem o som externo.</p>'},
+ {level:'medio',q:'Generalizar de Beethoven para todos é o quê?',sol:'<div class="sstep"></div><p class="ans">Uma falácia (generalização indevida).</p>'},
+ {level:'medio',q:'A estrutura musical formal pode ser operada como?',sol:'<div class="sstep"></div><p class="ans">Mentalmente (sem som externo).</p>'},
+ {level:'medio',q:'Um exemplo ilustra; ele demonstra uma lei universal?',sol:'<div class="sstep"></div><p class="ans">Não.</p>'},
+ {level:'medio',q:'Em ciência, o que refuta uma afirmação universal?',sol:'<div class="sstep"></div><p class="ans">Um contraexemplo.</p>'},
+ {level:'medio',q:'“Ouvir para compor” é necessário?',sol:'<div class="sstep"></div><p class="ans">Não — Beethoven é contraexemplo.</p>'},
+ {level:'medio',q:'“Ter um modelo interno da estrutura” é necessário para compor?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'A moral (separar necessário de habitual) vale além da música?',sol:'<div class="sstep"></div><p class="ans">Sim.</p>'},
+ {level:'medio',q:'Confundir “geralmente” com “sempre” é o quê?',sol:'<div class="sstep"></div><p class="ans">Um erro lógico.</p>'},
+ {level:'dificil',q:'De “Beethoven compôs surdo” segue “a audição externa é irrelevante para todos”?',sol:'<div class="sstep"></div><p class="ans">Não — é um não-sequitur.</p>'},
+ {level:'dificil',q:'O caso de Beethoven é evidência a favor de qual tese?',sol:'<div class="sstep"></div><p class="ans">De que o modelo interno é suficiente para compor.</p>'},
+ {level:'dificil',q:'Quantos contraexemplos derrubam “é impossível X”?',sol:'<div class="sstep"></div><p class="ans">1.</p>'},
+ {level:'dificil',q:'O que é mais forte como prova: 1 exemplo de uma universal, ou 1 contraexemplo dela?',sol:'<div class="sstep"></div><p class="ans">O contraexemplo (refuta a universal).</p>'},
+ {level:'desafio',q:'Por que Beethoven é “um caso específico, não um modelo universal”?',sol:'<div class="sstep"></div><p class="ans">Porque ilustra uma possibilidade, não uma regra que valha para todos.</p>'},
+ {level:'desafio',q:'Qual a lição mais transferível do caderno, para além da música?',sol:'<div class="sstep"></div><p class="ans">Separar o necessário do meramente habitual.</p>'}
+],
+mcq:[
+ {level:'facil',q:'1 exemplo prova uma lei universal?',options:['sim','não'],answer:1,sol:'Não.'},
+ {level:'facil',q:'1 contraexemplo derruba uma afirmação universal?',options:['sim','não'],answer:0,sol:'Sim.'},
+ {level:'facil',q:'Beethoven surdo compondo é um caso:',options:['universal','específico','impossível','comum'],answer:1,sol:'Específico.'},
+ {level:'facil',q:'Ouvir externamente para compor é:',options:['necessário','habitual','impossível','proibido'],answer:1,sol:'Não necessário.'},
+ {level:'facil',q:'A lição: distinguir necessário de:',options:['habitual','agudo','grave','digital'],answer:0,sol:'Habitual.'},
+ {level:'medio',q:'Generalizar de 1 caso para todos é uma:',options:['prova','falácia','lei','medida'],answer:1,sol:'Generalização indevida.'},
+ {level:'medio',q:'O que permitiu Beethoven compor surdo:',options:['sorte','modelo interno','alto-falantes','leitura labial'],answer:1,sol:'Modelo interno.'},
+ {level:'medio',q:'“Compôs surdo” ⇒ “audição externa é irrelevante p/ todos”:',options:['válido','não-sequitur'],answer:1,sol:'Não segue.'},
+ {level:'medio',q:'Contraexemplos para derrubar “é impossível compor surdo”:',options:['0','1','muitos','infinitos'],answer:1,sol:'Basta 1.'},
+ {level:'medio',q:'Um exemplo isolado:',options:['confirma universalmente','apenas ilustra'],answer:1,sol:'Não prova lei geral.'},
+ {level:'medio',q:'Ter um modelo interno da estrutura, para compor, é:',options:['necessário','dispensável'],answer:0,sol:'É o que opera.'},
+ {level:'medio',q:'Confundir “geralmente” com “sempre” é:',options:['correto','erro lógico'],answer:1,sol:'Erro.'},
+ {level:'medio',q:'O caso de Beethoven apoia que o modelo interno é:',options:['insuficiente','suficiente'],answer:1,sol:'Para compor.'},
+ {level:'facil',q:'A moral vale além da música?',options:['sim','não'],answer:0,sol:'Sim.'},
+ {level:'medio',q:'“Todo cisne é branco” cai com:',options:['mais cisnes brancos','um cisne preto'],answer:1,sol:'Um contraexemplo.'},
+ {level:'medio',q:'Evidência de 1 caso para leis gerais é:',options:['forte','fraca'],answer:1,sol:'Fraca.'},
+ {level:'medio',q:'Beethoven é apresentado como:',options:['modelo universal','caso específico'],answer:1,sol:'Específico.'},
+ {level:'medio',q:'A estrutura musical formal pode ser operada:',options:['só com som','mentalmente também'],answer:1,sol:'Modelo interno.'},
+ {level:'medio',q:'O erro a evitar é:',options:['separar necessário de habitual','confundir caso com modelo'],answer:1,sol:'Generalização indevida.'},
+ {level:'desafio',q:'A lição mais transferível do caderno é:',options:['decorar notas','separar o necessário do habitual','tocar rápido','usar logaritmo'],answer:1,sol:'Necessário × habitual.'}
+]
+};
+const EX_IDS=['corda','timbre','consonancia','batimentos','cents','escala','temperamento','tonal','modelo','beethoven'];
+EX_IDS.forEach(id=>renderExercises(id,'ex-'+id));
 
 </script>
 </body>
