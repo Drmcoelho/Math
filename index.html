@@ -48,9 +48,14 @@ h1 .o{color:var(--a)}h1 .v{color:var(--g)}
 footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--m);font:13px/1.7 var(--mono)}
 footer a{color:var(--a2);text-decoration:none}
 @media(max-width:640px){header{min-height:52vh}}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;opacity:.6;pointer-events:none}
+.surprise{justify-self:start;margin-top:12px;font:12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#0a0a0c;background:linear-gradient(90deg,var(--a),var(--g));border:0;padding:12px 20px;border-radius:999px;cursor:pointer;font-weight:700;transition:transform .15s,filter .15s;box-shadow:0 10px 30px -12px rgba(255,90,31,.5)}
+.surprise:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.surprise:active{transform:translateY(0)}
 </style>
 </head>
 <body>
+<canvas id="bg" aria-hidden="true"></canvas>
 <div class="wrap">
 
 <header>
@@ -61,6 +66,7 @@ footer a{color:var(--a2);text-decoration:none}
   <b>vetor</b><b>produto escalar</b><b>erro</b><b>gradiente</b><b>profundidade</b><b>atenção</b>
   <b class="v">corda</b><b class="v">razão</b><b class="v">logaritmo</b><b class="v">temperamento</b>
  </div>
+ <button id="surprise" class="surprise" type="button">surpreenda-me &#10024;</button>
 </header>
 
 <div class="mv maq">Trilha — A máquina <span>Why Machines Learn · a matemática da IA moderna</span></div>
@@ -156,5 +162,43 @@ footer a{color:var(--a2);text-decoration:none}
 </footer>
 
 </div>
+<script>
+// "surpreenda-me": pula para um tópico aleatório de qualquer caderno
+(function(){
+ const T=['why-machines-learn.html#c1','why-machines-learn.html#c3','why-machines-learn.html#c6','why-machines-learn.html#c10','why-machines-learn.html#c12','why-machines-learn.html#epi','why-machines-learn.html#p2',
+  'matematica-introdutoria.html#i3','matematica-introdutoria.html#i5','matematica-introdutoria.html#i7',
+  'musica-matematica.html#corda','musica-matematica.html#consonancia','musica-matematica.html#cents','musica-matematica.html#temperamento',
+  'matematica-fundamental.html#f4','matematica-fundamental.html#f6','matematica-fundamental.html#f9'];
+ const btn=document.getElementById('surprise');
+ if(btn) btn.addEventListener('click',()=>{location.href=T[Math.floor(Math.random()*T.length)];});
+})();
+// fundo generativo: descida de gradiente (máquina) + ondas (música) + partículas
+(function(){
+ const c=document.getElementById('bg'); if(!c) return; const x=c.getContext('2d');
+ const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ let W,H,t=0,pts=[];
+ function resize(){W=c.width=innerWidth;H=c.height=innerHeight;
+  pts=[];for(let i=0;i<Math.min(70,(W*H)/26000);i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.5+.4});}
+ addEventListener('resize',resize); resize();
+ function wave(amp,freq,phase,color,base){x.beginPath();for(let px=0;px<=W;px+=10){const py=base+Math.sin(px*freq+phase)*amp;px===0?x.moveTo(px,py):x.lineTo(px,py);}x.strokeStyle=color;x.lineWidth=1.5;x.globalAlpha=.16;x.stroke();x.globalAlpha=1;}
+ function frame(){
+  x.clearRect(0,0,W,H);
+  x.fillStyle='rgba(236,231,225,.22)';
+  for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}
+  wave(18,0.011,t*0.02,'#4fb87a',H*0.83);
+  wave(11,0.019,t*0.03+1,'#e8a838',H*0.88);
+  // tigela de perda + bolinha descendo (gradiente descendente)
+  const cx=W*0.74, baseY=H*0.26, s=Math.min(W,H)*0.16;
+  x.strokeStyle='rgba(255,90,31,.20)';x.lineWidth=1.5;x.beginPath();
+  for(let u=-1.5;u<=1.5;u+=0.05){const xx=cx+u*s,yy=baseY+u*u*s*0.62;u===-1.5?x.moveTo(xx,yy):x.lineTo(xx,yy);}x.stroke();
+  const ph=(t*0.018)%(Math.PI*6), u=1.35*Math.cos(ph)*Math.exp(-ph/9);
+  const bx=cx+u*s, by=baseY+u*u*s*0.62;
+  x.fillStyle='#ff5a1f';x.beginPath();x.arc(bx,by,5,0,7);x.fill();
+  x.fillStyle='rgba(255,155,100,.25)';x.beginPath();x.arc(bx,by,11,0,7);x.fill();
+  t++; if(!reduce) requestAnimationFrame(frame);
+ }
+ frame();
+})();
+</script>
 </body>
 </html>
