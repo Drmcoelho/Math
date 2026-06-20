@@ -184,6 +184,15 @@ footer .sig{color:var(--text-dim)}
 .mcq-opt.wrong .mk{color:var(--red)}
 .mcq-fb{border-top:1px solid var(--border);margin-top:.7rem;padding-top:.7rem;font-size:.85rem;line-height:1.7;display:none}
 .mcq-fb.show{display:block}
+
+.deep-lead{color:var(--text-dim)}
+details.deep{border:1px solid var(--border);border-left:3px solid var(--green);border-radius:8px;background:linear-gradient(135deg,rgba(79,184,122,.06),transparent);margin:1.4rem 0}
+details.deep>summary{cursor:pointer;list-style:none;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);padding:.9rem 1.1rem}
+details.deep>summary::-webkit-details-marker{display:none}
+details.deep>summary::before{content:"\25B8";color:var(--green);margin-right:.5em;display:inline-block;transition:transform .15s}
+details.deep[open]>summary::before{transform:rotate(90deg)}
+details.deep .dd{padding:0 1.1rem 1.1rem;line-height:1.8}
+details.deep .dd p{margin:.6rem 0}
 </style>
 </head>
 <body>
