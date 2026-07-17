@@ -3,202 +3,23 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Math · Cadernos de matemática interativa</title>
-<meta name="description" content="Portal de quatro cadernos interativos de matemática, em português: Why Machines Learn (a matemática da IA) e A Matemática da Música — cada um com seu pré-caderno, exercícios e gabarito passo a passo.">
+<meta name="description" content="Seis cadernos interativos em português: matemática da máquina, da música e da forma, com laboratórios e exercícios.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="canonical" href="https://drmcoelho.github.io/Math/">
-<meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:title" content="Math — cadernos de matemática interativa"><meta property="og:description" content="Why Machines Learn e A Matemática da Música: 4 cadernos, exercícios com gabarito, offline-first."><meta property="og:url" content="https://drmcoelho.github.io/Math/"><meta property="og:image" content="https://drmcoelho.github.io/Math/og-image.svg"><meta property="og:image:type" content="image/svg+xml">
 <style>
-:root{
- --bg:#0a0a0c;--p:#141418;--p2:#1b1b22;--ink:#ece7e1;--m:#9a938b;--line:rgba(236,231,225,.12);
- --a:#ff5a1f;--a2:#ff9b64;            /* máquina (laranja) */
- --g:#4fb87a;--g2:#8fe0ad;            /* música (verde) */
- --mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:Georgia,serif;
-}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);font:17px/1.7 var(--serif);
- background:radial-gradient(1100px 600px at 78% -12%,rgba(255,90,31,.20),transparent),radial-gradient(900px 600px at 8% 8%,rgba(79,184,122,.13),transparent),var(--bg)}
-.wrap{max-width:1100px;margin:auto;padding:0 clamp(20px,5vw,56px) 90px}
-header{min-height:62vh;display:grid;align-content:center;gap:18px;padding-top:8vh}
-.kick{font:12px var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--a)}
-h1{font-family:var(--sans);font-size:clamp(3.2rem,11vw,7rem);line-height:.86;letter-spacing:-.06em;margin:0;font-weight:850}
-h1 .o{color:var(--a)}h1 .v{color:var(--g)}
-.lead{font-family:var(--sans);font-size:clamp(1.1rem,2.4vw,1.5rem);color:#d8d2cb;max-width:48ch;line-height:1.35}
-.chain{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.chain b{font:12px var(--mono);border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--a2);background:var(--p);font-weight:400}
-.chain b.v{color:var(--g2)}
-.mv{font:11px var(--mono);letter-spacing:.22em;text-transform:uppercase;margin:64px 0 18px;padding-bottom:9px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.mv.maq{color:var(--a)}.mv.mus{color:var(--g)}
-.mv span{color:var(--m);letter-spacing:.04em;text-transform:none}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
-.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:linear-gradient(180deg,var(--p),#0e0e12);
- border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:transform .18s,border-color .18s,box-shadow .18s}
-.card:hover{transform:translateY(-4px);border-color:var(--ac);box-shadow:0 18px 40px -22px var(--ac)}
-.card.maq{--ac:var(--a);--ac2:var(--a2)}.card.mus{--ac:var(--g);--ac2:var(--g2)}
-.art{height:150px;display:block;width:100%;background:#070709;border-bottom:1px solid var(--line)}
-.body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
-.ck{font:11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ac)}
-.card h2{font-family:var(--sans);font-size:1.5rem;line-height:1.12;letter-spacing:-.02em;margin:0}
-.card p{margin:0;color:var(--m);font-size:.98rem;line-height:1.5;flex:1}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tags i{font:10px var(--mono);font-style:normal;text-transform:uppercase;letter-spacing:.06em;color:var(--ac2);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
-.go{font:12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-top:4px}
-.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:64px}
-.stat{flex:1 1 180px;border:1px solid var(--line);border-radius:14px;background:var(--p);padding:16px 18px}
-.stat b{display:block;font-family:var(--sans);font-size:1.7rem;letter-spacing:-.03em}
-.stat span{font:11px var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--m)}
-footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--m);font:13px/1.7 var(--mono)}
-footer a{color:var(--a2);text-decoration:none}
-@media(max-width:640px){header{min-height:52vh}}
-#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;opacity:.6;pointer-events:none}
-.surprise{justify-self:start;margin-top:12px;font:12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#0a0a0c;background:linear-gradient(90deg,var(--a),var(--g));border:0;padding:12px 20px;border-radius:999px;cursor:pointer;font-weight:700;transition:transform .15s,filter .15s;box-shadow:0 10px 30px -12px rgba(255,90,31,.5)}
-.surprise:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.surprise:active{transform:translateY(0)}
+:root{--bg:#090a0d;--p:#14171d;--ink:#eceff5;--m:#9aa0ad;--line:rgba(236,239,245,.12);--a:#ff5a1f;--a2:#ff9b64;--g:#4fb87a;--g2:#8fe0ad;--b:#5686e6;--b2:#a7c2ff;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:Georgia,serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font:17px/1.7 var(--serif);background:radial-gradient(900px 520px at 82% -12%,rgba(86,134,230,.18),transparent),radial-gradient(850px 500px at 8% 5%,rgba(79,184,122,.12),transparent),var(--bg)}#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;opacity:.55;pointer-events:none}.wrap{max-width:1120px;margin:auto;padding:0 clamp(20px,5vw,56px) 90px}header{min-height:64vh;display:grid;align-content:center;gap:18px;padding-top:6vh}.kick{font:12px var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--b)}h1{font:850 clamp(3.5rem,12vw,7.5rem)/.84 var(--sans);letter-spacing:-.065em;margin:0;background:linear-gradient(90deg,var(--a),var(--g),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font:clamp(1.1rem,2.4vw,1.5rem)/1.38 var(--sans);color:#d8dce5;max-width:55ch}.chain{display:flex;flex-wrap:wrap;gap:8px}.chain b{font:12px var(--mono);font-weight:400;border:1px solid var(--line);border-radius:999px;padding:7px 11px;background:var(--p)}.chain .m{color:var(--a2)}.chain .u{color:var(--g2)}.chain .f{color:var(--b2)}.surprise{justify-self:start;margin-top:8px;border:0;border-radius:999px;padding:12px 20px;background:linear-gradient(90deg,var(--a),var(--g),var(--b));color:#08090c;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.trail{font:11px var(--mono);letter-spacing:.2em;text-transform:uppercase;margin:62px 0 18px;padding-bottom:9px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.trail span{color:var(--m);letter-spacing:.03em;text-transform:none}.trail.mach{color:var(--a)}.trail.music{color:var(--g)}.trail.form{color:var(--b)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}.card{--ac:var(--b);--ac2:var(--b2);display:flex;flex-direction:column;text-decoration:none;color:inherit;background:linear-gradient(180deg,var(--p),#0e1015);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.18s}.card:hover{transform:translateY(-4px);border-color:var(--ac);box-shadow:0 18px 42px -24px var(--ac)}.card.mach{--ac:var(--a);--ac2:var(--a2)}.card.music{--ac:var(--g);--ac2:var(--g2)}.art{height:145px;width:100%;display:block;background:#07090d;border-bottom:1px solid var(--line)}.body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}.ck{font:11px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--ac)}.card h2{font:750 1.5rem/1.12 var(--sans);letter-spacing:-.025em;margin:0}.card p{margin:0;color:var(--m);font-size:.98rem;line-height:1.5;flex:1}.tags{display:flex;flex-wrap:wrap;gap:6px}.tags i{font:10px var(--mono);font-style:normal;text-transform:uppercase;color:var(--ac2);border:1px solid var(--line);border-radius:6px;padding:3px 7px}.go{font:12px var(--mono);text-transform:uppercase;color:var(--ac)}.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:64px}.stat{flex:1 1 180px;border:1px solid var(--line);border-radius:14px;background:var(--p);padding:16px 18px}.stat b{display:block;font:750 1.7rem var(--sans)}.stat span{font:11px var(--mono);text-transform:uppercase;color:var(--m)}footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--m);font:13px/1.7 var(--mono)}footer a{color:var(--b2)}
 </style>
-</head>
-<body>
-<canvas id="bg" aria-hidden="true"></canvas>
-<div class="wrap">
-
-<header>
- <div class="kick">Cadernos de matemática interativa · em português</div>
- <h1><span class="o">Math</span></h1>
- <p class="lead">Quatro cadernos que constroem a matemática do zero, com derivações, laboratórios e <strong>exercícios com gabarito passo a passo</strong>. Duas trilhas: a matemática da <span style="color:var(--a2)">máquina</span> e a da <span style="color:var(--g2)">música</span>.</p>
- <div class="chain">
-  <b>vetor</b><b>produto escalar</b><b>erro</b><b>gradiente</b><b>profundidade</b><b>atenção</b>
-  <b class="v">corda</b><b class="v">razão</b><b class="v">logaritmo</b><b class="v">temperamento</b>
- </div>
- <button id="surprise" class="surprise" type="button">surpreenda-me &#10024;</button>
-</header>
-
-<div class="mv maq">Trilha — A máquina <span>Why Machines Learn · a matemática da IA moderna</span></div>
-<div class="grid">
-
- <a class="card maq" href="matematica-introdutoria.html">
-  <svg class="art" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-   <defs><linearGradient id="gm1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5a1f" stop-opacity=".0"/><stop offset="1" stop-color="#ff5a1f" stop-opacity=".18"/></linearGradient></defs>
-   <rect width="320" height="150" fill="url(#gm1)"/>
-   <path d="M20 130 Q160 -40 300 130" fill="none" stroke="#3a2a22" stroke-width="2"/>
-   <path d="M20 130 Q160 -40 300 130" fill="none" stroke="#ff5a1f" stroke-width="2.5" stroke-dasharray="3 7" stroke-linecap="round" opacity=".5"/>
-   <circle cx="64" cy="92" r="6" fill="#ff9b64"/><circle cx="104" cy="58" r="6" fill="#ff8a4c"/>
-   <circle cx="150" cy="36" r="6" fill="#ff7a3a"/><circle cx="170" cy="33" r="7" fill="#ff5a1f"/>
-   <path d="M170 33 l0 22 m0 -22 l-6 14" stroke="#ff5a1f" stroke-width="2" fill="none" stroke-linecap="round"/>
-  </svg>
-  <div class="body">
-   <div class="ck">Pré-caderno · do zero</div>
-   <h2>A matemática de Why Machines Learn</h2>
-   <p>Os pré-requisitos, construídos do zero e na ordem da cadeia causal: vetor, produto escalar, matriz, variância, probabilidade, gradiente.</p>
-   <div class="tags"><i>introdução</i><i>KaTeX</i><i>exercícios</i></div>
-   <div class="go">abrir &rarr;</div>
-  </div>
- </a>
-
- <a class="card maq" href="why-machines-learn.html">
-  <svg class="art" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-   <defs><linearGradient id="gm2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5a1f" stop-opacity=".0"/><stop offset="1" stop-color="#ff5a1f" stop-opacity=".16"/></linearGradient></defs>
-   <rect width="320" height="150" fill="url(#gm2)"/>
-   <line x1="40" y1="140" x2="280" y2="20" stroke="#ece7e1" stroke-width="2"/>
-   <g fill="#ff8a4c"><circle cx="70" cy="46" r="6"/><circle cx="100" cy="40" r="6"/><circle cx="92" cy="74" r="6"/><circle cx="128" cy="58" r="6"/><circle cx="64" cy="80" r="6"/></g>
-   <g fill="#7b8ed6"><circle cx="210" cy="104" r="6"/><circle cx="240" cy="96" r="6"/><circle cx="226" cy="124" r="6"/><circle cx="262" cy="116" r="6"/><circle cx="196" cy="120" r="6"/></g>
-  </svg>
-  <div class="body">
-   <div class="ck">Caderno principal · 12 capítulos + epílogo</div>
-   <h2>Why Machines Learn</h2>
-   <p>Do perceptron à atenção: aprender é descer uma superfície de erro. Perceptron, gradiente, PCA, SVM, backprop, CNN e Transformers — com laboratórios ao vivo.</p>
-   <div class="tags"><i>labs em canvas</i><i>KaTeX</i><i>850 exercícios</i></div>
-   <div class="go">abrir &rarr;</div>
-  </div>
- </a>
-
-</div>
-
-<div class="mv mus">Trilha — A música <span>A Matemática da Música · da corda vibrante à percepção</span></div>
-<div class="grid">
-
- <a class="card mus" href="matematica-fundamental.html">
-  <svg class="art" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-   <defs><linearGradient id="gv1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4fb87a" stop-opacity=".0"/><stop offset="1" stop-color="#4fb87a" stop-opacity=".18"/></linearGradient></defs>
-   <rect width="320" height="150" fill="url(#gv1)"/>
-   <line x1="36" y1="120" x2="290" y2="120" stroke="#2d3a32" stroke-width="2"/>
-   <line x1="60" y1="20" x2="60" y2="134" stroke="#2d3a32" stroke-width="2"/>
-   <path d="M60 120 C120 120 120 40 200 40 C250 40 250 96 290 96" fill="none" stroke="#4fb87a" stroke-width="2.5"/>
-   <text x="208" y="34" fill="#8fe0ad" font-family="ui-monospace,monospace" font-size="15">f(x)</text>
-  </svg>
-  <div class="body">
-   <div class="ck">Pré-caderno · do zero</div>
-   <h2>A matemática por trás da matemática</h2>
-   <p>Da balança algébrica à equação de onda: variável, razão, fração, potências, função, logaritmo, seno, somatório, derivada e integral — com exercícios.</p>
-   <div class="tags"><i>introdução</i><i>offline-first</i><i>exercícios</i></div>
-   <div class="go">abrir &rarr;</div>
-  </div>
- </a>
-
- <a class="card mus" href="musica-matematica.html">
-  <svg class="art" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-   <defs><linearGradient id="gv2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4fb87a" stop-opacity=".0"/><stop offset="1" stop-color="#e8a838" stop-opacity=".16"/></linearGradient></defs>
-   <rect width="320" height="150" fill="url(#gv2)"/>
-   <path d="M10 75 Q40 25 70 75 T130 75 T190 75 T250 75 T310 75" fill="none" stroke="#4fb87a" stroke-width="2.5"/>
-   <path d="M10 75 Q25 40 40 75 T70 75 T100 75 T130 75 T160 75 T190 75 T220 75 T250 75 T280 75 T310 75" fill="none" stroke="#e8a838" stroke-width="1.6" opacity=".7"/>
-  </svg>
-  <div class="body">
-   <div class="ck">Caderno principal · 10 níveis</div>
-   <h2>A Matemática da Música</h2>
-   <p>Não começa por “dó, ré, mi”, mas por uma corda e uma equação: harmônicos, consonância, batimentos, cents, escalas e temperamento — com áudio e canvas.</p>
-   <div class="tags"><i>WebAudio</i><i>offline-first</i><i>500 exercícios</i></div>
-   <div class="go">abrir &rarr;</div>
-  </div>
- </a>
-
-</div>
-
-<div class="stats">
- <div class="stat"><b>4</b><span>cadernos</span></div>
- <div class="stat"><b>2300</b><span>exercícios + gabarito</span></div>
- <div class="stat"><b>0</b><span>dependências externas</span></div>
- <div class="stat"><b>100%</b><span>offline-first · KaTeX local</span></div>
-</div>
-
-<footer>
- Math — cadernos de matemática interativa, em português · KaTeX embarcado, laboratórios em canvas, exercícios com solução passo a passo e múltipla escolha.<br>
- Ver <a href="README.md">README</a> · <a href="docs/REFERENCES.md">referências</a> · <a href="docs/DEPLOY.md">deploy</a>.
-</footer>
-
-</div>
-<script>
-// "surpreenda-me": pula para um tópico aleatório de qualquer caderno
-(function(){
- const T=['why-machines-learn.html#c1','why-machines-learn.html#c3','why-machines-learn.html#c6','why-machines-learn.html#c10','why-machines-learn.html#c12','why-machines-learn.html#epi','why-machines-learn.html#p2',
-  'matematica-introdutoria.html#i3','matematica-introdutoria.html#i5','matematica-introdutoria.html#i7',
-  'musica-matematica.html#corda','musica-matematica.html#consonancia','musica-matematica.html#cents','musica-matematica.html#temperamento',
-  'matematica-fundamental.html#f4','matematica-fundamental.html#f6','matematica-fundamental.html#f9'];
- const btn=document.getElementById('surprise');
- if(btn) btn.addEventListener('click',()=>{location.href=T[Math.floor(Math.random()*T.length)];});
-})();
-// fundo generativo: descida de gradiente (máquina) + ondas (música) + partículas
-(function(){
- const c=document.getElementById('bg'); if(!c) return; const x=c.getContext('2d');
- const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
- let W,H,t=0,pts=[];
- function resize(){W=c.width=innerWidth;H=c.height=innerHeight;
-  pts=[];for(let i=0;i<Math.min(70,(W*H)/26000);i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.5+.4});}
- addEventListener('resize',resize); resize();
- function wave(amp,freq,phase,color,base){x.beginPath();for(let px=0;px<=W;px+=10){const py=base+Math.sin(px*freq+phase)*amp;px===0?x.moveTo(px,py):x.lineTo(px,py);}x.strokeStyle=color;x.lineWidth=1.5;x.globalAlpha=.16;x.stroke();x.globalAlpha=1;}
- function frame(){
-  x.clearRect(0,0,W,H);
-  x.fillStyle='rgba(236,231,225,.22)';
-  for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}
-  wave(18,0.011,t*0.02,'#4fb87a',H*0.83);
-  wave(11,0.019,t*0.03+1,'#e8a838',H*0.88);
-  // tigela de perda + bolinha descendo (gradiente descendente)
-  const cx=W*0.74, baseY=H*0.26, s=Math.min(W,H)*0.16;
-  x.strokeStyle='rgba(255,90,31,.20)';x.lineWidth=1.5;x.beginPath();
-  for(let u=-1.5;u<=1.5;u+=0.05){const xx=cx+u*s,yy=baseY+u*u*s*0.62;u===-1.5?x.moveTo(xx,yy):x.lineTo(xx,yy);}x.stroke();
-  const ph=(t*0.018)%(Math.PI*6), u=1.35*Math.cos(ph)*Math.exp(-ph/9);
-  const bx=cx+u*s, by=baseY+u*u*s*0.62;
-  x.fillStyle='#ff5a1f';x.beginPath();x.arc(bx,by,5,0,7);x.fill();
-  x.fillStyle='rgba(255,155,100,.25)';x.beginPath();x.arc(bx,by,11,0,7);x.fill();
-  t++; if(!reduce) requestAnimationFrame(frame);
- }
- frame();
-})();
-</script>
-</body>
-</html>
+</head><body><canvas id="bg" aria-hidden="true"></canvas><div class="wrap">
+<header><div class="kick">Cadernos de matemática interativa · em português</div><h1>Math</h1><p class="lead">Seis cadernos constroem matemática do zero em três trilhas causais: a <span style="color:var(--a2)">máquina</span>, a <span style="color:var(--g2)">música</span> e a <span style="color:var(--b2)">forma</span>.</p><div class="chain"><b class="m">vetor → gradiente → atenção</b><b class="u">corda → harmônicos → tonalidade</b><b class="f">ponto → invariante → curvatura</b></div><button id="surprise" class="surprise" type="button">surpreenda-me ✦</button></header>
+<div class="trail mach">Trilha — A máquina <span>vetor → produto escalar → erro → gradiente → profundidade → generalização</span></div><div class="grid">
+<a class="card mach" href="matematica-introdutoria.html"><svg class="art" viewBox="0 0 320 145"><path d="M20 125 Q160 -35 300 125" fill="none" stroke="#ff5a1f" stroke-width="3"/><circle cx="165" cy="31" r="7" fill="#ff9b64"/></svg><div class="body"><div class="ck">Pré-caderno</div><h2>A matemática de Why Machines Learn</h2><p>Vetor, produto escalar, matriz, variância, probabilidade e gradiente na ordem em que se tornam necessários.</p><div class="tags"><i>KaTeX</i><i>exercícios</i></div><div class="go">abrir →</div></div></a>
+<a class="card mach" href="why-machines-learn.html"><svg class="art" viewBox="0 0 320 145"><line x1="40" y1="130" x2="280" y2="20" stroke="#eceff5" stroke-width="2"/><g fill="#ff7a3a"><circle cx="78" cy="55" r="6"/><circle cx="110" cy="72" r="6"/><circle cx="130" cy="42" r="6"/></g><g fill="#7b8ed6"><circle cx="210" cy="102" r="6"/><circle cx="245" cy="92" r="6"/><circle cx="255" cy="120" r="6"/></g></svg><div class="body"><div class="ck">Caderno principal</div><h2>Why Machines Learn</h2><p>Do perceptron à atenção: superfícies de erro, gradiente, PCA, SVM, backprop, CNN e Transformers.</p><div class="tags"><i>canvas</i><i>850 exercícios</i></div><div class="go">abrir →</div></div></a></div>
+<div class="trail music">Trilha — A música <span>corda → harmônicos → timbre → consonância → temperamento → tonalidade</span></div><div class="grid">
+<a class="card music" href="matematica-fundamental.html"><svg class="art" viewBox="0 0 320 145"><line x1="45" y1="120" x2="290" y2="120" stroke="#314038"/><path d="M50 120 C115 120 115 35 195 35 C250 35 250 95 290 95" fill="none" stroke="#4fb87a" stroke-width="3"/></svg><div class="body"><div class="ck">Pré-caderno</div><h2>A matemática por trás da matemática</h2><p>Variável, razão, fração, potência, função, logaritmo, seno, derivada, integral e equação de onda.</p><div class="tags"><i>offline-first</i><i>exercícios</i></div><div class="go">abrir →</div></div></a>
+<a class="card music" href="musica-matematica.html"><svg class="art" viewBox="0 0 320 145"><path d="M10 72 Q40 22 70 72 T130 72 T190 72 T250 72 T310 72" fill="none" stroke="#4fb87a" stroke-width="3"/><path d="M10 72 Q25 38 40 72 T70 72 T100 72 T130 72 T160 72 T190 72 T220 72 T250 72 T280 72 T310 72" fill="none" stroke="#e8a838" stroke-width="1.5"/></svg><div class="body"><div class="ck">Caderno principal</div><h2>A Matemática da Música</h2><p>Da corda vibrante à percepção: Fourier, consonância, batimentos, cents, escalas e temperamento.</p><div class="tags"><i>WebAudio</i><i>canvas</i></div><div class="go">abrir →</div></div></a></div>
+<div class="trail form">Trilha — A forma <span>ponto → distância → transformação → invariante → curvatura → limite</span></div><div class="grid">
+<a class="card" href="geometria-fundamental.html"><svg class="art" viewBox="0 0 320 145"><g stroke="#334261"><path d="M35 115 L155 25 L285 115 Z" fill="none"/><circle cx="35" cy="115" r="5" fill="#a7c2ff"/><circle cx="155" cy="25" r="5" fill="#a7c2ff"/><circle cx="285" cy="115" r="5" fill="#a7c2ff"/></g></svg><div class="body"><div class="ck">Pré-caderno</div><h2>A matemática antes da geometria</h2><p>Ponto, distância, ângulo, coordenadas, vetores, simetria, continuidade e prova sem pré-requisitos ocultos.</p><div class="tags"><i>do zero</i><i>prova</i></div><div class="go">abrir →</div></div></a>
+<a class="card" href="geometria-do-possivel.html"><svg class="art" viewBox="0 0 320 145"><circle cx="160" cy="72" r="52" fill="none" stroke="#334261"/><path d="M110 93 Q160 5 210 93 Q160 122 110 93" fill="none" stroke="#5fe0e6" stroke-width="3"/><path d="M70 125 Q160 55 250 125" fill="none" stroke="#5686e6" stroke-width="2" stroke-dasharray="5 6"/></svg><div class="body"><div class="ck">Caderno principal</div><h2>A Geometria do Possível</h2><p>Métricas, transformações, invariantes, curvatura e caos em laboratórios Canvas com diagnóstico explícito.</p><div class="tags"><i>4 labs</i><i>canvas seguro</i></div><div class="go">abrir →</div></div></a></div>
+<div class="stats"><div class="stat"><b>6</b><span>cadernos</span></div><div class="stat"><b>3</b><span>trilhas causais</span></div><div class="stat"><b>0</b><span>dependências externas</span></div><div class="stat"><b>100%</b><span>offline-first</span></div></div>
+<footer>Math — cadernos de matemática interativa. Ver <a href="README.md">README</a>, <a href="docs/VALIDATION.md">validação</a> e <a href="docs/DEPLOY.md">deploy</a>.</footer></div>
+<script>(()=>{'use strict';const topics=['why-machines-learn.html#c3','matematica-introdutoria.html#i5','musica-matematica.html#corda','matematica-fundamental.html#f6','geometria-fundamental.html#distancia','geometria-do-possivel.html#curvatura','geometria-do-possivel.html#caos'];document.getElementById('surprise').addEventListener('click',()=>location.href=topics[Math.floor(Math.random()*topics.length)]);const c=document.getElementById('bg'),x=c.getContext('2d');if(!x)return;let w,h,t=0;const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;function size(){const d=Math.min(2,devicePixelRatio||1);w=innerWidth;h=innerHeight;c.width=w*d;c.height=h*d;c.style.width=w+'px';c.style.height=h+'px';x.setTransform(d,0,0,d,0,0)}function frame(){x.clearRect(0,0,w,h);for(let i=0;i<44;i++){const px=(i*97+t*.17)%w,py=(i*i*23+t*.09)%h;x.fillStyle=i%3===0?'rgba(86,134,230,.22)':i%3===1?'rgba(79,184,122,.16)':'rgba(255,90,31,.15)';x.beginPath();x.arc(px,py,1.2+(i%3),0,7);x.fill()}t++;if(!reduce)requestAnimationFrame(frame)}addEventListener('resize',size);size();frame()})();</script></body></html>
